@@ -1,11 +1,10 @@
-// src/store/authSlice.js
-
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+
 import {
     signupAPI,
     loginAPI,
     googleLoginAPI,
-    logoutAPI
+    logoutAPI,
 } from './authAPI'
 
 // Get saved user from LocalStorage
@@ -24,9 +23,11 @@ const savedUser = getSavedUser()
 const initialState = {
     user: savedUser,
     isAuthenticated: !!savedUser,
+
     isCheckingAuth: false,
     isLoading: false,
     isLoggingOut: false,
+
     error: null,
     signupMessage: null,
 }
@@ -52,17 +53,24 @@ export const loginUser = createAsyncThunk(
     async (credentials, { rejectWithValue }) => {
         try {
             const response = await loginAPI(credentials)
+
             const user = response?.user || response
             const token = response?.token
 
-            if (user) {
-                localStorage.setItem('user', JSON.stringify(user))
+            if (!user?.name || !user?.email) {
+                return rejectWithValue(
+                    'Login response does not contain valid user information.'
+                )
             }
+
+            localStorage.setItem('user', JSON.stringify(user))
+
             if (token) {
                 localStorage.setItem('token', token)
             }
 
             return response
+
         } catch (error) {
             return rejectWithValue(
                 error.response?.data?.message ||
@@ -78,17 +86,24 @@ export const googleLoginUser = createAsyncThunk(
     async (credential, { rejectWithValue }) => {
         try {
             const response = await googleLoginAPI(credential)
+
             const user = response?.user || response
             const token = response?.token
 
-            if (user) {
-                localStorage.setItem('user', JSON.stringify(user))
+            if (!user?.name || !user?.email) {
+                return rejectWithValue(
+                    'Google login response does not contain valid user information.'
+                )
             }
+
+            localStorage.setItem('user', JSON.stringify(user))
+
             if (token) {
                 localStorage.setItem('token', token)
             }
 
             return response
+
         } catch (error) {
             return rejectWithValue(
                 error.response?.data?.message ||
@@ -143,14 +158,14 @@ const authSlice = createSlice({
 
     extraReducers: (builder) => {
         builder
-            // SIGNUP PENDING
+
+            // SIGNUP
             .addCase(signupUser.pending, (state) => {
                 state.isLoading = true
                 state.error = null
                 state.signupMessage = null
             })
 
-            // SIGNUP SUCCESS
             .addCase(signupUser.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.signupMessage =
@@ -159,19 +174,17 @@ const authSlice = createSlice({
                 state.error = null
             })
 
-            // SIGNUP ERROR
             .addCase(signupUser.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })
 
-            // LOGIN PENDING
+            // LOGIN
             .addCase(loginUser.pending, (state) => {
                 state.isLoading = true
                 state.error = null
             })
 
-            // LOGIN SUCCESS
             .addCase(loginUser.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.user = action.payload?.user || action.payload
@@ -179,19 +192,17 @@ const authSlice = createSlice({
                 state.error = null
             })
 
-            // LOGIN ERROR
             .addCase(loginUser.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })
 
-            // GOOGLE LOGIN PENDING
+            // GOOGLE LOGIN
             .addCase(googleLoginUser.pending, (state) => {
                 state.isLoading = true
                 state.error = null
             })
 
-            // GOOGLE LOGIN SUCCESS
             .addCase(googleLoginUser.fulfilled, (state, action) => {
                 state.isLoading = false
                 state.user = action.payload?.user || action.payload
@@ -199,19 +210,17 @@ const authSlice = createSlice({
                 state.error = null
             })
 
-            // GOOGLE LOGIN ERROR
             .addCase(googleLoginUser.rejected, (state, action) => {
                 state.isLoading = false
                 state.error = action.payload
             })
 
-            // LOGOUT PENDING
+            // LOGOUT
             .addCase(logoutUser.pending, (state) => {
                 state.isLoggingOut = true
                 state.error = null
             })
 
-            // LOGOUT SUCCESS
             .addCase(logoutUser.fulfilled, (state) => {
                 state.isLoggingOut = false
                 state.user = null
@@ -220,7 +229,6 @@ const authSlice = createSlice({
                 state.signupMessage = null
             })
 
-            // LOGOUT ERROR
             .addCase(logoutUser.rejected, (state, action) => {
                 state.isLoggingOut = false
                 state.user = null

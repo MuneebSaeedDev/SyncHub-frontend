@@ -5,9 +5,8 @@ import { googleLoginUser } from '../store/authSlice'
 
 export default function GoogleSignInButton() {
     const dispatch = useDispatch()
-    const navigate = useNavigate()
-    const location = useLocation()
-
+    const navigate = useNavigate() // navigate to the next or previous page
+    const location = useLocation() // get the current page url
     const handleGoogleSuccess = async (response) => {
         try {
             await dispatch(

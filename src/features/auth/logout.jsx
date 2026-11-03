@@ -8,7 +8,7 @@ function Logout({ open, onClose }) {
     const dispatch = useDispatch()
     const navigate = useNavigate()
 
-    const { isLoggingOut } = useSelector((state) => state.auth)
+    const { isLoggingOut, user } = useSelector((state) => state.auth)
 
     const handleLogout = async () => {
         try {
@@ -24,42 +24,56 @@ function Logout({ open, onClose }) {
     if (!open) return null
 
     return (
-        <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
-            <div className="relative w-full max-w-md rounded-2xl bg-white p-6 shadow-xl dark:bg-gray-900">
+        <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4">
+            <div className="relative w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl border border-slate-100">
 
                 {/* Close Button */}
                 <button
                     type="button"
                     onClick={onClose}
                     disabled={isLoggingOut}
-                    className="absolute right-4 top-4 rounded-lg p-2 text-gray-500 hover:bg-gray-100 dark:hover:bg-gray-800"
+                    className="cursor-pointer absolute right-5 top-5 rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors"
                     aria-label="Close logout dialog"
                 >
-                    <X size={20} />
+                    <X size={18} />
                 </button>
 
-                {/* Icon */}
-                <div className="mb-4 flex h-14 w-14 items-center justify-center rounded-full bg-red-50 dark:bg-red-950">
-                    <LogOut size={26} className="text-red-600" />
+                {/* Top Icon */}
+                <div className="mb-4 flex h-12 w-12 items-center justify-center rounded-2xl bg-rose-50 text-rose-600 border border-rose-100/50">
+                    <LogOut size={22} />
                 </div>
 
-                {/* Content */}
-                <h2 className="text-xl font-semibold text-gray-900 dark:text-white">
+                {/* Header & Subtitle */}
+                <h2 className="text-lg font-bold text-slate-900">
                     Sign out of SyncHub?
                 </h2>
 
-                <p className="mt-2 text-sm leading-6 text-gray-500 dark:text-gray-400">
-                    Are you sure you want to log out of your account?
-                    You will need to sign in again to access your account.
+                <p className="mt-1 text-xs sm:text-sm text-slate-500 leading-relaxed">
+                    You will need to re-enter your credentials to access your personal tasks and friends.
                 </p>
 
+                {/* User Profile Card */}
+                <div className="mt-5 flex items-center gap-3 rounded-2xl border border-slate-100 bg-slate-50/60 p-3.5">
+                    <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl bg-indigo-50 font-bold text-indigo-600 text-sm">
+                        {user?.name ? user.name.split(' ').map(n => n[0]).join('') : 'AM'}
+                    </div>
+                    <div className="min-w-0 flex-1">
+                        <p className="truncate text-sm font-bold text-slate-900">
+                            {user?.name || 'Alex Morgan'}
+                        </p>
+                        <p className="truncate text-xs text-slate-500">
+                            {user?.email || 'alex@example.com'}
+                        </p>
+                    </div>
+                </div>
+
                 {/* Actions */}
-                <div className="mt-6 flex justify-end gap-3">
+                <div className="mt-6 flex items-center justify-end gap-3">
                     <button
                         type="button"
                         onClick={onClose}
                         disabled={isLoggingOut}
-                        className="rounded-lg border border-gray-300 px-4 py-2.5 text-sm font-medium text-gray-700 hover:bg-gray-50 disabled:opacity-50 dark:border-gray-700 dark:text-gray-300 dark:hover:bg-gray-800"
+                        className="cursor-pointer rounded-xl border border-slate-200 px-5 py-2.5 text-xs sm:text-sm font-semibold text-slate-700 hover:bg-slate-50 disabled:opacity-50 transition-colors"
                     >
                         Cancel
                     </button>
@@ -68,9 +82,8 @@ function Logout({ open, onClose }) {
                         type="button"
                         onClick={handleLogout}
                         disabled={isLoggingOut}
-                        className="flex items-center gap-2 rounded-lg bg-red-600 px-4 py-2.5 text-sm font-medium text-white hover:bg-red-700 disabled:cursor-not-allowed disabled:opacity-50"
+                        className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl bg-rose-600 px-5 py-2.5 text-xs sm:text-sm font-semibold text-white hover:bg-rose-700 disabled:cursor-not-allowed disabled:opacity-50 transition-colors shadow-sm"
                     >
-                        <LogOut size={16} />
                         {isLoggingOut ? 'Logging out...' : 'Log Out'}
                     </button>
                 </div>

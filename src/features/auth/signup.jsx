@@ -1,17 +1,12 @@
-import { useState, useEffect } from 'react'
-
+import { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-
 import { User } from 'lucide-react'
-
 import { useDispatch, useSelector } from 'react-redux'
-
 import { signupUser, clearError } from '../../store/authSlice'
-
 import BrandLogo from '../../components/common/BrandLogo'
-import Button from '../../components/common/Button'
 import FormField from '../../components/common/FormField'
 import GoogleSignInButton from '../../components/GoogleSignInButton'
+import Button from '../../components/common/Button'
 
 export default function Signup() {
     const dispatch = useDispatch()
@@ -30,89 +25,49 @@ export default function Signup() {
 
     const [errors, setErrors] = useState({})
 
-    // Clear previous errors
-    useEffect(() => {
+    const handleChange = (e) => {
+        setFormData({
+            ...formData,
+            [e.target.name]: e.target.value,
+        })
+    }
+
+    const handleSubmit = async (e) => {
+        e.preventDefault()
+
         dispatch(clearError())
-    }, [dispatch])
 
-    // Form validation
-    const validate = () => {
-        const newErrors = {}
-
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
-
-        if (!formData.name.trim()) {
-            newErrors.name = 'Full name is required'
+        const { name, email, password, confirmPassword } = formData
+        if (!name || !email || !password || !confirmPassword) {
+            setErrors({ form: 'All fields are required.' })
+            return
         }
-
-        if (!formData.email.trim()) {
-            newErrors.email = 'Email address is required'
-        } else if (!emailRegex.test(formData.email.trim())) {
-            newErrors.email = 'Please enter a valid email address'
+        if (password.length < 8) {
+            setErrors({ password: 'Password must be at least 8 characters.' })
+            return
         }
-
-        if (!formData.password) {
-            newErrors.password = 'Password is required'
-        } else if (formData.password.length < 8) {
-            newErrors.password = 'Password must be at least 8 characters'
+        if (password !== confirmPassword) {
+            setErrors({ confirmPassword: 'Passwords do not match.' })
+            return
         }
-
-        if (!formData.confirmPassword) {
-            newErrors.confirmPassword = 'Please confirm your password'
-        } else if (formData.password !== formData.confirmPassword) {
-            newErrors.confirmPassword = 'Passwords do not match'
-        }
-
-        setErrors(newErrors)
-
-        return Object.keys(newErrors).length === 0
-    }
-
-    // Handle input changes
-    const handleChange = (event) => {
-        const { name, value } = event.target
-
-        setFormData((prev) => ({
-            ...prev,
-            [name]: value,
-        }))
-
-        if (errors[name]) {
-            setErrors((prev) => ({
-                ...prev,
-                [name]: null,
-            }))
-        }
-    }
-
-    // Handle signup
-    const handleSubmit = async (event) => {
-        event.preventDefault()
-
-        if (!validate()) return
-
+        setErrors({})
         try {
             const response = await dispatch(
                 signupUser({
-                    name: formData.name.trim(),
-                    email: formData.email.trim(),
-                    password: formData.password,
+                    name: name.trim(),
+                    email: email.trim(),
+                    password,
                 })
             ).unwrap()
 
-            // Your backend creates the account without logging in.
-            // Redirect the user to the login page.
-
             navigate('/login', {
                 replace: true,
-
                 state: {
                     message: response.message || 'Account created successfully! Please sign in.',
                 },
             })
-
-        } catch (error) {
-            console.error('Signup failed:', error)
+        } catch (err) {
+            console.error(err)
         }
     }
 
@@ -241,7 +196,7 @@ export default function Signup() {
                     </div>
 
                 </form>
-                        
+
                 {/* Login Link */}
                 <p className="mt-5 text-center text-[12px] text-[#64748b]">
                     Already have an account?{' '}
