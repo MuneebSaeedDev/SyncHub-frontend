@@ -108,7 +108,7 @@ export default function FormField({
             onClick={handleTogglePassword}
             tabIndex={-1}
             aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
-            className="ml-2 grid size-8 place-items-center rounded-md text-gray-400 transition hover:bg-gray-100 hover:text-gray-700 focus:outline-none"
+            className="cursor-pointer ml-2 grid size-8 place-items-center rounded-md text-gray-400 transition hover:bg-gray-100 hover:text-gray-700 focus:outline-none"
           >
             {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
           </button>

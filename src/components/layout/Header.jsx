@@ -35,7 +35,7 @@ export default function Header({
                 <button
                     type="button"
                     onClick={onNotifications}
-                    className="rounded-lg p-2 text-slate-500 transition hover:bg-slate-100"
+                    className="cursor-pointer rounded-lg p-2 text-slate-500 transition hover:bg-slate-100 hover:text-slate-700"
                     aria-label="Notifications"
                 >
                     <Bell size={17} />
@@ -44,7 +44,7 @@ export default function Header({
                 <button
                     type="button"
                     onClick={onProfileClick}
-                    className="flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700"
+                    className="cursor-pointer flex h-8 w-8 items-center justify-center rounded-full bg-indigo-100 text-xs font-semibold text-indigo-700 transition hover:ring-2 hover:ring-indigo-300"
                     aria-label="User profile"
                 >
                     {userInitial}
