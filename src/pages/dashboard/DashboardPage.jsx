@@ -2,42 +2,16 @@ import { useState, useEffect } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
 
-import {
-    ListTodo,
-    Clock,
-    MoreHorizontal,
-    Plus,
-    Loader2,
-} from 'lucide-react'
+import { ListTodo, Clock, MoreHorizontal, Plus, Loader2, Trash2 } from 'lucide-react'
 
 import DatePicker from '../../components/taskComponents/DatePicker.jsx'
 import TaskDropdown from '../../components/taskComponents/TaskDropdown.jsx'
+import { fetchFriends, deleteFriend } from '../../store/friendSlice.js'
 
 import {
     fetchTasks,
     deleteTask,
 } from '../../store/taskSlice.js'
-
-const friends = [
-    {
-        name: 'Sarah Kim',
-        email: 'sarah@example.com',
-        initials: 'SK',
-        color: 'bg-sky-100 text-sky-700',
-    },
-    {
-        name: 'Jordan Diaz',
-        email: 'jordan@example.com',
-        initials: 'JD',
-        color: 'bg-blue-100 text-blue-700',
-    },
-    {
-        name: 'Nina Okafor',
-        email: 'nina@example.com',
-        initials: 'NO',
-        color: 'bg-emerald-100 text-emerald-700',
-    },
-]
 
 export default function DashboardPage() {
     const dispatch = useDispatch()
@@ -53,8 +27,23 @@ export default function DashboardPage() {
     const {
         tasks,
         isLoading,
-        error,
+        error: taskError,
     } = useSelector((state) => state.tasks)
+
+    const friendsState = useSelector((state) => state.friends)
+    const friends = Array.isArray(friendsState?.list) ? friendsState.list : []
+    const status = friendsState?.status || 'idle'
+    const friendError = friendsState?.error || null
+
+    useEffect(() => {
+        if (status === 'idle') {
+            dispatch(fetchFriends())
+        }
+    }, [status, dispatch])
+
+    const handleDelete = (id) => {
+        dispatch(deleteFriend(id))
+    }
 
     // Fetch tasks on mount and refresh every 5 seconds
     useEffect(() => {
@@ -247,21 +236,21 @@ export default function DashboardPage() {
                         )}
 
                         {/* Error */}
-                        {error && (
+                        {taskError && (
                             <div className="py-8 text-center text-xs text-red-500">
-                                {error}
+                                {taskError}
                             </div>
                         )}
 
                         {/* Empty State */}
-                        {!isLoading && !error && displayedTasks.length === 0 && (
+                        {!isLoading && !taskError && displayedTasks.length === 0 && (
                             <div className="py-8 text-center text-xs text-slate-400">
                                 No tasks found.
                             </div>
                         )}
 
                         {/* Task List (Max 5 items) */}
-                        {!error && displayedTasks.map((task) => {
+                        {!taskError && displayedTasks.map((task) => {
                             const taskId = task._id || task.id
 
                             const normalizedPriority =
@@ -397,66 +386,99 @@ export default function DashboardPage() {
                 <div className="space-y-4">
 
                     <section className="rounded-xl border border-slate-200/70 bg-white p-5 shadow-2xs">
-
                         <div className="mb-3 flex items-center justify-between">
                             <h2 className="text-sm font-semibold text-slate-900">
                                 Friends
                             </h2>
 
                             <button className="!text-xs font-medium text-indigo-600 cursor-pointer">
-                                Manage (5)
+                                Manage ({friends.length})
                             </button>
                         </div>
 
-                        <div className="mb-2 flex items-center gap-2">
-                            <div className="flex -space-x-1.5 overflow-hidden">
-                                {friends.map((friend) => (
-                                    <span
-                                        key={friend.initials}
-                                        className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold ring-2 ring-white ${friend.color}`}
-                                    >
-                                        {friend.initials}
-                                    </span>
-                                ))}
+                        {/* Loading state handle karne ke liye */}
+                        {status === 'loading' && (
+                            <div className="flex justify-center items-center py-6">
+                                <Loader2 className="animate-spin text-indigo-600" size={20} />
                             </div>
+                        )}
 
-                            <span className="inline-flex h-5 items-center justify-center rounded-full bg-slate-100 px-2 text-[10px] font-medium text-slate-600">
-                                +2
-                            </span>
-                        </div>
+                        {/* Error state handle karne ke liye */}
+                        {status === 'failed' && (
+                            <p className="mb-4 text-[11px] text-red-500">
+                                Failed to load friends: {friendError}
+                            </p>
+                        )}
 
-                        <p className="mb-4 text-[11px] text-slate-400">
-                            5 connected friends
-                        </p>
-
-                        <div className="mb-4 divide-y divide-slate-100">
-                            {friends.map((friend) => (
-                                <div
-                                    key={friend.email}
-                                    className="flex items-center gap-2.5 py-2.5 first:pt-0 last:pb-0"
-                                >
-                                    <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${friend.color}`}>
-                                        {friend.initials}
+                        {status === 'succeeded' && (
+                            <>
+                                <div className="mb-2 flex items-center gap-2">
+                                    <div className="flex -space-x-1.5 overflow-hidden">
+                                        {friends.slice(0, 5).map((friend) => (
+                                            <span
+                                                key={friend.id || friend.email}
+                                                className={`inline-flex h-6 w-6 items-center justify-center rounded-full text-[10px] font-bold ring-2 ring-white ${friend.color || 'bg-indigo-100 text-indigo-700'}`}
+                                            >
+                                                {friend.initials || friend.name?.charAt(0)}
+                                            </span>
+                                        ))}
                                     </div>
 
-                                    <div className="min-w-0 flex-1">
-                                        <p className="truncate text-xs font-medium text-slate-900">
-                                            {friend.name}
-                                        </p>
-
-                                        <p className="truncate text-[10px] text-slate-400">
-                                            {friend.email}
-                                        </p>
-                                    </div>
+                                    {friends.length > 5 && (
+                                        <span className="inline-flex h-5 items-center justify-center rounded-full bg-slate-100 px-2 text-[10px] font-medium text-slate-600">
+                                            +{friends.length - 5}
+                                        </span>
+                                    )}
                                 </div>
-                            ))}
-                        </div>
+
+                                <p className="mb-4 text-[11px] text-slate-400">
+                                    {friends.length} connected friends
+                                </p>
+
+                                <div className="mb-4 divide-y divide-slate-100 max-h-60 overflow-y-auto">
+                                    {friends.length === 0 ? (
+                                        <p className="text-xs text-slate-400 py-2">No friends connected yet.</p>
+                                    ) : (
+                                        friends.map((friend) => (
+                                            <div
+                                                key={friend.id || friend.email}
+                                                className="flex items-center justify-between py-2.5 first:pt-0 last:pb-0 group"
+                                            >
+                                                <div className="flex items-center gap-2.5 min-w-0">
+                                                    <div className={`flex h-7 w-7 shrink-0 items-center justify-center rounded-full text-[10px] font-bold ${friend.color || 'bg-indigo-100 text-indigo-700'}`}>
+                                                        {friend.initials || friend.name?.charAt(0)}
+                                                    </div>
+
+                                                    <div className="min-w-0 flex-1">
+                                                        <p className="truncate text-xs font-medium text-slate-900">
+                                                            {friend.name}
+                                                        </p>
+
+                                                        <p className="truncate text-[10px] text-slate-400">
+                                                            {friend.email}
+                                                        </p>
+                                                    </div>
+                                                </div>
+
+                                                {/* Delete Button */}
+                                                <button
+                                                    onClick={() => handleDelete(friend.id)}
+                                                    className="text-slate-400 hover:text-red-500 opacity-0 group-hover:opacity-100 transition-opacity cursor-pointer p-1"
+                                                    title="Delete friend"
+                                                >
+                                                    <Trash2 size={14} />
+                                                </button>
+                                            </div>
+                                        ))
+                                    )}
+                                </div>
+                            </>
+                        )}
 
                         <button className="flex w-full items-center justify-center gap-1.5 rounded-lg border border-dashed border-indigo-200 bg-indigo-50/20 py-2 !text-xs font-medium text-indigo-600 hover:bg-indigo-50/50 cursor-pointer">
                             <Plus size={14} />
                             Connect New Friend
                         </button>
-
                     </section>
 
                     {/* Friend Requests */}
