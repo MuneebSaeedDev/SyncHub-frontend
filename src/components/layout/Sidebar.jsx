@@ -30,13 +30,14 @@ export default function Sidebar({
 
     const menuItems = [
         { name: 'Overview', icon: LayoutDashboard },
-        { name: 'My Tasks', icon: CheckSquare, count: 8 },
-        { name: 'Friends', icon: Users, count: 5 },
-        { name: 'Friend Requests', icon: UserRoundPlus, count: 2 },
+        { name: 'My Tasks', icon: CheckSquare, count: 0 },
+        { name: 'Friends', icon: Users, count: 0 },
+        { name: 'Friend Requests', icon: UserRoundPlus, count: 0 },
         { name: 'Settings', icon: Settings },
     ]
 
     const handleNavigate = (name) => {
+        console.log(name)
         onNavigate?.(name)
         setMobileOpen(false)
     }
