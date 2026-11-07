@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getTasksAPI, deleteTasksAPI } from './taskAPI'
+import { getTasksAPI, deleteTasksAPI, createTaskAPI } from './taskAPI'
 
 // Fetch Tasks
 export const fetchTasks = createAsyncThunk(
@@ -11,6 +11,21 @@ export const fetchTasks = createAsyncThunk(
         } catch (error) {
             return rejectWithValue(
                 error.response?.data?.message || 'Failed to fetch tasks'
+            )
+        }
+    }
+)
+
+// Create Task
+export const createTask = createAsyncThunk(
+    'tasks/createTask',
+    async (taskData, { rejectWithValue }) => {
+        try {
+            const response = await createTaskAPI(taskData)
+            return response
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.message || 'Failed to create task'
             )
         }
     }
@@ -35,6 +50,7 @@ export const deleteTask = createAsyncThunk(
 const initialState = {
     tasks: [],
     isLoading: false,
+    isCreating: false,
     isDeleting: false,
     error: null,
 }
@@ -73,6 +89,27 @@ const taskSlice = createSlice({
                 state.error = action.payload
             })
 
+            // Create Task - Pending
+            .addCase(createTask.pending, (state) => {
+                state.isCreating = true
+                state.error = null
+            })
+
+            // Create Task - Fulfilled
+            .addCase(createTask.fulfilled, (state, action) => {
+                state.isCreating = false
+                const newTask = action.payload?.task || action.payload
+                if (newTask) {
+                    state.tasks.unshift(newTask)
+                }
+            })
+
+            // Create Task - Rejected
+            .addCase(createTask.rejected, (state, action) => {
+                state.isCreating = false
+                state.error = action.payload
+            })
+
             // Delete Task - Pending
             .addCase(deleteTask.pending, (state) => {
                 state.isDeleting = true
@@ -84,7 +121,7 @@ const taskSlice = createSlice({
                 state.isDeleting = false
 
                 state.tasks = state.tasks.filter(
-                    (task) => task._id !== action.payload
+                    (task) => task._id !== action.payload && task.id !== action.payload
                 )
             })
 

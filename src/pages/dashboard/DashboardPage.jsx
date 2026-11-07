@@ -6,6 +6,7 @@ import { ListTodo, Clock, MoreHorizontal, Plus, Loader2, Trash2 } from 'lucide-r
 
 import DatePicker from '../../components/taskComponents/DatePicker.jsx'
 import TaskDropdown from '../../components/taskComponents/TaskDropdown.jsx'
+import CreateTask from '../../pages/task/CreateTask.jsx'
 import { fetchFriends, deleteFriend } from '../../store/friendSlice.js'
 
 import {
@@ -20,6 +21,7 @@ export default function DashboardPage() {
     const [searchQuery, setSearchQuery] = useState('')
     const [openDatePickerId, setOpenDatePickerId] = useState(null)
     const [openDropdownId, setOpenDropdownId] = useState(null)
+    const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false)
 
     // Redux state
     const { user } = useSelector((state) => state.auth)
@@ -124,6 +126,12 @@ export default function DashboardPage() {
         }
     }
 
+    const handleCreateTaskSubmit = (taskData) => {
+        console.log('Create task submitted:', taskData)
+        setIsCreateTaskOpen(false)
+        // Dispatch create task action here when ready
+    }
+
     return (
         <div className="mx-auto max-w-7xl space-y-6">
 
@@ -141,6 +149,7 @@ export default function DashboardPage() {
 
                 <button
                     type="button"
+                    onClick={() => setIsCreateTaskOpen(true)}
                     className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-semibold text-white shadow-xs transition-all hover:bg-indigo-500"
                 >
                     <Plus size={16} />
@@ -496,6 +505,13 @@ export default function DashboardPage() {
 
                 </div>
             </div>
+
+            {/* Create Task Modal */}
+            <CreateTask
+                isOpen={isCreateTaskOpen}
+                onClose={() => setIsCreateTaskOpen(false)}
+                onSubmit={handleCreateTaskSubmit}
+            />
 
         </div>
     )
