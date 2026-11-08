@@ -2,25 +2,7 @@ import React from 'react'
 import { Loader2 } from 'lucide-react'
 import { getUserInitials } from '../../utils/userUtils'
 
-// Avatar background colors matched to design
-const AVATAR_COLORS = [
-    { bg: 'bg-indigo-50', text: 'text-indigo-600' },
-    { bg: 'bg-cyan-50', text: 'text-cyan-600' },
-    { bg: 'bg-purple-50', text: 'text-purple-600' },
-    { bg: 'bg-rose-50', text: 'text-rose-600' },
-    { bg: 'bg-amber-50', text: 'text-amber-600' },
-]
-
-const getAvatarStyle = (str = '') => {
-    let hash = 0
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash)
-    }
-    const index = Math.abs(hash) % AVATAR_COLORS.length
-    return AVATAR_COLORS[index]
-}
-
-// Relative time formatting helper (e.g. "Received 2 hours ago", "Received yesterday")
+// Relative time formatting helper
 const formatRelativeTime = (dateStr) => {
     if (!dateStr) return 'Received recently'
     const date = new Date(dateStr)
@@ -54,40 +36,37 @@ export default function FriendRequestCard({
     const name = requester.name || 'Anonymous User'
     const email = requester.email || ''
     const initials = getUserInitials(name)
-    const avatarStyle = getAvatarStyle(name || email)
     const timeAgo = formatRelativeTime(request.createdAt)
 
     return (
-        <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between transition-colors hover:bg-slate-50/50">
+        <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between transition-colors hover:bg-[#f8fafc]">
             {/* Left: Avatar + Details */}
-            <div className="flex items-center gap-3.5 min-w-0">
-                <div
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xs font-bold tracking-wider ${avatarStyle.bg} ${avatarStyle.text}`}
-                >
+            <div className="flex items-center gap-3 min-w-0">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border border-[#dddddd] bg-[#f8fafc] text-xs font-medium text-[#181d26]">
                     {initials}
                 </div>
 
                 <div className="min-w-0">
-                    <h3 className="truncate text-sm font-bold text-slate-900 leading-tight">
+                    <h3 className="truncate text-xs font-medium text-[#181d26] leading-tight">
                         {name}
                     </h3>
-                    <p className="truncate text-xs text-slate-400 mt-0.5">
+                    <p className="truncate text-[11px] text-[#41454d] mt-0.5">
                         {email}
                     </p>
-                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-1">
-                        <span className="inline-block h-2 w-2 rounded-full border border-slate-300" />
+                    <div className="flex items-center gap-1.5 text-[10px] text-[#41454d] mt-1">
+                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#9297a0]" />
                         <span>{timeAgo}</span>
                     </div>
                 </div>
             </div>
 
             {/* Right: Actions */}
-            <div className="flex items-center gap-2.5 self-end sm:self-center">
+            <div className="flex items-center gap-2 self-end sm:self-center">
                 <button
                     type="button"
                     disabled={isLoading}
                     onClick={onDecline}
-                    className="cursor-pointer rounded-lg border border-slate-200 bg-white px-4 py-2 text-xs font-semibold text-slate-700 shadow-2xs transition-colors hover:bg-slate-50 hover:text-slate-900 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="cursor-pointer rounded-[6px] border border-[#dddddd] bg-white px-3 py-1.5 text-xs font-normal text-[#41454d] transition-colors hover:border-[#9297a0] hover:bg-[#f8fafc] hover:text-[#181d26] disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     Decline
                 </button>
@@ -96,10 +75,10 @@ export default function FriendRequestCard({
                     type="button"
                     disabled={isLoading}
                     onClick={onAccept}
-                    className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-indigo-600 px-4 py-2 text-xs font-semibold text-white shadow-xs transition-colors hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-[6px] bg-[#181d26] px-3.5 py-1.5 text-xs font-medium text-white transition-colors hover:bg-[#0d1218] active:bg-[#0d1218] shadow-xs disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isLoading && (
-                        <Loader2 size={13} className="animate-spin" />
+                        <Loader2 size={12} className="animate-spin" />
                     )}
                     <span>Accept</span>
                 </button>

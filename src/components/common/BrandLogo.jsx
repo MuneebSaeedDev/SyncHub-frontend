@@ -8,19 +8,19 @@ export default function BrandLogo({
 }) {
   const sizeMap = {
     sm: {
-      box: 'size-7 rounded-[8px]',
+      box: 'size-7 rounded-[6px]',
+      icon: 14,
+      text: 'text-base',
+    },
+    md: {
+      box: 'size-8 rounded-[8px]',
       icon: 16,
       text: 'text-lg',
     },
-    md: {
-      box: 'size-9 rounded-[10px]',
-      icon: 22,
-      text: 'text-[22px]',
-    },
     lg: {
-      box: 'size-11 rounded-[12px]',
-      icon: 26,
-      text: 'text-2xl',
+      box: 'size-10 rounded-[10px]',
+      icon: 20,
+      text: 'text-xl',
     },
   }
 
@@ -29,17 +29,17 @@ export default function BrandLogo({
   return (
     <div
       onClick={onClick}
-      className={`inline-flex items-center justify-center gap-3 ${onClick ? 'cursor-pointer' : ''} ${className}`}
+      className={`inline-flex items-center justify-center gap-2.5 ${onClick ? 'cursor-pointer' : ''} ${className}`}
     >
       <div
-        className={`grid ${currentSize.box} place-items-center bg-[#5145ed] text-white shadow-sm transition hover:bg-[#4338ca]`}
+        className={`grid ${currentSize.box} place-items-center bg-[#181d26] text-white shadow-xs transition hover:bg-[#0d1218]`}
       >
-        <Share2 size={currentSize.icon} strokeWidth={2.8} />
+        <Share2 size={currentSize.icon} strokeWidth={2.2} />
       </div>
 
       {showText && (
         <span
-          className={`${currentSize.text} font-semibold tracking-[-0.7px] text-[#111a2e]`}
+          className={`${currentSize.text} font-medium tracking-tight text-[#181d26]`}
         >
           SyncHub
         </span>

@@ -2,24 +2,6 @@ import React from 'react'
 import { Loader2, X } from 'lucide-react'
 import { getUserInitials } from '../../utils/userUtils'
 
-// Avatar background colors matched to design
-const AVATAR_COLORS = [
-    { bg: 'bg-indigo-50', text: 'text-indigo-600' },
-    { bg: 'bg-cyan-50', text: 'text-cyan-600' },
-    { bg: 'bg-purple-50', text: 'text-purple-600' },
-    { bg: 'bg-rose-50', text: 'text-rose-600' },
-    { bg: 'bg-amber-50', text: 'text-amber-600' },
-]
-
-const getAvatarStyle = (str = '') => {
-    let hash = 0
-    for (let i = 0; i < str.length; i++) {
-        hash = str.charCodeAt(i) + ((hash << 5) - hash)
-    }
-    const index = Math.abs(hash) % AVATAR_COLORS.length
-    return AVATAR_COLORS[index]
-}
-
 // Relative time formatting helper
 const formatRelativeTime = (dateStr) => {
     if (!dateStr) return 'Sent recently'
@@ -32,7 +14,7 @@ const formatRelativeTime = (dateStr) => {
     if (diffInSeconds < 60) return 'Sent just now'
     const diffInMinutes = Math.floor(diffInSeconds / 60)
     if (diffInMinutes < 60) return `Sent ${diffInMinutes}m ago`
-    const diffInHours = Math.floor(diffInMinutes / 60)
+    const diffInHours = Math.floor(diffInSeconds / 60)
     if (diffInHours < 24) return `Sent ${diffInHours} hours ago`
     const diffInDays = Math.floor(diffInHours / 24)
     if (diffInDays === 1) return 'Sent yesterday'
@@ -53,56 +35,53 @@ export default function SentInvitationCard({
     const name = recipient.name || 'Anonymous User'
     const email = recipient.email || ''
     const initials = getUserInitials(name)
-    const avatarStyle = getAvatarStyle(name || email)
     const timeAgo = formatRelativeTime(request.createdAt)
 
     return (
-        <div className="flex flex-col gap-4 p-5 sm:flex-row sm:items-center sm:justify-between transition-colors hover:bg-slate-50/50">
+        <div className="flex flex-col gap-4 p-4 sm:flex-row sm:items-center sm:justify-between transition-colors hover:bg-[#f8fafc]">
             {/* Left: Avatar + Details */}
-            <div className="flex items-center gap-3.5 min-w-0">
-                <div
-                    className={`flex h-11 w-11 shrink-0 items-center justify-center rounded-full text-xs font-bold tracking-wider ${avatarStyle.bg} ${avatarStyle.text}`}
-                >
+            <div className="flex items-center gap-3 min-w-0">
+                <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] border border-[#dddddd] bg-[#f8fafc] text-xs font-medium text-[#181d26]">
                     {initials}
                 </div>
 
                 <div className="min-w-0">
                     <div className="flex items-center gap-2">
-                        <h3 className="truncate text-sm font-bold text-slate-900 leading-tight">
+                        <h3 className="truncate text-xs font-medium text-[#181d26] leading-tight">
                             {name}
                         </h3>
-                        <span className="inline-flex items-center rounded-full bg-amber-50 px-2 py-0.5 text-[10px] font-semibold text-amber-700">
+                        <span className="inline-flex items-center rounded-[4px] bg-[#d9a441]/15 border border-[#d9a441]/35 px-1.5 py-0.5 text-[10px] font-medium text-[#91650c]">
                             Pending
                         </span>
                     </div>
 
-                    <p className="truncate text-xs text-slate-400 mt-0.5">
+                    <p className="truncate text-[11px] text-[#41454d] mt-0.5">
                         {email}
                     </p>
 
-                    <div className="flex items-center gap-1.5 text-[11px] text-slate-400 mt-1">
-                        <span className="inline-block h-2 w-2 rounded-full border border-slate-300" />
+                    <div className="flex items-center gap-1.5 text-[10px] text-[#41454d] mt-1">
+                        <span className="inline-block h-1.5 w-1.5 rounded-full bg-[#9297a0]" />
                         <span>{timeAgo}</span>
                     </div>
                 </div>
             </div>
 
             {/* Right: Cancel Invitation Button */}
-            <div className="flex items-center gap-2.5 self-end sm:self-center">
+            <div className="flex items-center gap-2 self-end sm:self-center">
                 <button
                     type="button"
                     disabled={isLoading}
                     onClick={onCancel}
-                    className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-lg border border-slate-200 bg-white px-3.5 py-1.5 text-xs font-semibold text-rose-600 shadow-2xs transition-colors hover:bg-rose-50 hover:border-rose-200 disabled:opacity-50 disabled:cursor-not-allowed"
+                    className="inline-flex cursor-pointer items-center justify-center gap-1.5 rounded-[6px] border border-[#dddddd] bg-white px-3 py-1.5 text-xs font-normal text-[#aa2d00] transition-colors hover:border-[#aa2d00]/30 hover:bg-[#aa2d00]/10 disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                     {isLoading ? (
                         <>
-                            <Loader2 size={13} className="animate-spin" />
+                            <Loader2 size={12} className="animate-spin" />
                             <span>Cancelling...</span>
                         </>
                     ) : (
                         <>
-                            <X size={13} />
+                            <X size={12} />
                             <span>Cancel Invitation</span>
                         </>
                     )}

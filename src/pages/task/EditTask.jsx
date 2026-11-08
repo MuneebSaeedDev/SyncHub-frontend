@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { X, Calendar as CalendarIcon, Loader2, UserCheck } from 'lucide-react';
+import { X, Calendar as CalendarIcon, Loader2, Check } from 'lucide-react';
 import DatePicker from '../../components/taskComponents/DatePicker.jsx';
 import { updateTask } from '../../store/taskSlice.js';
 
@@ -137,21 +137,21 @@ export default function EditTask({
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 backdrop-blur-xs p-4 transition-opacity">
-      <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-slate-100 flex flex-col relative overflow-visible">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#181d26]/40 backdrop-blur-xs p-4 transition-opacity animate-fadeIn">
+      <div className="w-full max-w-xl rounded-[12px] bg-white shadow-xl border border-[#dddddd] flex flex-col relative overflow-visible text-[#181d26]">
 
         {/* Modal Header */}
-        <div className="flex items-start justify-between px-7 pt-6 pb-2 rounded-t-2xl">
+        <div className="flex items-start justify-between px-6 pt-5 pb-3 border-b border-[#dddddd]">
           <div>
-            <div className="flex items-center gap-2.5">
-              <h2 className="text-xl font-bold text-slate-900 tracking-tight">
+            <div className="flex items-center gap-2">
+              <h2 className="text-base font-semibold text-[#181d26] tracking-tight">
                 Edit Task
               </h2>
-              <span className="rounded-md bg-slate-100 px-2 py-0.5 text-xs font-medium text-slate-500 font-mono">
+              <span className="rounded-[4px] bg-[#f8fafc] border border-[#dddddd] px-1.5 py-0.5 text-[11px] font-mono text-[#41454d]">
                 {shortId}
               </span>
             </div>
-            <p className="text-sm text-slate-500 mt-1">
+            <p className="text-xs text-[#41454d] mt-0.5">
               Update the details of your personal task.
             </p>
           </div>
@@ -160,19 +160,19 @@ export default function EditTask({
             type="button"
             onClick={onClose}
             disabled={isUpdating}
-            className="cursor-pointer rounded-xl border border-slate-200 p-2 text-slate-500 hover:bg-slate-50 hover:text-slate-800 transition-colors"
+            className="cursor-pointer rounded-[6px] p-1.5 text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26] transition-colors"
             aria-label="Close dialog"
           >
-            <X size={18} />
+            <X size={16} />
           </button>
         </div>
 
         {/* Form Body */}
-        <form onSubmit={handleSubmit} className="px-7 py-4 space-y-4">
+        <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4">
 
           {/* Error Banner */}
           {error && (
-            <div className="rounded-xl bg-red-50 p-3 text-xs text-red-600 border border-red-100">
+            <div className="rounded-[6px] bg-[#aa2d00]/10 p-3 text-xs text-[#aa2d00] border border-[#aa2d00]/30">
               {error}
             </div>
           )}
@@ -180,10 +180,10 @@ export default function EditTask({
           {/* Task Title */}
           <div>
             <div className="flex justify-between items-center mb-1.5">
-              <label className="block text-xs font-bold text-slate-900">
-                Task Title <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium text-[#181d26]">
+                Task Title <span className="text-[#aa2d00]">*</span>
               </label>
-              <span className="text-xs text-slate-400 font-normal">
+              <span className="text-[11px] text-[#9297a0] tabular-nums">
                 {title.length}/100
               </span>
             </div>
@@ -192,18 +192,18 @@ export default function EditTask({
               value={title}
               onChange={(e) => setTitle(e.target.value)}
               maxLength={100}
-              placeholder="Finalize Quarterly Engineering Sprint Scope"
-              className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 transition-colors shadow-2xs"
+              placeholder="Enter task title..."
+              className="w-full rounded-[6px] border border-[#dddddd] bg-white px-3 py-2 text-xs text-[#181d26] placeholder:text-[#9297a0] hover:border-[#9297a0] focus:border-[#458fff] focus:outline-none transition-colors"
             />
           </div>
 
           {/* Description */}
           <div>
             <div className="flex justify-between items-center mb-1.5">
-              <label className="block text-xs font-bold text-slate-900">
-                Description <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium text-[#181d26]">
+                Description <span className="text-[#aa2d00]">*</span>
               </label>
-              <span className="text-xs text-slate-400 font-normal">
+              <span className="text-[11px] text-[#9297a0] tabular-nums">
                 {description.length}/1000
               </span>
             </div>
@@ -212,8 +212,8 @@ export default function EditTask({
               value={description}
               onChange={(e) => setDescription(e.target.value)}
               maxLength={1000}
-              placeholder="Define epic deliverables, milestones, and resource allocation across team members."
-              className="w-full rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 placeholder:text-slate-400 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 resize-none transition-colors shadow-2xs"
+              placeholder="Provide context, acceptance criteria, or key steps..."
+              className="w-full rounded-[6px] border border-[#dddddd] bg-white px-3 py-2 text-xs text-[#181d26] placeholder:text-[#9297a0] hover:border-[#9297a0] focus:border-[#458fff] focus:outline-none resize-none transition-colors"
             />
           </div>
 
@@ -222,23 +222,23 @@ export default function EditTask({
 
             {/* Priority */}
             <div>
-              <label className="block text-xs font-bold text-slate-900 mb-1.5">
-                Priority <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium text-[#181d26] mb-1.5">
+                Priority <span className="text-[#aa2d00]">*</span>
               </label>
-              <div className="flex rounded-xl border border-slate-300 p-1 bg-white h-[42px] items-center">
+              <div className="flex rounded-[8px] border border-[#dddddd] p-0.5 bg-[#f8fafc] h-[36px] items-center">
                 {['low', 'medium', 'high'].map((p) => {
                   const isSelected = priority === p;
                   const label = p.charAt(0).toUpperCase() + p.slice(1);
 
-                  let activeStyles = 'border-transparent text-slate-600 hover:text-slate-900 hover:bg-slate-50';
+                  let activeStyles = 'border-transparent text-[#41454d] hover:text-[#181d26] hover:bg-white/60';
 
                   if (isSelected) {
                     if (p === 'high') {
-                      activeStyles = 'border border-red-500/80 bg-red-50/50 text-red-600 font-semibold shadow-2xs';
+                      activeStyles = 'border border-[#aa2d00]/30 bg-white text-[#aa2d00] font-medium shadow-xs';
                     } else if (p === 'medium') {
-                      activeStyles = 'border border-amber-500/80 bg-amber-50/50 text-amber-700 font-semibold shadow-2xs';
+                      activeStyles = 'border border-[#d9a441]/40 bg-white text-[#91650c] font-medium shadow-xs';
                     } else {
-                      activeStyles = 'border border-slate-400 bg-slate-100 text-slate-900 font-semibold shadow-2xs';
+                      activeStyles = 'border border-[#dddddd] bg-white text-[#181d26] font-medium shadow-xs';
                     }
                   }
 
@@ -247,7 +247,7 @@ export default function EditTask({
                       key={p}
                       type="button"
                       onClick={() => setPriority(p)}
-                      className={`flex-1 h-full rounded-lg text-xs font-medium cursor-pointer transition-all flex items-center justify-center ${activeStyles}`}
+                      className={`flex-1 h-full rounded-[6px] text-xs font-medium cursor-pointer transition-colors flex items-center justify-center capitalize ${activeStyles}`}
                     >
                       {label}
                     </button>
@@ -258,23 +258,23 @@ export default function EditTask({
 
             {/* Due Date */}
             <div className="relative" ref={datePickerRef}>
-              <label className="block text-xs font-bold text-slate-900 mb-1.5">
-                Due Date <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium text-[#181d26] mb-1.5">
+                Due Date <span className="text-[#aa2d00]">*</span>
               </label>
 
               <div
                 onClick={() => setIsDatePickerOpen((prev) => !prev)}
-                className="w-full flex items-center justify-between rounded-xl border border-slate-300 px-3.5 py-2.5 text-sm text-slate-900 bg-white cursor-pointer hover:border-indigo-600 transition-colors select-none shadow-2xs h-[42px]"
+                className="w-full flex items-center justify-between rounded-[6px] border border-[#dddddd] px-3 py-2 text-xs text-[#181d26] bg-white cursor-pointer hover:border-[#9297a0] transition-colors select-none h-[36px]"
               >
-                <span className={dueDate ? 'text-slate-900 font-normal' : 'text-slate-400'}>
+                <span className={dueDate ? 'text-[#181d26]' : 'text-[#9297a0]'}>
                   {dueDate || 'YYYY-MM-DD'}
                 </span>
-                <CalendarIcon size={16} className="text-slate-400 shrink-0" />
+                <CalendarIcon size={14} className="text-[#41454d] shrink-0" />
               </div>
 
               {/* DatePicker Dropdown */}
               {isDatePickerOpen && (
-                <div className="absolute right-0 bottom-full mb-2 z-50">
+                <div className="absolute right-0 bottom-full mb-2 z-50 shadow-xl">
                   <DatePicker
                     value={dueDate}
                     onChange={handleDateSelect}
@@ -286,33 +286,33 @@ export default function EditTask({
           </div>
 
           {/* Metadata Row: Created on & Last updated */}
-          <div className="flex items-center gap-2 pt-2 text-xs text-slate-500">
-            <CalendarIcon size={14} className="text-slate-400 shrink-0" />
+          <div className="flex items-center gap-2 pt-1 text-[11px] text-[#41454d]">
+            <CalendarIcon size={12} className="text-[#9297a0] shrink-0" />
             <span>
-              Created on {createdDateStr} • Last updated {updatedDateStr}
+              Created on {createdDateStr} &middot; Last updated {updatedDateStr}
             </span>
           </div>
 
         </form>
 
         {/* Modal Footer */}
-        <div className="flex items-center justify-between px-7 py-5 bg-white border-t border-slate-100 rounded-b-2xl mt-2">
+        <div className="flex items-center justify-between px-6 py-3.5 bg-[#f8fafc] border-t border-[#dddddd] rounded-b-[12px]">
           {/* Delete Action on the left */}
           <button
             type="button"
             onClick={handleDelete}
-            className="cursor-pointer text-sm font-semibold text-rose-600 hover:text-rose-700 hover:bg-rose-50 px-3 py-2 rounded-xl transition-colors"
+            className="cursor-pointer text-xs font-medium text-[#aa2d00] hover:text-[#8f2500] hover:bg-[#aa2d00]/10 px-2.5 py-1.5 rounded-[6px] transition-colors"
           >
             Delete task...
           </button>
 
           {/* Cancel and Save on the right */}
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2.5">
             <button
               type="button"
               onClick={onClose}
               disabled={isUpdating}
-              className="cursor-pointer rounded-xl border border-slate-300 px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs"
+              className="cursor-pointer rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] transition-colors"
             >
               Cancel
             </button>
@@ -321,12 +321,12 @@ export default function EditTask({
               type="button"
               onClick={handleSubmit}
               disabled={isUpdating}
-              className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl bg-[#4F46E5] hover:bg-[#4338CA] px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition-all disabled:opacity-50 active:scale-[0.99]"
+              className="cursor-pointer inline-flex items-center justify-center gap-1.5 rounded-[10px] bg-[#181d26] hover:bg-[#0d1218] active:bg-[#0d1218] px-4 py-2 text-xs font-medium text-white transition-all disabled:opacity-50 shadow-xs"
             >
               {isUpdating ? (
-                <Loader2 size={16} className="animate-spin" />
+                <Loader2 size={14} className="animate-spin" />
               ) : (
-                <UserCheck size={16} />
+                <Check size={14} />
               )}
               <span>Save Changes</span>
             </button>

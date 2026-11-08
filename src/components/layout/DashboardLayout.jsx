@@ -59,7 +59,7 @@ export default function DashboardLayout() {
     }
 
     return (
-        <div className="flex min-h-screen bg-slate-50/40 text-slate-800">
+        <div className="flex min-h-screen bg-[#ffffff] text-[#181d26]">
 
             <Sidebar
                 activeItem={activeItem}
@@ -69,7 +69,7 @@ export default function DashboardLayout() {
                 userInitial={userInitials}
             />
 
-            <main className="flex min-w-0 flex-1 flex-col">
+            <main className="flex min-w-0 flex-1 flex-col bg-white">
 
                 <Header
                     title={activeItem}
@@ -80,7 +80,7 @@ export default function DashboardLayout() {
                     userInitial={userInitials}
                 />
 
-                <div className="flex-1 p-5">
+                <div className="flex-1 p-6 lg:p-8">
                     <Outlet />
                 </div>
 

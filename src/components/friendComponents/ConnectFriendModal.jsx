@@ -12,7 +12,7 @@ export default function ConnectFriendModal({ isOpen, onClose }) {
         (state) => state.friends
     )
 
-    // Modal band hone par ya khulne par form reset ho jaye
+    // Reset when modal closes or opens
     useEffect(() => {
         if (!isOpen) {
             setEmail('')
@@ -36,7 +36,6 @@ export default function ConnectFriendModal({ isOpen, onClose }) {
 
         const trimmedEmail = email.trim()
 
-        // Basic client-side email format validation
         if (!trimmedEmail) {
             setLocalError("Email address is required.")
             return
@@ -50,29 +49,28 @@ export default function ConnectFriendModal({ isOpen, onClose }) {
 
         try {
             await dispatch(sendFriendRequest(trimmedEmail)).unwrap()
-            // Success hone par input clear ho jayega
             setEmail('')
         } catch {
-            // Error Redux state (sendError) se handle hota hai
+            // Handled via sendError in Redux state
         }
     }
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#181d26]/40 p-4 backdrop-blur-xs transition-opacity animate-fadeIn"
             onClick={handleClose}
         >
             <div
-                className="w-full max-w-[480px] rounded-2xl border border-slate-100 bg-white p-6 shadow-2xl transition-all sm:p-7"
+                className="w-full max-w-[460px] rounded-[12px] border border-[#dddddd] bg-white p-6 shadow-xl transition-all text-[#181d26]"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Modal Header */}
                 <div className="flex items-start justify-between">
                     <div>
-                        <h3 className="text-xl font-bold tracking-tight text-slate-900">
+                        <h3 className="text-base font-semibold tracking-tight text-[#181d26]">
                             Connect with a Friend
                         </h3>
-                        <p className="mt-1 text-sm text-slate-500">
+                        <p className="mt-0.5 text-xs text-[#41454d]">
                             Send an invitation to connect on SyncHub.
                         </p>
                     </div>
@@ -81,37 +79,37 @@ export default function ConnectFriendModal({ isOpen, onClose }) {
                         type="button"
                         onClick={handleClose}
                         disabled={sendLoading}
-                        className="cursor-pointer rounded-lg p-1.5 text-slate-400 hover:bg-slate-100 hover:text-slate-600 transition-colors disabled:opacity-50"
+                        className="cursor-pointer rounded-[6px] p-1.5 text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26] transition-colors disabled:opacity-50"
                         aria-label="Close modal"
                     >
-                        <X size={18} />
+                        <X size={15} />
                     </button>
                 </div>
 
                 {/* Success Banner if request was successfully sent */}
                 {sendSuccess ? (
-                    <div className="mt-6 rounded-2xl border border-emerald-100 bg-emerald-50/70 p-5 text-center">
-                        <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-600">
-                            <CheckCircle2 size={24} />
+                    <div className="mt-5 rounded-[12px] border border-[#39bf45]/30 bg-[#006400]/10 p-5 text-center">
+                        <div className="mx-auto flex h-10 w-10 items-center justify-center rounded-full bg-[#006400]/20 text-[#006400]">
+                            <CheckCircle2 size={20} />
                         </div>
-                        <h4 className="mt-3 text-sm font-bold text-emerald-900">
-                            Friend Request Sent!
+                        <h4 className="mt-2.5 text-xs font-semibold text-[#181d26]">
+                            Friend Request Sent
                         </h4>
-                        <p className="mt-1 text-xs text-emerald-700 leading-relaxed">
+                        <p className="mt-1 text-xs text-[#41454d] leading-relaxed">
                             Your request has been delivered. Once they accept, they will appear in your network.
                         </p>
-                        <div className="mt-5 flex justify-center gap-3">
+                        <div className="mt-4 flex justify-center gap-2.5">
                             <button
                                 type="button"
                                 onClick={() => dispatch(resetSendState())}
-                                className="cursor-pointer rounded-lg border border-emerald-200 bg-white px-4 py-2 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 transition-colors shadow-2xs"
+                                className="cursor-pointer rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-1.5 text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] transition-colors"
                             >
                                 Send Another
                             </button>
                             <button
                                 type="button"
                                 onClick={handleClose}
-                                className="cursor-pointer rounded-lg bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 transition-colors shadow-xs"
+                                className="cursor-pointer rounded-[8px] bg-[#181d26] px-3.5 py-1.5 text-xs font-medium text-white hover:bg-[#0d1218] transition-colors shadow-xs"
                             >
                                 Done
                             </button>
@@ -119,11 +117,11 @@ export default function ConnectFriendModal({ isOpen, onClose }) {
                     </div>
                 ) : (
                     /* Form Section */
-                    <form onSubmit={handleSubmit} className="mt-6 space-y-5">
+                    <form onSubmit={handleSubmit} className="mt-5 space-y-4">
                         {/* Server or Local Error Message */}
                         {(sendError || localError) && (
-                            <div className="flex items-center gap-2 rounded-xl border border-red-200 bg-red-50 p-3.5 text-xs font-medium text-red-600">
-                                <AlertCircle size={16} className="shrink-0" />
+                            <div className="flex items-center gap-2 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 text-xs font-normal text-[#aa2d00]">
+                                <AlertCircle size={14} className="shrink-0" />
                                 <span>{localError || sendError}</span>
                             </div>
                         )}
@@ -132,15 +130,15 @@ export default function ConnectFriendModal({ isOpen, onClose }) {
                         <div>
                             <label
                                 htmlFor="friend-email-input"
-                                className="block text-[13px] font-semibold text-slate-900"
+                                className="block text-xs font-medium text-[#181d26]"
                             >
-                                Friend's Email Address <span className="text-rose-500">*</span>
+                                Friend's Email Address <span className="text-[#aa2d00]">*</span>
                             </label>
 
-                            <div className="relative mt-2">
+                            <div className="relative mt-1.5">
                                 <Mail
-                                    size={16}
-                                    className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400"
+                                    size={14}
+                                    className="absolute left-3 top-1/2 -translate-y-1/2 text-[#9297a0]"
                                 />
                                 <input
                                     id="friend-email-input"
@@ -152,25 +150,25 @@ export default function ConnectFriendModal({ isOpen, onClose }) {
                                         if (localError) setLocalError('')
                                         if (sendError) dispatch(resetSendState())
                                     }}
-                                    placeholder="e.g., colleague@example.com"
-                                    className="h-11 w-full rounded-xl border border-slate-200 bg-white pl-10 pr-4 text-sm text-slate-900 placeholder:text-slate-400 shadow-2xs outline-none transition-all focus:border-indigo-600 focus:ring-3 focus:ring-indigo-100"
+                                    placeholder="e.g., alex@example.com"
+                                    className="h-9 w-full rounded-[6px] border border-[#dddddd] bg-white pl-9 pr-3 text-xs text-[#181d26] placeholder:text-[#9297a0] outline-none transition-colors hover:border-[#9297a0] focus:border-[#458fff]"
                                 />
                             </div>
 
-                            <p className="mt-2 text-xs text-slate-400 leading-relaxed">
+                            <p className="mt-1 text-[11px] text-[#41454d]">
                                 The recipient must have an existing SyncHub account registered with this email.
                             </p>
                         </div>
 
                         {/* How connections work Info Card */}
-                        <div className="rounded-xl border border-indigo-100/70 bg-[#F8FAFF] p-4">
-                            <div className="flex items-start gap-3">
-                                <Info size={18} className="text-indigo-600 mt-0.5 shrink-0" />
+                        <div className="rounded-[8px] border border-[#dddddd] bg-[#f8fafc] p-3.5">
+                            <div className="flex items-start gap-2.5">
+                                <Info size={15} className="text-[#181d26] mt-0.5 shrink-0" />
                                 <div>
-                                    <h4 className="text-[13px] font-bold text-slate-800">
+                                    <h4 className="text-xs font-medium text-[#181d26]">
                                         How connections work
                                     </h4>
-                                    <p className="mt-1 text-xs text-slate-500 leading-relaxed">
+                                    <p className="mt-0.5 text-[11px] text-[#41454d] leading-relaxed">
                                         Once sent, your request will appear in your friend&apos;s &ldquo;Friend Requests&rdquo; inbox. They can accept or reject the request at any time.
                                     </p>
                                 </div>
@@ -178,12 +176,12 @@ export default function ConnectFriendModal({ isOpen, onClose }) {
                         </div>
 
                         {/* Modal Footer Buttons */}
-                        <div className="flex items-center justify-end gap-3 pt-4 border-t border-slate-100">
+                        <div className="flex items-center justify-end gap-2.5 pt-3 border-t border-[#dddddd]">
                             <button
                                 type="button"
                                 onClick={handleClose}
                                 disabled={sendLoading}
-                                className="cursor-pointer rounded-xl border border-slate-200 bg-white px-5 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors shadow-2xs disabled:opacity-50"
+                                className="cursor-pointer rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] transition-colors disabled:opacity-50"
                             >
                                 Cancel
                             </button>
@@ -191,17 +189,17 @@ export default function ConnectFriendModal({ isOpen, onClose }) {
                             <button
                                 type="submit"
                                 disabled={sendLoading || !email.trim()}
-                                className="cursor-pointer inline-flex items-center justify-center gap-2 rounded-xl bg-indigo-600 px-5 py-2.5 text-sm font-semibold text-white shadow-xs transition-colors hover:bg-indigo-500 disabled:opacity-50 disabled:cursor-not-allowed"
+                                className="cursor-pointer inline-flex items-center justify-center gap-1.5 rounded-[8px] bg-[#181d26] px-3.5 py-2 text-xs font-medium text-white transition-colors hover:bg-[#0d1218] active:bg-[#0d1218] disabled:opacity-50 disabled:cursor-not-allowed shadow-xs"
                             >
                                 {sendLoading ? (
                                     <>
-                                        <Loader2 size={16} className="animate-spin" />
+                                        <Loader2 size={13} className="animate-spin" />
                                         <span>Sending...</span>
                                     </>
                                 ) : (
                                     <>
                                         <span>Send Request</span>
-                                        <Send size={15} />
+                                        <Send size={12} />
                                     </>
                                 )}
                             </button>

@@ -81,26 +81,26 @@ export default function TaskPage() {
     const getPriorityBadge = (priority) => {
         switch (priority?.toLowerCase()) {
             case 'high':
-                return 'bg-red-50 text-red-700 border border-red-200/60';
+                return 'bg-[#aa2d00]/10 text-[#aa2d00] border border-[#aa2d00]/25';
             case 'medium':
-                return 'bg-amber-50 text-amber-700 border border-amber-200/60';
+                return 'bg-[#d9a441]/15 text-[#91650c] border border-[#d9a441]/35';
             case 'low':
-                return 'bg-slate-100 text-slate-700 border border-slate-200/60';
+                return 'bg-[#f8fafc] text-[#41454d] border border-[#dddddd]';
             default:
-                return 'bg-slate-100 text-slate-700';
+                return 'bg-[#f8fafc] text-[#41454d] border border-[#dddddd]';
         }
     };
 
     const getPriorityDot = (priority) => {
         switch (priority?.toLowerCase()) {
             case 'high':
-                return 'bg-red-500';
+                return 'bg-[#aa2d00]';
             case 'medium':
-                return 'bg-amber-500';
+                return 'bg-[#d9a441]';
             case 'low':
-                return 'bg-slate-400';
+                return 'bg-[#9297a0]';
             default:
-                return 'bg-slate-400';
+                return 'bg-[#9297a0]';
         }
     };
 
@@ -140,28 +140,28 @@ export default function TaskPage() {
     };
 
     return (
-        <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans relative">
+        <div className="min-h-screen text-[#181d26] font-sans relative">
             <div className="max-w-7xl mx-auto space-y-6">
 
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-2xl font-bold tracking-tight text-slate-900">My Tasks</h1>
-                        <p className="text-sm text-slate-500 mt-0.5">{tasks.length} active personal tasks recorded</p>
+                        <h1 className="text-xl font-semibold tracking-tight text-[#181d26]">My Tasks</h1>
+                        <p className="text-xs text-[#41454d] mt-1">{tasks.length} active personal tasks recorded</p>
                     </div>
                     <button
                         type="button"
                         onClick={() => setIsCreateTaskOpen(true)}
-                        className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-semibold text-white shadow-xs transition-all hover:bg-indigo-500"
+                        className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] bg-[#181d26] px-4 py-2 text-xs font-medium text-white transition hover:bg-[#0d1218] active:bg-[#0d1218] shadow-xs"
                     >
-                        <Plus size={16} />
+                        <Plus size={15} />
                         Create Task
                     </button>
                 </div>
 
                 {/* Tabs Navigation */}
-                <div className="border-b border-slate-200">
-                    <nav className="flex space-x-8" aria-label="Tabs">
+                <div className="border-b border-[#dddddd]">
+                    <nav className="flex space-x-6" aria-label="Tabs">
                         {tabs.map((tab) => {
                             const isActive = activeTab === tab;
                             return (
@@ -171,9 +171,9 @@ export default function TaskPage() {
                                         setActiveTab(tab);
                                         setCurrentPage(1);
                                     }}
-                                    className={`py-3 px-1 !text-sm font-medium border-b-2 transition-colors relative cursor-pointer ${isActive
-                                            ? 'border-[#6366F1] text-[#6366F1]'
-                                            : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                                    className={`py-2.5 px-0.5 text-xs font-medium border-b-2 transition-colors relative cursor-pointer ${isActive
+                                            ? 'border-[#181d26] text-[#181d26]'
+                                            : 'border-transparent text-[#41454d] hover:text-[#181d26]'
                                         }`}
                                 >
                                     {tab}
@@ -186,7 +186,7 @@ export default function TaskPage() {
                 {/* Controls Bar */}
                 <div className="flex flex-col sm:flex-row items-center gap-3">
                     <div className="relative flex-1 w-full">
-                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-4 h-4 text-[#9297a0]" />
                         <input
                             type="text"
                             value={searchQuery}
@@ -195,12 +195,12 @@ export default function TaskPage() {
                                 setCurrentPage(1);
                             }}
                             placeholder="Filter by title..."
-                            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20 focus:border-[#6366F1] transition-all shadow-xs"
+                            className="w-full pl-9 pr-3.5 py-2 bg-white border border-[#dddddd] rounded-[8px] text-xs text-[#181d26] placeholder:text-[#9297a0] focus:outline-none focus:border-[#458fff] transition-colors"
                         />
                     </div>
                     <div className="flex items-center gap-2.5 w-full sm:w-auto relative">
-                        <button className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-xs cursor-pointer">
-                            <SlidersHorizontal className="w-4 h-4 text-slate-500" />
+                        <button className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 bg-white border border-[#dddddd] rounded-[8px] text-xs font-medium text-[#41454d] hover:text-[#181d26] hover:bg-[#f8fafc] transition-colors cursor-pointer">
+                            <SlidersHorizontal className="w-3.5 h-3.5 text-[#41454d]" />
                             Filters
                         </button>
 
@@ -208,17 +208,17 @@ export default function TaskPage() {
                         <div className="relative" ref={datePickerRef}>
                             <button
                                 onClick={() => setIsDatePickerOpen((prev) => !prev)}
-                                className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border rounded-lg text-sm font-medium transition-colors shadow-xs cursor-pointer ${selectedDateFilter
-                                        ? 'border-indigo-600 text-indigo-600 bg-indigo-50/30'
-                                        : 'border-slate-200 text-slate-700 hover:bg-slate-50'
+                                className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-[8px] text-xs font-medium transition-colors cursor-pointer ${selectedDateFilter
+                                        ? 'border border-[#181d26] text-[#181d26] bg-[#f8fafc]'
+                                        : 'border border-[#dddddd] bg-white text-[#41454d] hover:text-[#181d26] hover:bg-[#f8fafc]'
                                     }`}
                             >
-                                <CalendarIcon className="w-4 h-4 text-slate-500" />
+                                <CalendarIcon className="w-3.5 h-3.5 text-[#41454d]" />
                                 {selectedDateFilter ? formatDate(selectedDateFilter) : 'Due date'}
                             </button>
 
                             {isDatePickerOpen && (
-                                <div className="absolute right-0 mt-2 z-50 shadow-2xl">
+                                <div className="absolute right-0 mt-2 z-50 shadow-xl">
                                     <DatePicker
                                         value={selectedDateFilter}
                                         onChange={(date) => {
@@ -235,37 +235,37 @@ export default function TaskPage() {
 
                 {/* Error State */}
                 {error && (
-                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+                    <div className="p-3 bg-[#aa2d00]/10 border border-[#aa2d00]/30 rounded-[8px] text-xs text-[#aa2d00]">
                         {error}
                     </div>
                 )}
 
                 {/* Task Table Container */}
-                <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-visible">
+                <div className="bg-white border border-[#dddddd] rounded-[12px] shadow-xs overflow-visible">
                     <div className="overflow-x-auto">
                         <table className="w-full text-left border-collapse">
                             <thead>
-                                <tr className="border-b border-slate-200 bg-slate-50/50 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
-                                    <th className="py-3 px-6 w-32">State</th>
-                                    <th className="py-3 px-2">Task Title & Description</th>
-                                    <th className="py-3 px-6 w-32">Priority</th>
-                                    <th className="py-3 px-6 w-36">Due Date</th>
-                                    <th className="py-3 px-6 w-24 text-right">Actions</th>
+                                <tr className="border-b border-[#dddddd] bg-[#f8fafc] text-[11px] font-medium text-[#41454d]">
+                                    <th className="py-2.5 px-5 w-28">State</th>
+                                    <th className="py-2.5 px-3">Task title & description</th>
+                                    <th className="py-2.5 px-5 w-32">Priority</th>
+                                    <th className="py-2.5 px-5 w-36">Due date</th>
+                                    <th className="py-2.5 px-5 w-20 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-slate-100 text-sm">
+                            <tbody className="divide-y divide-[#dddddd] text-xs">
                                 {isLoading ? (
                                     <tr>
-                                        <td colSpan="5" className="py-12 text-center text-slate-500">
+                                        <td colSpan="5" className="py-12 text-center text-[#41454d]">
                                             <div className="flex justify-center items-center gap-2">
-                                                <Loader2 className="w-5 h-5 animate-spin text-[#6366F1]" />
+                                                <Loader2 className="w-4 h-4 animate-spin text-[#181d26]" />
                                                 Loading tasks...
                                             </div>
                                         </td>
                                     </tr>
                                 ) : currentTasks.length === 0 ? (
                                     <tr>
-                                        <td colSpan="5" className="py-12 text-center text-slate-500">
+                                        <td colSpan="5" className="py-12 text-center text-[#41454d]">
                                             No tasks found.
                                         </td>
                                     </tr>
@@ -277,59 +277,58 @@ export default function TaskPage() {
                                         const formattedDueDate = formatDate(task.dueDate);
 
                                         return (
-                                            <tr key={taskId} className="hover:bg-slate-50/60 transition-colors group cursor-pointer">
+                                            <tr key={taskId} className="hover:bg-[#f8fafc]/70 transition-colors group cursor-pointer">
                                                 {/* Status Column */}
-                                                <td className="py-4 px-6 align-middle">
-                                                    <span className={`text-xs font-medium ${task.status === 'Overdue' ? 'text-rose-600 font-semibold' : 'text-slate-500'}`}>
+                                                <td className="py-3.5 px-5 align-middle">
+                                                    <span className={`text-[11px] font-medium ${task.status === 'Overdue' ? 'text-[#aa2d00]' : 'text-[#41454d]'}`}>
                                                         {task.status || 'Default'}
                                                     </span>
                                                 </td>
 
                                                 {/* Title & Description Column */}
-                                                <td className="py-4 px-2 align-middle">
+                                                <td className="py-3.5 px-3 align-middle">
                                                     <div className="space-y-0.5">
-                                                        <p className="font-semibold text-slate-900">{task.title}</p>
-                                                        <p className="text-xs text-slate-500">{task.description}</p>
+                                                        <p className="font-medium text-[#181d26]">{task.title}</p>
+                                                        <p className="text-[11px] text-[#41454d]">{task.description}</p>
                                                     </div>
                                                 </td>
 
                                                 {/* Priority Column */}
-                                                <td className="py-4 px-6 align-middle">
-                                                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${getPriorityBadge(task.priority)}`}>
+                                                <td className="py-3.5 px-5 align-middle">
+                                                    <span className={`inline-flex items-center gap-1.5 px-2 py-0.5 rounded-[4px] text-[11px] font-medium ${getPriorityBadge(task.priority)}`}>
                                                         <span className={`w-1.5 h-1.5 rounded-full ${getPriorityDot(task.priority)}`}></span>
-                                                        {task.priority}
+                                                        {task.priority ? task.priority.charAt(0).toUpperCase() + task.priority.slice(1) : 'Low'}
                                                     </span>
                                                 </td>
 
                                                 {/* Due Date Column with Toggleable DatePicker */}
-                                                <td className="py-4 px-6 align-middle text-xs relative">
+                                                <td className="py-3.5 px-5 align-middle text-[11px] relative">
                                                     <div
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             setActiveDateTaskId(isInlineDateOpen ? null : taskId);
                                                         }}
-                                                        className="cursor-pointer inline-block hover:text-indigo-600 transition-colors"
+                                                        className="cursor-pointer inline-block hover:text-[#181d26] text-[#41454d] transition-colors"
                                                     >
                                                         {task.isOverdue ? (
-                                                            <span className="text-rose-600 font-medium leading-tight block">
-                                                                {formattedDueDate} <span className="block text-[11px]">· Overdue</span>
+                                                            <span className="text-[#aa2d00] font-medium leading-tight block">
+                                                                {formattedDueDate} <span className="block text-[10px] text-[#aa2d00]/80">&middot; Overdue</span>
                                                             </span>
                                                         ) : (
-                                                            <span className="text-slate-600">{formattedDueDate}</span>
+                                                            <span>{formattedDueDate}</span>
                                                         )}
                                                     </div>
 
-                                                    {/* DatePicker renders right on click, overriding/overlapping container bounds */}
+                                                    {/* DatePicker */}
                                                     {isInlineDateOpen && (
                                                         <div
                                                             ref={inlineDatePickerRef}
-                                                            className="absolute left-0 top-14 z-50 shadow-2xl"
+                                                            className="absolute left-0 top-12 z-50 shadow-xl"
                                                             onClick={(e) => e.stopPropagation()}
                                                         >
                                                             <DatePicker
                                                                 value={task.dueDate}
                                                                 onChange={(newDate) => {
-                                                                    console.log("Selected new date for task:", taskId, newDate);
                                                                     setActiveDateTaskId(null);
                                                                 }}
                                                             />
@@ -338,13 +337,13 @@ export default function TaskPage() {
                                                 </td>
 
                                                 {/* Actions Column with Dropdown */}
-                                                <td className="py-4 px-6 align-middle text-right relative">
+                                                <td className="py-3.5 px-5 align-middle text-right relative">
                                                     <button
                                                         onClick={(e) => {
                                                             e.stopPropagation();
                                                             setActiveDropdownId(isMenuOpen ? null : taskId);
                                                         }}
-                                                        className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
+                                                        className="p-1 text-[#41454d] hover:text-[#181d26] hover:bg-[#f8fafc] rounded-[6px] border border-transparent hover:border-[#dddddd] transition-colors cursor-pointer"
                                                         title="Actions"
                                                     >
                                                         <MoreHorizontal className="w-4 h-4" />
@@ -353,7 +352,7 @@ export default function TaskPage() {
                                                     {isMenuOpen && (
                                                         <div
                                                             ref={dropdownRef}
-                                                            className="absolute right-12 top-2 z-50 text-left shadow-2xl"
+                                                            className="absolute right-8 top-2 z-50 text-left shadow-xl"
                                                             onClick={(e) => e.stopPropagation()}
                                                         >
                                                             <TaskDropdown
@@ -385,15 +384,15 @@ export default function TaskPage() {
                     </div>
 
                     {/* Pagination Footer */}
-                    <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-3.5 border-t border-slate-200 bg-white gap-3">
-                        <p className="text-xs text-slate-500">
-                            Showing <span className="font-medium text-slate-700">{filteredTasks.length > 0 ? indexOfFirstTask + 1 : 0}–{Math.min(indexOfLastTask, filteredTasks.length)}</span> of <span className="font-medium text-slate-700">{filteredTasks.length}</span> tasks
+                    <div className="flex flex-col sm:flex-row items-center justify-between px-5 py-3 border-t border-[#dddddd] bg-white gap-3">
+                        <p className="text-xs text-[#41454d]">
+                            Showing <span className="font-medium text-[#181d26]">{filteredTasks.length > 0 ? indexOfFirstTask + 1 : 0}&ndash;{Math.min(indexOfLastTask, filteredTasks.length)}</span> of <span className="font-medium text-[#181d26]">{filteredTasks.length}</span> tasks
                         </p>
                         <div className="flex items-center gap-1.5">
                             <button
                                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                 disabled={currentPage === 1}
-                                className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                                className="px-3 py-1.5 text-xs font-normal text-[#41454d] bg-white border border-[#dddddd] rounded-[6px] hover:text-[#181d26] hover:bg-[#f8fafc] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                             >
                                 Previous
                             </button>
@@ -401,9 +400,9 @@ export default function TaskPage() {
                                 <button
                                     key={page}
                                     onClick={() => setCurrentPage(page)}
-                                    className={`w-8 h-8 text-xs font-medium rounded-lg transition-colors cursor-pointer ${currentPage === page
-                                            ? 'bg-[#6366F1] text-white shadow-xs'
-                                            : 'text-slate-700 hover:bg-slate-100'
+                                    className={`w-7 h-7 text-xs font-medium rounded-[6px] transition-colors cursor-pointer ${currentPage === page
+                                            ? 'bg-[#181d26] text-white shadow-xs'
+                                            : 'text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26]'
                                         }`}
                                 >
                                     {page}
@@ -412,7 +411,7 @@ export default function TaskPage() {
                             <button
                                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                                 disabled={currentPage === totalPages || totalPages === 0}
-                                className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                                className="px-3 py-1.5 text-xs font-normal text-[#41454d] bg-white border border-[#dddddd] rounded-[6px] hover:text-[#181d26] hover:bg-[#f8fafc] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                             >
                                 Next
                             </button>

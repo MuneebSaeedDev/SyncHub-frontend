@@ -51,10 +51,10 @@ export default function FormField({
   const renderIcon = () => {
     if (icon) return icon
     if (type === 'email') {
-      return <Mail size={18} className="shrink-0 text-gray-400" />
+      return <Mail size={16} className="shrink-0 text-[#9297a0]" />
     }
     if (isPasswordField) {
-      return <Lock size={18} className="shrink-0 text-gray-400" />
+      return <Lock size={16} className="shrink-0 text-[#9297a0]" />
     }
     return null
   }
@@ -64,14 +64,14 @@ export default function FormField({
   return (
     <div className={`space-y-1.5 text-left ${className}`}>
       {(label || labelAction) && (
-        <div className="flex items-center justify-between text-sm">
+        <div className="flex items-center justify-between text-xs">
           {label && (
             <label
               htmlFor={inputId}
-              className="font-medium text-gray-700 select-none"
+              className="font-medium text-[#181d26] select-none"
             >
               {label}
-              {required && <span className="ml-0.5 text-rose-500">*</span>}
+              {required && <span className="ml-0.5 text-[#aa2d00]">*</span>}
             </label>
           )}
           {labelAction}
@@ -79,13 +79,13 @@ export default function FormField({
       )}
 
       <div
-        className={`relative flex h-12 w-full items-center rounded-lg border bg-white px-3.5 transition ${
+        className={`relative flex h-10 w-full items-center rounded-[6px] border bg-white px-3 transition ${
           error
-            ? 'border-rose-300 focus-within:border-rose-500 focus-within:ring-2 focus-within:ring-rose-500/15'
-            : 'border-gray-300 focus-within:border-[#5145ed] focus-within:ring-2 focus-within:ring-[#5145ed]/15'
-        } ${disabled ? 'bg-gray-50 opacity-60 cursor-not-allowed' : ''}`}
+            ? 'border-[#aa2d00] focus-within:border-[#aa2d00] focus-within:ring-2 focus-within:ring-[#aa2d00]/20'
+            : 'border-[#dddddd] focus-within:border-[#458fff] focus-within:ring-2 focus-within:ring-[#458fff]/20 hover:border-[#9297a0]'
+        } ${disabled ? 'opacity-40 cursor-not-allowed bg-[#f8fafc]' : ''}`}
       >
-        {fieldIcon && <span className="mr-3 flex items-center">{fieldIcon}</span>}
+        {fieldIcon && <span className="mr-2.5 flex items-center">{fieldIcon}</span>}
 
         <input
           id={inputId}
@@ -98,7 +98,7 @@ export default function FormField({
           disabled={disabled}
           autoComplete={autoComplete}
           aria-invalid={Boolean(error)}
-          className={`h-full min-w-0 flex-1 bg-transparent text-sm text-gray-900 outline-none placeholder:text-gray-400 disabled:cursor-not-allowed ${inputClassName}`}
+          className={`h-full min-w-0 flex-1 bg-transparent text-sm text-[#181d26] outline-none placeholder:text-[#9297a0] disabled:cursor-not-allowed ${inputClassName}`}
           {...restProps}
         />
 
@@ -108,19 +108,19 @@ export default function FormField({
             onClick={handleTogglePassword}
             tabIndex={-1}
             aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
-            className="cursor-pointer ml-2 grid size-8 place-items-center rounded-md text-gray-400 transition hover:bg-gray-100 hover:text-gray-700 focus:outline-none"
+            className="cursor-pointer ml-2 grid size-7 place-items-center rounded-[4px] text-[#9297a0] transition hover:bg-[#f8fafc] hover:text-[#181d26] focus:outline-none"
           >
-            {isPasswordVisible ? <EyeOff size={18} /> : <Eye size={18} />}
+            {isPasswordVisible ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
         )}
       </div>
 
       {error ? (
-        <p className="text-xs font-medium text-rose-600 animate-fadeIn">
+        <p className="text-xs font-normal text-[#aa2d00]">
           {error}
         </p>
       ) : hint ? (
-        <p className="text-xs text-gray-500">{hint}</p>
+        <p className="text-xs text-[#41454d]">{hint}</p>
       ) : null}
     </div>
   )

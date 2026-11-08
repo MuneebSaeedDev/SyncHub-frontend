@@ -26,7 +26,7 @@ export default function TaskDropdown({
     ]
 
     return (
-        <div className="w-[190px] rounded-xl border border-slate-100 bg-white p-1.5 shadow-xl">
+        <div className="w-[180px] rounded-[10px] border border-[#dddddd] bg-white p-1 shadow-xl">
 
             {items.map((item) => {
 
@@ -37,14 +37,14 @@ export default function TaskDropdown({
                         type="button"
                         key={item.label}
                         onClick={item.onClick}
-                        className={`flex w-full cursor-pointer items-center gap-2 rounded-lg px-2.5 py-2.5 text-left text-[11px] transition-colors
+                        className={`flex w-full cursor-pointer items-center gap-2 rounded-[6px] px-2.5 py-1.5 text-left text-xs font-normal transition-colors
                             ${item.destructive
-                                ? 'text-red-500 hover:bg-red-50'
-                                : 'text-slate-700 hover:bg-slate-100'
+                                ? 'text-[#aa2d00] hover:bg-[#aa2d00]/10'
+                                : 'text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26]'
                             }
                         `}
                     >
-                        <Icon size={14} strokeWidth={1.7} />
+                        <Icon size={14} strokeWidth={1.5} />
                         {item.label}
                     </button>
                 )

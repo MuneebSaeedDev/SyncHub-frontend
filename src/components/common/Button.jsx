@@ -14,15 +14,15 @@ export default function Button({
 }) {
   const variantStyles = {
     primary:
-      'bg-[#5145ed] text-white hover:bg-[#4338ca] focus:ring-[#5145ed]/20 shadow-sm',
+      'bg-[#181d26] text-white hover:bg-[#0d1218] active:bg-[#0d1218] focus:ring-2 focus:ring-[#181d26]/20 border border-transparent',
     secondary:
-      'bg-gray-100 text-gray-800 hover:bg-gray-200',
+      'bg-white text-[#181d26] hover:bg-[#f8fafc] border border-[#dddddd] focus:border-[#9297a0]',
     outline:
-      'border border-gray-300 bg-white text-gray-700 hover:bg-gray-50',
+      'border border-[#dddddd] bg-white text-[#181d26] hover:bg-[#f8fafc]',
     ghost:
-      'text-gray-600 hover:bg-gray-100 hover:text-gray-900',
+      'text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26]',
     danger:
-      'bg-rose-600 text-white hover:bg-rose-700',
+      'bg-[#aa2d00] text-white hover:bg-[#8f2500] border border-transparent',
   }
 
   return (
@@ -32,16 +32,15 @@ export default function Button({
       onClick={onClick}
       className={`
         inline-flex items-center justify-center gap-2
-        rounded-lg font-medium cursor-pointer select-none
-        transition duration-150 ease-in-out
-        focus:outline-none focus:ring-4
-        disabled:opacity-60 disabled:cursor-not-allowed
-        active:scale-[0.99]
+        rounded-[10px] font-medium cursor-pointer select-none
+        transition duration-150 ease-out
+        focus:outline-none
+        disabled:opacity-40 disabled:cursor-not-allowed
+        active:scale-[0.98]
 
-        h-9 px-3 text-xs
-        sm:h-10 sm:px-3.5 sm:text-xs
-        md:h-11 md:px-4 md:text-sm
-        lg:h-12 lg:px-5 lg:text-sm
+        h-9 px-3.5 text-xs
+        sm:h-9 sm:px-3.5 sm:text-xs
+        md:h-10 md:px-4 md:text-sm
 
         ${variantStyles[variant] || variantStyles.primary}
         ${fullWidth ? 'w-full' : ''}
@@ -51,12 +50,12 @@ export default function Button({
     >
       {isLoading ? (
         <>
-          <Loader2 className="size-4 animate-spin shrink-0" />
+          <Loader2 className="size-3.5 animate-spin shrink-0 text-current" />
           <span>Loading...</span>
         </>
       ) : (
         <>
-          {Icon && <Icon className="size-4 shrink-0" />}
+          {Icon && <Icon className="size-3.5 shrink-0" />}
           {children}
         </>
       )}

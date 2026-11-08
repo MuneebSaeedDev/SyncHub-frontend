@@ -101,51 +101,46 @@ export default function FriendRequestsPage() {
   const sentCount = sentRequests?.length || 0;
 
   return (
-    <div className="mx-auto max-w-5xl space-y-6 pb-12">
-      {/* Top Breadcrumb & Heading */}
+    <div className="mx-auto max-w-5xl space-y-6 pb-12 text-[#181d26]">
+      {/* Top Heading */}
       <div>
-        <p className="text-xs font-semibold uppercase tracking-wider text-slate-400">
-          Network / Friend Requests
+        <h1 className="text-xl font-semibold tracking-tight text-[#181d26]">
+          Friend Requests
+        </h1>
+        <p className="mt-1 text-xs text-[#41454d]">
+          {activeTab === "received"
+            ? pendingCount === 0
+              ? "You have no pending invitations."
+              : `You have ${pendingCount} pending ${
+                  pendingCount === 1 ? "invitation" : "invitations"
+                } waiting for your response.`
+            : sentCount === 0
+              ? "You have not sent any pending invitations."
+              : `You have sent ${sentCount} ${
+                  sentCount === 1 ? "invitation" : "invitations"
+                } awaiting response.`}
         </p>
-        <div className="mt-2">
-          <h1 className="text-2xl font-bold tracking-tight text-slate-900">
-            Friend Requests
-          </h1>
-          <p className="mt-0.5 text-xs text-slate-500">
-            {activeTab === "received"
-              ? pendingCount === 0
-                ? "You have no pending invitations."
-                : `You have ${pendingCount} pending ${
-                    pendingCount === 1 ? "invitation" : "invitations"
-                  } waiting for your response.`
-              : sentCount === 0
-                ? "You have not sent any pending invitations."
-                : `You have sent ${sentCount} ${
-                    sentCount === 1 ? "invitation" : "invitations"
-                  } awaiting response.`}
-          </p>
-        </div>
       </div>
 
       {/* Segmented Control / Tabs */}
-      <div className="flex items-center gap-1.5 rounded-xl bg-slate-100 p-1 w-fit">
+      <div className="flex items-center gap-1.5 rounded-[8px] bg-[#f8fafc] border border-[#dddddd] p-1 w-fit">
         {/* Received Requests */}
         <button
           type="button"
           onClick={() => setActiveTab("received")}
-          className={`cursor-pointer inline-flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${
+          className={`cursor-pointer inline-flex items-center gap-2 rounded-[6px] px-3 py-1.5 text-xs font-medium transition-colors ${
             activeTab === "received"
-              ? "bg-white text-slate-900 shadow-2xs"
-              : "text-slate-500 hover:text-slate-800"
+              ? "bg-[#181d26] text-white shadow-xs"
+              : "text-[#41454d] hover:text-[#181d26] hover:bg-[#e0e2e6]/60 border border-transparent"
           }`}
         >
           <span>Received Requests</span>
 
           <span
-            className={`flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold ${
+            className={`flex h-4 min-w-4 items-center justify-center rounded-[4px] px-1 text-[10px] tabular-nums font-medium ${
               activeTab === "received"
-                ? "bg-amber-100 text-amber-800"
-                : "bg-slate-200 text-slate-600"
+                ? "bg-white/20 text-white"
+                : "bg-[#e0e2e6] text-[#41454d]"
             }`}
           >
             {pendingCount}
@@ -156,19 +151,19 @@ export default function FriendRequestsPage() {
         <button
           type="button"
           onClick={() => setActiveTab("sent")}
-          className={`cursor-pointer inline-flex items-center gap-2 rounded-lg px-3.5 py-1.5 text-xs font-semibold transition-all ${
+          className={`cursor-pointer inline-flex items-center gap-2 rounded-[6px] px-3 py-1.5 text-xs font-medium transition-colors ${
             activeTab === "sent"
-              ? "bg-white text-slate-900 shadow-2xs"
-              : "text-slate-500 hover:text-slate-800"
+              ? "bg-[#181d26] text-white shadow-xs"
+              : "text-[#41454d] hover:text-[#181d26] hover:bg-[#e0e2e6]/60 border border-transparent"
           }`}
         >
           <span>Sent Invitations</span>
 
           <span
-            className={`flex h-4 min-w-4 items-center justify-center rounded-full px-1 text-[10px] font-bold ${
+            className={`flex h-4 min-w-4 items-center justify-center rounded-[4px] px-1 text-[10px] tabular-nums font-medium ${
               activeTab === "sent"
-                ? "bg-indigo-100 text-indigo-700"
-                : "bg-slate-200 text-slate-600"
+                ? "bg-white/20 text-white"
+                : "bg-[#e0e2e6] text-[#41454d]"
             }`}
           >
             {sentCount}
@@ -179,21 +174,21 @@ export default function FriendRequestsPage() {
       {/* Notification / Feedback Banner */}
       {actionFeedback && (
         <div
-          className={`flex items-center justify-between rounded-xl border p-3.5 text-xs font-medium transition-all ${
+          className={`flex items-center justify-between rounded-[8px] border p-3 text-xs font-normal transition-all ${
             actionFeedback.type === "success"
-              ? "border-emerald-200 bg-emerald-50 text-emerald-800"
+              ? "border-[#39bf45]/30 bg-[#006400]/10 text-[#006400]"
               : actionFeedback.type === "error"
-                ? "border-red-200 bg-red-50 text-red-700"
-                : "border-slate-200 bg-slate-50 text-slate-700"
+                ? "border-[#aa2d00]/30 bg-[#aa2d00]/10 text-[#aa2d00]"
+                : "border-[#dddddd] bg-[#f8fafc] text-[#41454d]"
           }`}
         >
           <div className="flex items-center gap-2">
             {actionFeedback.type === "success" ? (
-              <CheckCircle2 size={16} className="text-emerald-600" />
+              <CheckCircle2 size={15} className="text-[#006400]" />
             ) : actionFeedback.type === "error" ? (
-              <AlertCircle size={16} className="text-red-600" />
+              <AlertCircle size={15} className="text-[#aa2d00]" />
             ) : (
-              <UserCheck size={16} className="text-slate-500" />
+              <UserCheck size={15} className="text-[#41454d]" />
             )}
             <span>{actionFeedback.message}</span>
           </div>
@@ -201,7 +196,7 @@ export default function FriendRequestsPage() {
           <button
             type="button"
             onClick={() => setActionFeedback(null)}
-            className="text-xs opacity-60 hover:opacity-100 cursor-pointer"
+            className="text-xs text-[#41454d] hover:text-[#181d26] cursor-pointer"
           >
             Dismiss
           </button>
@@ -210,38 +205,38 @@ export default function FriendRequestsPage() {
 
       {/* Tab: Received Requests */}
       {activeTab === "received" && (
-        <div className="rounded-2xl border border-slate-200/80 bg-white shadow-2xs overflow-hidden">
+        <div className="rounded-[12px] border border-[#dddddd] bg-white shadow-xs overflow-hidden">
           {/* Header bar inside table */}
-          <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/70 px-6 py-3">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+          <div className="flex items-center justify-between border-b border-[#dddddd] bg-[#f8fafc] px-5 py-2.5">
+            <span className="text-[11px] font-medium text-[#41454d]">
               Pending Invitations
             </span>
-            <span className="text-xs font-medium text-slate-500">
+            <span className="text-[11px] font-normal text-[#41454d] tabular-nums">
               {pendingCount} {pendingCount === 1 ? "request" : "requests"}
             </span>
           </div>
 
           {/* Content */}
           {requestStatus === "loading" && requests.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-slate-400">
-              <Loader2 size={24} className="animate-spin text-indigo-600" />
+            <div className="flex flex-col items-center justify-center py-16 text-[#41454d]">
+              <Loader2 size={22} className="animate-spin text-[#181d26]" />
               <p className="mt-2 text-xs">Loading requests...</p>
             </div>
           ) : requests.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center text-slate-400">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-400">
-                <Inbox size={22} />
+            <div className="flex flex-col items-center justify-center py-16 text-center text-[#41454d]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-[#f8fafc] border border-[#dddddd] text-[#9297a0]">
+                <Inbox size={20} />
               </div>
-              <h3 className="mt-3 text-sm font-semibold text-slate-700">
+              <h3 className="mt-3 text-xs font-medium text-[#181d26]">
                 No pending requests
               </h3>
-              <p className="mt-1 text-xs text-slate-400 max-w-sm">
+              <p className="mt-1 text-[11px] text-[#41454d] max-w-sm">
                 When other users invite you to connect, their invitations will
                 appear here.
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-[#dddddd]">
               {requests.map((request) => {
                 const id = request._id || request.id;
                 const name = request.requester?.name;
@@ -264,38 +259,38 @@ export default function FriendRequestsPage() {
 
       {/* Tab: Sent Invitations */}
       {activeTab === "sent" && (
-        <div className="rounded-2xl border border-slate-200/80 bg-white shadow-2xs overflow-hidden">
+        <div className="rounded-[12px] border border-[#dddddd] bg-white shadow-xs overflow-hidden">
           {/* Header bar inside table */}
-          <div className="flex items-center justify-between border-b border-slate-100 bg-slate-50/70 px-6 py-3">
-            <span className="text-[11px] font-bold uppercase tracking-wider text-slate-400">
+          <div className="flex items-center justify-between border-b border-[#dddddd] bg-[#f8fafc] px-5 py-2.5">
+            <span className="text-[11px] font-medium text-[#41454d]">
               Sent Invitations
             </span>
-            <span className="text-xs font-medium text-slate-500">
+            <span className="text-[11px] font-normal text-[#41454d] tabular-nums">
               {sentCount} {sentCount === 1 ? "invitation" : "invitations"}
             </span>
           </div>
 
           {/* Content */}
           {sentStatus === "loading" && sentRequests.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-slate-400">
-              <Loader2 size={24} className="animate-spin text-indigo-600" />
+            <div className="flex flex-col items-center justify-center py-16 text-[#41454d]">
+              <Loader2 size={22} className="animate-spin text-[#181d26]" />
               <p className="mt-2 text-xs">Loading sent invitations...</p>
             </div>
           ) : sentRequests.length === 0 ? (
-            <div className="flex flex-col items-center justify-center py-16 text-center text-slate-400">
-              <div className="flex h-12 w-12 items-center justify-center rounded-2xl bg-slate-50 text-slate-400">
-                <Send size={22} />
+            <div className="flex flex-col items-center justify-center py-16 text-center text-[#41454d]">
+              <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-[#f8fafc] border border-[#dddddd] text-[#9297a0]">
+                <Send size={18} />
               </div>
-              <h3 className="mt-3 text-sm font-semibold text-slate-700">
+              <h3 className="mt-3 text-xs font-medium text-[#181d26]">
                 No sent invitations
               </h3>
-              <p className="mt-1 text-xs text-slate-400 max-w-sm">
+              <p className="mt-1 text-[11px] text-[#41454d] max-w-sm">
                 You haven't sent any friend requests yet, or all your requests
                 have been accepted.
               </p>
             </div>
           ) : (
-            <div className="divide-y divide-slate-100">
+            <div className="divide-y divide-[#dddddd]">
               {sentRequests.map((request) => {
                 const id = request._id || request.id;
                 const name = request.recipient?.name;

@@ -1,6 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { X, UserPlus, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
+import { X, Plus, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 import DatePicker from '../../components/taskComponents/DatePicker.jsx';
 import { createTask } from '../../store/taskSlice.js';
 
@@ -115,22 +115,22 @@ export default function CreateTask({ isOpen = true, onClose }) {
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 transition-opacity animate-fadeIn">
-      <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-gray-100 flex flex-col transform transition-all overflow-visible relative">
+    <div className="fixed inset-0 z-50 flex items-center justify-center bg-[#181d26]/40 backdrop-blur-xs p-4 transition-opacity animate-fadeIn">
+      <div className="w-full max-w-xl rounded-[12px] bg-white shadow-xl border border-[#dddddd] flex flex-col transform transition-all overflow-visible relative text-[#181d26]">
 
         {/* Header */}
-        <div className="flex items-start justify-between px-6 pt-6 pb-2 rounded-t-2xl">
+        <div className="flex items-start justify-between px-6 pt-5 pb-3 border-b border-[#dddddd]">
           <div>
-            <h2 className="text-xl font-bold text-gray-900">Create New Task</h2>
-            <p className="text-sm text-gray-500 mt-0.5">Add a personal task to your workspace.</p>
+            <h2 className="text-base font-semibold tracking-tight text-[#181d26]">Create New Task</h2>
+            <p className="text-xs text-[#41454d] mt-0.5">Add a personal task to your workspace.</p>
           </div>
           <button
             type="button"
             onClick={handleClose}
             disabled={isSubmitting}
-            className="cursor-pointer rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
+            className="cursor-pointer rounded-[6px] p-1.5 text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26] transition-colors"
           >
-            <X className="w-5 h-5" />
+            <X className="w-4 h-4" />
           </button>
         </div>
 
@@ -139,18 +139,18 @@ export default function CreateTask({ isOpen = true, onClose }) {
 
           {/* Error Banner */}
           {error && (
-            <div className="rounded-xl bg-red-50 p-3 text-xs text-red-600 border border-red-100">
+            <div className="rounded-[6px] bg-[#aa2d00]/10 p-3 text-xs text-[#aa2d00] border border-[#aa2d00]/30">
               {error}
             </div>
           )}
 
           {/* Task Title */}
           <div>
-            <div className="flex justify-between items-center mb-1">
-              <label className="block text-xs font-semibold text-gray-900">
-                Task Title <span className="text-red-500">*</span>
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="block text-xs font-medium text-[#181d26]">
+                Task Title <span className="text-[#aa2d00]">*</span>
               </label>
-              <span className="text-[11px] text-gray-400">{title.length}/100</span>
+              <span className="text-[11px] text-[#9297a0] tabular-nums">{title.length}/100</span>
             </div>
             <input
               type="text"
@@ -158,18 +158,18 @@ export default function CreateTask({ isOpen = true, onClose }) {
               onChange={(e) => setTitle(e.target.value)}
               maxLength={100}
               placeholder="Enter task title..."
-              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 transition-colors"
+              className="w-full rounded-[6px] border border-[#dddddd] bg-white px-3 py-2 text-xs text-[#181d26] placeholder:text-[#9297a0] hover:border-[#9297a0] focus:border-[#458fff] focus:outline-none transition-colors"
             />
-            <p className="text-[11px] text-gray-500 mt-1">Minimum 8 characters required by schema.</p>
+            <p className="text-[11px] text-[#41454d] mt-1">Minimum 8 characters required by schema.</p>
           </div>
 
           {/* Description */}
           <div>
-            <div className="flex justify-between items-center mb-1">
-              <label className="block text-xs font-semibold text-gray-900">
-                Description <span className="text-red-500">*</span>
+            <div className="flex justify-between items-center mb-1.5">
+              <label className="block text-xs font-medium text-[#181d26]">
+                Description <span className="text-[#aa2d00]">*</span>
               </label>
-              <span className="text-[11px] text-gray-400">{description.length}/1000</span>
+              <span className="text-[11px] text-[#9297a0] tabular-nums">{description.length}/1000</span>
             </div>
             <textarea
               rows={3}
@@ -177,9 +177,9 @@ export default function CreateTask({ isOpen = true, onClose }) {
               onChange={(e) => setDescription(e.target.value)}
               maxLength={1000}
               placeholder="Provide context, acceptance criteria, or key steps (min 16 chars)..."
-              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 resize-none transition-colors"
+              className="w-full rounded-[6px] border border-[#dddddd] bg-white px-3 py-2 text-xs text-[#181d26] placeholder:text-[#9297a0] hover:border-[#9297a0] focus:border-[#458fff] focus:outline-none resize-none transition-colors"
             />
-            <p className="text-[11px] text-gray-500 mt-1">Detailed description required by backend controller.</p>
+            <p className="text-[11px] text-[#41454d] mt-1">Detailed description required by backend controller.</p>
           </div>
 
           {/* Priority and Due Date Row */}
@@ -187,28 +187,28 @@ export default function CreateTask({ isOpen = true, onClose }) {
 
             {/* Priority */}
             <div>
-              <label className="block text-xs font-semibold text-gray-900 mb-1">
-                Priority <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium text-[#181d26] mb-1.5">
+                Priority <span className="text-[#aa2d00]">*</span>
               </label>
-              <div className="flex rounded-xl border border-gray-300 p-0.5 bg-white">
+              <div className="flex rounded-[8px] border border-[#dddddd] p-0.5 bg-[#f8fafc]">
                 {['low', 'medium', 'high'].map((p) => {
-                  const isSelected = priority === p;
-                  let textColor = 'text-gray-600';
+                  const isSelected = priority.toLowerCase() === p;
+                  let selectedStyle = 'bg-white text-[#181d26] border border-[#dddddd] shadow-xs';
                   if (isSelected) {
-                    if (p === 'low') textColor = 'text-gray-900';
-                    if (p === 'medium') textColor = 'text-amber-700';
-                    if (p === 'high') textColor = 'text-red-600';
+                    if (p === 'low') selectedStyle = 'bg-white text-[#181d26] border border-[#dddddd] shadow-xs';
+                    if (p === 'medium') selectedStyle = 'bg-white text-[#91650c] border border-[#d9a441]/50 shadow-xs';
+                    if (p === 'high') selectedStyle = 'bg-white text-[#aa2d00] border border-[#aa2d00]/40 shadow-xs';
                   }
 
                   return (
                     <button
                       key={p}
                       type="button"
-                      onClick={() => setPriority(p)}
-                      className={`flex-1 rounded-lg py-1.5 text-xs font-semibold cursor-pointer transition-all ${
+                      onClick={() => setPriority(p.charAt(0).toUpperCase() + p.slice(1))}
+                      className={`flex-1 rounded-[6px] py-1.5 text-xs font-medium cursor-pointer transition-colors capitalize ${
                         isSelected
-                          ? `bg-amber-50/60 border border-amber-300/60 shadow-xs ${textColor}`
-                          : `text-gray-500 hover:text-gray-900 hover:bg-gray-50`
+                          ? selectedStyle
+                          : `text-[#41454d] hover:text-[#181d26] hover:bg-white/60 border border-transparent`
                       }`}
                     >
                       {p}
@@ -220,23 +220,23 @@ export default function CreateTask({ isOpen = true, onClose }) {
 
             {/* Due Date with Custom DatePicker Dropdown Trigger */}
             <div className="relative" ref={datePickerRef}>
-              <label className="block text-xs font-semibold text-gray-900 mb-1">
-                Due Date <span className="text-red-500">*</span>
+              <label className="block text-xs font-medium text-[#181d26] mb-1.5">
+                Due Date <span className="text-[#aa2d00]">*</span>
               </label>
 
               <div
                 onClick={() => setIsDatePickerOpen((prev) => !prev)}
-                className="w-full flex items-center justify-between rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 bg-white cursor-pointer hover:border-indigo-600 transition-colors select-none"
+                className="w-full flex items-center justify-between rounded-[6px] border border-[#dddddd] px-3 py-2 text-xs bg-white cursor-pointer hover:border-[#9297a0] transition-colors select-none"
               >
-                <span className={dueDate ? 'text-gray-900' : 'text-gray-400'}>
+                <span className={dueDate ? 'text-[#181d26]' : 'text-[#9297a0]'}>
                   {dueDate ? formatDisplayDate(dueDate) : 'YYYY-MM-DD'}
                 </span>
-                <CalendarIcon size={16} className="text-gray-400" />
+                <CalendarIcon size={14} className="text-[#41454d]" />
               </div>
 
               {/* DatePicker UI pops up above the input to avoid modal cutoff */}
               {isDatePickerOpen && (
-                <div className="absolute right-0 bottom-full mb-2 z-50">
+                <div className="absolute right-0 bottom-full mb-2 z-50 shadow-xl">
                   <DatePicker
                     value={dueDate}
                     onChange={handleDateSelect}
@@ -249,12 +249,12 @@ export default function CreateTask({ isOpen = true, onClose }) {
         </form>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-3 bg-gray-50/50 border-t border-gray-100 rounded-b-2xl">
+        <div className="flex items-center justify-end gap-2.5 px-6 py-3.5 bg-[#f8fafc] border-t border-[#dddddd] rounded-b-[12px]">
           <button
             type="button"
             onClick={handleClose}
             disabled={isSubmitting}
-            className="cursor-pointer rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
+            className="cursor-pointer rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] transition-colors"
           >
             Cancel
           </button>
@@ -262,12 +262,12 @@ export default function CreateTask({ isOpen = true, onClose }) {
             type="button"
             onClick={handleSubmit}
             disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 active:scale-[0.98] shadow-sm cursor-pointer transition-all disabled:opacity-50"
+            className="inline-flex items-center gap-1.5 rounded-[10px] bg-[#181d26] px-4 py-2 text-xs font-medium text-white hover:bg-[#0d1218] active:bg-[#0d1218] cursor-pointer transition-all disabled:opacity-50 shadow-xs"
           >
             {isSubmitting ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
+              <Loader2 className="w-3.5 h-3.5 animate-spin" />
             ) : (
-              <UserPlus className="w-4 h-4" />
+              <Plus className="w-3.5 h-3.5" />
             )}
             {isSubmitting ? 'Creating...' : 'Create Task'}
           </button>

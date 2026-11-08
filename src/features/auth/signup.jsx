@@ -72,29 +72,34 @@ export default function Signup() {
     }
 
     return (
-        <div className="flex min-h-screen items-center justify-center bg-[#F8FAFC] px-4 py-10">
-
-            <div className="w-full max-w-[390px] rounded-xl border border-gray-100 bg-white px-7 py-7 shadow-[0_4px_16px_rgba(15,23,42,0.08)]">
-
+        <div className="flex min-h-screen items-center justify-center bg-[#f8fafc] px-4 py-10">
+            <div className="w-full max-w-[400px] rounded-[12px] border border-[#dddddd] bg-white px-7 py-7 shadow-xs">
                 {/* Logo */}
                 <div className="mb-5 flex w-full justify-center">
-                    <BrandLogo size="sm" className="gap-2" />
+                    <BrandLogo size="md" />
                 </div>
 
                 {/* Heading */}
                 <div className="mb-6 text-center">
-                    <h1 className="text-[24px] font-bold tracking-tight text-[#111a2e]">
+                    <h1 className="text-xl font-semibold tracking-tight text-[#181d26]">
                         Create your account
                     </h1>
 
-                    <p className="mt-1 text-[13px] text-[#64748b]">
-                        Start organizing your tasks with minimal friction.
+                    <p className="mt-1 text-xs text-[#41454d]">
+                        Start organizing your tasks with minimal friction
                     </p>
                 </div>
 
+                {/* General Form Error */}
+                {errors.form && (
+                    <div className="mb-4 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 text-xs text-[#aa2d00]">
+                        {errors.form}
+                    </div>
+                )}
+
                 {/* Backend Error */}
                 {authError && (
-                    <div className="mb-5 rounded-lg border border-rose-200 bg-rose-50 p-3.5 text-xs text-rose-700">
+                    <div className="mb-4 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 text-xs text-[#aa2d00]">
                         {authError}
                     </div>
                 )}
@@ -105,7 +110,6 @@ export default function Signup() {
                     className="space-y-4"
                     noValidate
                 >
-
                     {/* Full Name */}
                     <FormField
                         label="Full name"
@@ -118,8 +122,8 @@ export default function Signup() {
                         error={errors.name}
                         icon={
                             <User
-                                size={18}
-                                className="text-[#64748b]"
+                                size={16}
+                                className="text-[#9297a0]"
                             />
                         }
                         required
@@ -131,7 +135,7 @@ export default function Signup() {
                         name="email"
                         type="email"
                         autoComplete="email"
-                        placeholder="you@example.com"
+                        placeholder="name@example.com"
                         value={formData.email}
                         onChange={handleChange}
                         error={errors.email}
@@ -168,47 +172,44 @@ export default function Signup() {
                     />
 
                     {/* Submit Button */}
-                    <Button
-                        type="submit"
-                        variant="primary"
-                        size="sm"
-                        fullWidth
-                        isLoading={isLoading}
-                        className="h-[38px] rounded-md text-[13px] font-semibold"
-                    >
-                        Create Account
-                    </Button>
+                    <div className="pt-2">
+                        <Button
+                            type="submit"
+                            variant="primary"
+                            fullWidth
+                            isLoading={isLoading}
+                        >
+                            Create Account
+                        </Button>
+                    </div>
 
                     {/* Social Login Divider */}
                     <div className="flex w-full items-center gap-3 py-2">
-                        <span className="h-px flex-1 bg-[#e9edff]" />
+                        <span className="h-px flex-1 bg-[#dddddd]" />
 
-                        <span className="whitespace-nowrap text-[13px] font-normal text-[#64748b]">
+                        <span className="whitespace-nowrap text-xs text-[#41454d]">
                             or continue with
                         </span>
 
-                        <span className="h-px flex-1 bg-[#e9edff]" />
+                        <span className="h-px flex-1 bg-[#dddddd]" />
                     </div>
 
                     {/* Google Sign In */}
                     <div className="w-full">
                         <GoogleSignInButton />
                     </div>
-
                 </form>
 
                 {/* Login Link */}
-                <p className="mt-5 text-center text-[12px] text-[#64748b]">
+                <p className="mt-5 text-center text-xs text-[#41454d]">
                     Already have an account?{' '}
-
                     <Link
                         to="/login"
-                        className="font-semibold text-[#5145ed] transition-colors hover:text-[#4338ca]"
+                        className="font-medium text-[#1b61c9] transition-colors hover:text-[#1a3866]"
                     >
                         Sign in
                     </Link>
                 </p>
-
             </div>
         </div>
     )

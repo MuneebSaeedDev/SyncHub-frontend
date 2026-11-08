@@ -32,7 +32,6 @@ export default function ViewTask({
 
     // Check where the user came from (default to /tasks)
     const previousPath = location.state?.from || '/tasks'
-    console.log('Previous Path:', previousPath) // Debugging line
     const fromLabel = previousPath.includes('dashboard') ? 'Dashboard' : 'My Tasks'
 
     // Fetch or resolve task
@@ -187,9 +186,9 @@ export default function ViewTask({
 
     if (loading) {
         return (
-            <div className="flex h-96 items-center justify-center gap-2 text-slate-500">
-                <Loader2 className="h-6 w-6 animate-spin text-indigo-600" />
-                <span className="text-sm font-medium">Loading task details...</span>
+            <div className="flex h-96 items-center justify-center gap-2 text-[#41454d]">
+                <Loader2 className="h-5 w-5 animate-spin text-[#181d26]" />
+                <span className="text-xs font-medium">Loading task details...</span>
             </div>
         )
     }
@@ -200,12 +199,12 @@ export default function ViewTask({
                 <button
                     type="button"
                     onClick={handleBack}
-                    className="flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors cursor-pointer mb-6"
+                    className="flex items-center gap-1.5 text-xs font-medium text-[#1b61c9] hover:text-[#1a3866] transition-colors cursor-pointer mb-6"
                 >
-                    <ArrowLeft size={16} />
+                    <ArrowLeft size={14} />
                     Back to {fromLabel}
                 </button>
-                <div className="rounded-2xl border border-red-200 bg-red-50 p-6 text-center text-sm text-red-600">
+                <div className="rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-5 text-center text-xs text-[#aa2d00]">
                     {error || 'Task not found.'}
                 </div>
             </div>
@@ -218,24 +217,24 @@ export default function ViewTask({
 
     const priorityBadgeConfig = {
         high: {
-            bg: 'bg-red-50',
-            text: 'text-red-600',
-            border: 'border-red-100',
-            dot: 'bg-red-600',
+            bg: 'bg-[#aa2d00]/10',
+            text: 'text-[#aa2d00]',
+            border: 'border-[#aa2d00]/25',
+            dot: 'bg-[#aa2d00]',
             subText: 'Critical focus item',
         },
         medium: {
-            bg: 'bg-amber-50',
-            text: 'text-amber-700',
-            border: 'border-amber-200',
-            dot: 'bg-amber-500',
+            bg: 'bg-[#d9a441]/15',
+            text: 'text-[#91650c]',
+            border: 'border-[#d9a441]/35',
+            dot: 'bg-[#d9a441]',
             subText: 'Moderate priority item',
         },
         low: {
-            bg: 'bg-slate-100',
-            text: 'text-slate-700',
-            border: 'border-slate-200',
-            dot: 'bg-slate-400',
+            bg: 'bg-[#f8fafc]',
+            text: 'text-[#41454d]',
+            border: 'border-[#dddddd]',
+            dot: 'bg-[#9297a0]',
             subText: 'Low priority item',
         },
     }
@@ -248,26 +247,26 @@ export default function ViewTask({
     const userInitials = getUserInitials(userName) || 'AM'
 
     return (
-        <div className="mx-auto max-w-5xl space-y-6 pb-12">
+        <div className="mx-auto max-w-5xl space-y-6 pb-12 text-[#181d26]">
             {/* Breadcrumbs Row */}
-            <nav className="flex items-center gap-2 text-xs font-medium text-slate-500" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-2 text-xs font-normal text-[#41454d]" aria-label="Breadcrumb">
                 <button
                     type="button"
                     onClick={() => navigate('/dashboard')}
-                    className="flex items-center gap-1.5 hover:text-slate-800 transition-colors cursor-pointer"
+                    className="flex items-center gap-1 hover:text-[#181d26] transition-colors cursor-pointer"
                 >
-                    <Home size={14} className="text-slate-400" />
+                    <Home size={13} className="text-[#41454d]" />
                 </button>
-                <ChevronRight size={13} className="text-slate-400" />
+                <ChevronRight size={12} className="text-[#9297a0]" />
                 <button
                     type="button"
                     onClick={() => navigate('/tasks')}
-                    className="hover:text-slate-800 transition-colors cursor-pointer"
+                    className="hover:text-[#181d26] transition-colors cursor-pointer"
                 >
                     My Tasks
                 </button>
-                <ChevronRight size={13} className="text-slate-400" />
-                <span className="font-semibold text-slate-800">Task Details</span>
+                <ChevronRight size={12} className="text-[#9297a0]" />
+                <span className="font-medium text-[#181d26]">Task Details</span>
             </nav>
 
             {/* Top Action Bar */}
@@ -275,96 +274,96 @@ export default function ViewTask({
                 <button
                     type="button"
                     onClick={handleBack}
-                    className="flex items-center gap-2 text-sm font-semibold text-indigo-600 hover:text-indigo-800 transition-colors cursor-pointer"
+                    className="flex items-center gap-1.5 text-xs font-medium text-[#1b61c9] hover:text-[#1a3866] transition-colors cursor-pointer"
                 >
-                    <ArrowLeft size={16} />
+                    <ArrowLeft size={14} />
                     Back to {fromLabel}
                 </button>
 
-                <div className="flex items-center gap-3">
+                <div className="flex items-center gap-2.5">
                     <button
                         type="button"
                         onClick={handleEdit}
-                        className="flex items-center gap-2 rounded-xl border border-slate-300 bg-white px-4 py-2 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer shadow-xs"
+                        className="flex items-center gap-1.5 rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] hover:border-[#9297a0] transition-colors cursor-pointer shadow-xs"
                     >
-                        <Edit size={15} />
+                        <Edit size={13} />
                         Edit Task
                     </button>
                     <button
                         type="button"
                         onClick={handleDeleteClick}
-                        className="flex items-center gap-2 rounded-xl bg-red-700 px-4 py-2 text-sm font-semibold text-white hover:bg-red-800 transition-colors shadow-xs cursor-pointer"
+                        className="flex items-center gap-1.5 rounded-[8px] bg-[#aa2d00] px-3.5 py-2 text-xs font-medium text-white hover:bg-[#8f2500] transition-colors cursor-pointer shadow-xs"
                     >
-                        <Trash2 size={15} />
+                        <Trash2 size={13} />
                         Delete
                     </button>
                 </div>
             </div>
 
             {/* Main Task Card */}
-            <div className="rounded-2xl border border-slate-200 bg-white p-6 sm:p-8 shadow-xs">
+            <div className="rounded-[12px] border border-[#dddddd] bg-white p-6 sm:p-8 shadow-xs">
                 {/* Header Metadata: Priority Badge & Due Info */}
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-                    <span className={`inline-flex items-center gap-1.5 rounded-full px-3 py-1 text-xs font-semibold border ${priorityStyle.bg} ${priorityStyle.text} ${priorityStyle.border}`}>
-                        <span className={`h-1.5 w-1.5 rounded-full ${priorityStyle.dot} animate-pulse`}></span>
+                    <span className={`inline-flex items-center gap-1.5 rounded-[4px] px-2.5 py-1 text-xs font-medium border ${priorityStyle.bg} ${priorityStyle.text} ${priorityStyle.border}`}>
+                        <span className={`h-1.5 w-1.5 rounded-full ${priorityStyle.dot}`}></span>
                         {priority.charAt(0).toUpperCase() + priority.slice(1)} Priority
                     </span>
 
                     {dueBadgeText && (
-                        <div className="flex items-center gap-2 rounded-lg bg-amber-50/90 px-3 py-1.5 text-xs font-medium text-amber-800 border border-amber-200/70">
-                            <Calendar size={14} className="text-amber-600" />
+                        <div className="flex items-center gap-1.5 rounded-[6px] bg-[#f8fafc] px-2.5 py-1 text-xs font-medium text-[#41454d] border border-[#dddddd]">
+                            <Calendar size={13} className="text-[#41454d]" />
                             <span>{dueBadgeText}</span>
                         </div>
                     )}
                 </div>
 
                 {/* Task Title */}
-                <h1 className="text-2xl sm:text-[26px] font-bold text-slate-900 tracking-tight leading-snug">
+                <h1 className="text-xl sm:text-2xl font-semibold text-[#181d26] tracking-tight leading-snug">
                     {currentTask.title}
                 </h1>
 
                 {/* Task ID */}
-                <p className="mt-2 text-xs font-mono text-slate-400">
+                <p className="mt-1.5 text-xs font-mono text-[#41454d]">
                     Task ID: {taskId}
                 </p>
 
                 {/* Divider */}
-                <hr className="my-6 border-slate-100" />
+                <hr className="my-5 border-[#dddddd]" />
 
                 {/* Description Section */}
                 <div>
-                    <h2 className="text-[11px] font-bold tracking-wider text-slate-400 uppercase mb-2.5">
-                        DESCRIPTION
+                    <h2 className="text-xs font-medium text-[#181d26] mb-2">
+                        Description
                     </h2>
-                    <p className="text-sm text-slate-600 leading-relaxed whitespace-pre-wrap">
+                    <p className="text-xs text-[#333840] leading-relaxed whitespace-pre-wrap">
                         {currentTask.description || 'No description provided for this task.'}
                     </p>
                 </div>
 
                 {/* Details Grid Container */}
-                <div className="mt-8 rounded-xl border border-slate-100 bg-slate-50/60 p-6 sm:p-7">
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-6 gap-x-8">
+                <div className="mt-7 rounded-[8px] border border-[#dddddd] bg-[#f8fafc] p-5 sm:p-6">
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-y-5 gap-x-8">
                         {/* Due Date Detail */}
                         <div>
-                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                                DUE DATE
+                            <span className="text-[11px] font-normal text-[#41454d] block mb-1">
+                                Due date
                             </span>
-                            <div className="flex items-center gap-2.5 text-sm font-semibold text-slate-800">
-                                <Calendar size={16} className="text-slate-500 shrink-0" />
+                            <div className="flex items-center gap-2 text-xs font-medium text-[#181d26]">
+                                <Calendar size={14} className="text-[#41454d] shrink-0" />
                                 <span>{formatFullDateTime(currentTask.dueDate, true)}</span>
                             </div>
                         </div>
 
                         {/* Priority Level Detail */}
                         <div>
-                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                                PRIORITY LEVEL
+                            <span className="text-[11px] font-normal text-[#41454d] block mb-1">
+                                Priority level
                             </span>
-                            <div className={`flex items-center gap-2 text-sm font-semibold ${priorityStyle.text}`}>
-                                <AlertCircle size={16} className="shrink-0" />
+                            <div className={`flex items-center gap-1.5 text-xs font-medium ${priorityStyle.text}`}>
+                                <AlertCircle size={14} className="shrink-0" />
                                 <span>
                                     {priority.charAt(0).toUpperCase() + priority.slice(1)}{' '}
-                                    <span className="font-normal text-xs text-slate-500">
+                                    <span className="font-normal text-[11px] text-[#41454d]">
                                         ({priorityStyle.subText})
                                     </span>
                                 </span>
@@ -373,35 +372,35 @@ export default function ViewTask({
 
                         {/* Created Detail */}
                         <div>
-                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                                CREATED
+                            <span className="text-[11px] font-normal text-[#41454d] block mb-1">
+                                Created
                             </span>
-                            <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <div className="flex items-center gap-2 text-xs font-normal text-[#333840]">
                                 <span>{formatFullDateTime(currentTask.createdAt)}</span>
                             </div>
                         </div>
 
                         {/* Last Updated Detail */}
                         <div>
-                            <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-1.5">
-                                LAST UPDATED
+                            <span className="text-[11px] font-normal text-[#41454d] block mb-1">
+                                Last updated
                             </span>
-                            <div className="flex items-center gap-2 text-sm font-medium text-slate-700">
+                            <div className="flex items-center gap-2 text-xs font-normal text-[#333840]">
                                 <span>{formatFullDateTime(currentTask.updatedAt)}</span>
                             </div>
                         </div>
                     </div>
 
                     {/* Ownership Detail */}
-                    <div className="mt-6 pt-6 border-t border-slate-200/70">
-                        <span className="text-[11px] font-bold text-slate-400 uppercase tracking-wider block mb-2.5">
-                            OWNERSHIP
+                    <div className="mt-5 pt-5 border-t border-[#dddddd]">
+                        <span className="text-[11px] font-normal text-[#41454d] block mb-2">
+                            Ownership
                         </span>
-                        <div className="flex items-center gap-3">
-                            <div className="flex h-8 w-8 items-center justify-center rounded-lg bg-indigo-50 text-indigo-600 text-xs font-bold">
+                        <div className="flex items-center gap-2.5">
+                            <div className="flex h-7 w-7 items-center justify-center rounded-[6px] bg-white border border-[#dddddd] text-[#181d26] text-xs font-medium">
                                 {userInitials}
                             </div>
-                            <span className="text-sm font-medium text-slate-700">
+                            <span className="text-xs font-normal text-[#333840]">
                                 Personal Task (Private to {userName})
                             </span>
                         </div>

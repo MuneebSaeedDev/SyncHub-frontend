@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { Link, useNavigate, useLocation } from 'react-router-dom'
 import { useDispatch, useSelector } from 'react-redux'
-import { loginUser, clearError, } from '../../store/authSlice'
+import { loginUser, clearError } from '../../store/authSlice'
 import BrandLogo from '../../components/common/BrandLogo'
 import FormField from '../../components/common/FormField'
 import Button from '../../components/common/Button'
@@ -15,7 +15,7 @@ export default function Login() {
   const { isLoading, error: authError } = useSelector(
     (state) => state.auth
   )
-  
+
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [showPassword, setShowPassword] = useState(false)
@@ -63,8 +63,6 @@ export default function Login() {
 
       const from = location.state?.from?.pathname || '/dashboard'
       navigate(from, { replace: true })
-
-
     } catch (error) {
       // Error is already stored in Redux.
       console.error('Login failed:', error)
@@ -72,36 +70,34 @@ export default function Login() {
   }
 
   return (
-    <main className="flex min-h-screen items-center justify-center bg-[#f8f9fc] px-4 py-12">
-
-      <section className="w-full max-w-[420px] rounded-2xl border border-gray-100 bg-white p-7 shadow-xs sm:p-9">
-
+    <main className="flex min-h-screen items-center justify-center bg-[#f8fafc] px-4 py-12">
+      <section className="w-full max-w-[400px] rounded-[12px] border border-[#dddddd] bg-white p-7 shadow-xs sm:p-8">
         {/* Logo */}
         <div className="flex w-full justify-center">
           <BrandLogo />
         </div>
 
         {/* Heading */}
-        <header className="mb-7 mt-8 text-center">
-          <h1 className="text-2xl font-semibold tracking-tight text-gray-900">
+        <header className="mb-6 mt-6 text-center">
+          <h1 className="text-xl font-semibold tracking-tight text-[#181d26]">
             Welcome back
           </h1>
 
-          <p className="mt-2 text-sm text-gray-500">
-            Enter your credentials to access your account.
+          <p className="mt-1 text-xs text-[#41454d]">
+            Enter your credentials to access your account
           </p>
         </header>
 
         {/* Signup success message */}
         {location.state?.message && (
-          <div className="mb-5 rounded-lg border border-emerald-200 bg-emerald-50 p-3.5 text-xs text-emerald-700">
+          <div className="mb-4 rounded-[6px] border border-[#39bf45]/40 bg-[#006400]/5 p-3 text-xs text-[#006400]">
             {location.state.message}
           </div>
         )}
 
         {/* Backend error */}
         {authError && (
-          <div className="mb-5 rounded-lg border border-rose-200 bg-rose-50 p-3.5 text-xs text-rose-700">
+          <div className="mb-4 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 text-xs text-[#aa2d00]">
             {authError}
           </div>
         )}
@@ -112,7 +108,6 @@ export default function Login() {
           className="space-y-4"
           noValidate
         >
-
           {/* Email */}
           <FormField
             label="Email address"
@@ -130,7 +125,7 @@ export default function Login() {
                 }))
               }
             }}
-            placeholder="you@example.com"
+            placeholder="name@example.com"
             error={errors.email}
             required
           />
@@ -175,33 +170,30 @@ export default function Login() {
           </div>
 
           {/* Social Login Divider */}
-          <div className="flex items-center gap-4 pt-3 pb-1">
-            <div className="h-px flex-1 bg-[#e9edff]" />
+          <div className="flex items-center gap-3 pt-3 pb-1">
+            <div className="h-px flex-1 bg-[#dddddd]" />
 
-            <span className="shrink-0 text-sm text-slate-500">
+            <span className="shrink-0 text-xs text-[#41454d]">
               or continue with
             </span>
 
-            <div className="h-px flex-1 bg-[#e9edff]" />
+            <div className="h-px flex-1 bg-[#dddddd]" />
           </div>
 
           {/* Google Sign In */}
           <GoogleSignInButton />
-
         </form>
 
         {/* Signup Link */}
-        <p className="mt-6 text-center text-sm text-gray-500">
+        <p className="mt-6 text-center text-xs text-[#41454d]">
           Don&apos;t have an account?{' '}
-
           <Link
             to="/signup"
-            className="font-medium text-[#5145ed] transition hover:text-[#4035cc]"
+            className="font-medium text-[#1b61c9] transition hover:text-[#1a3866]"
           >
             Sign up
           </Link>
         </p>
-
       </section>
     </main>
   )

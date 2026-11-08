@@ -26,24 +26,24 @@ export default function DeleteTaskModal({
 
     return (
         <div
-            className="fixed inset-0 z-50 flex items-center justify-center bg-slate-900/40 p-4 backdrop-blur-xs transition-opacity"
+            className="fixed inset-0 z-50 flex items-center justify-center bg-[#181d26]/40 p-4 backdrop-blur-xs transition-opacity animate-fadeIn"
             onClick={handleClose}
         >
             <div
-                className="w-full max-w-[500px] rounded-2xl border border-slate-100 bg-white p-6 shadow-2xl transition-all"
+                className="w-full max-w-[460px] rounded-[12px] border border-[#dddddd] bg-white p-6 shadow-xl transition-all text-[#181d26]"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header: Trash Icon + Title/Subtitle + Close Button */}
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-12 w-12 shrink-0 items-center justify-center rounded-xl bg-red-50 text-red-600">
-                            <Trash2 size={22} strokeWidth={2} />
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] bg-[#aa2d00]/10 text-[#aa2d00] border border-[#aa2d00]/25">
+                            <Trash2 size={16} strokeWidth={1.8} />
                         </div>
                         <div>
-                            <h3 className="text-lg font-bold text-slate-900">
-                                Delete Task?
+                            <h3 className="text-sm font-semibold text-[#181d26]">
+                                Delete Task
                             </h3>
-                            <p className="text-sm font-medium text-red-600">
+                            <p className="text-xs text-[#aa2d00]">
                                 This action cannot be undone.
                             </p>
                         </div>
@@ -53,54 +53,54 @@ export default function DeleteTaskModal({
                         type="button"
                         onClick={handleClose}
                         disabled={isDeleting}
-                        className="flex h-9 w-9 items-center justify-center rounded-lg border border-slate-200 text-slate-500 hover:bg-slate-50 hover:text-slate-700 transition-colors cursor-pointer disabled:opacity-50"
+                        className="flex h-7 w-7 items-center justify-center rounded-[6px] border border-[#dddddd] text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26] transition-colors cursor-pointer disabled:opacity-50"
                     >
-                        <X size={16} />
+                        <X size={14} />
                     </button>
                 </div>
 
                 {/* Main Descriptive Question */}
-                <p className="mt-5 text-sm text-slate-500 leading-relaxed">
+                <p className="mt-4 text-xs text-[#41454d] leading-relaxed">
                     Are you sure you want to permanently delete this task from your workspace?
                 </p>
 
                 {/* Task Preview Card with Interactive Clickable Checkbox */}
-                <div 
+                <div
                     onClick={() => !isDeleting && setIsChecked(!isChecked)}
-                    className="mt-3 flex items-center justify-between rounded-xl border border-slate-200/80 bg-slate-50/50 p-3.5 cursor-pointer hover:bg-slate-100/60 transition-colors"
+                    className="mt-3.5 flex items-center justify-between rounded-[8px] border border-[#dddddd] bg-[#f8fafc] p-3 cursor-pointer hover:border-[#9297a0] transition-colors"
                 >
-                    <div className="flex items-center gap-3 min-w-0 pr-2">
+                    <div className="flex items-center gap-2.5 min-w-0 pr-2">
                         <div
-                            className={`flex h-5 w-5 shrink-0 items-center justify-center rounded border transition-colors ${
-                                isChecked 
-                                    ? 'bg-red-600 border-red-600 text-white' 
-                                    : 'border-slate-300 bg-white hover:border-slate-400'
+                            className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] border transition-colors ${
+                                isChecked
+                                    ? 'bg-[#aa2d00] border-[#aa2d00] text-white'
+                                    : 'border-[#dddddd] bg-white hover:border-[#9297a0]'
                             }`}
                         >
                             {isChecked && (
-                                <svg className="h-3.5 w-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
+                                <svg className="h-3 w-3" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="3" strokeLinecap="round" strokeLinejoin="round">
                                     <polyline points="20 6 9 17 4 12" />
                                 </svg>
                             )}
                         </div>
-                        <span className="text-sm font-semibold text-slate-800 truncate">
+                        <span className="text-xs font-medium text-[#181d26] truncate">
                             {task.title}
                         </span>
                     </div>
                     {task.priority && (
-                        <span className="shrink-0 rounded-md bg-red-50 px-2 py-0.5 text-xs font-semibold text-red-600">
+                        <span className="shrink-0 rounded-[4px] bg-[#aa2d00]/10 border border-[#aa2d00]/25 px-1.5 py-0.5 text-[10px] font-medium text-[#aa2d00] capitalize">
                             {task.priority}
                         </span>
                     )}
                 </div>
 
                 {/* Actions */}
-                <div className="mt-6 flex items-center justify-end gap-3">
+                <div className="mt-6 flex items-center justify-end gap-2.5">
                     <button
                         type="button"
                         onClick={handleClose}
                         disabled={isDeleting}
-                        className="rounded-lg border border-slate-300 bg-white px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50 transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Cancel
                     </button>
@@ -109,10 +109,10 @@ export default function DeleteTaskModal({
                         type="button"
                         onClick={handleConfirm}
                         disabled={isDeleting || !isChecked}
-                        className="flex items-center gap-2 rounded-lg bg-red-700 px-4 py-2.5 text-sm font-semibold text-white hover:bg-red-800 transition-colors shadow-xs cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="flex items-center gap-1.5 rounded-[8px] bg-[#aa2d00] px-3.5 py-2 text-xs font-medium text-white hover:bg-[#8f2500] transition-colors shadow-xs cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         {isDeleting && (
-                            <Loader2 size={16} className="animate-spin" />
+                            <Loader2 size={13} className="animate-spin" />
                         )}
                         Delete Task
                     </button>
