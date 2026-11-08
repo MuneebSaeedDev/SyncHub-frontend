@@ -9,7 +9,7 @@ export default function CreateTask({ isOpen = true, onClose }) {
 
   const [title, setTitle] = useState('');
   const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('Medium');
+  const [priority, setPriority] = useState('medium');
   const [dueDate, setDueDate] = useState('');
 
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
@@ -22,7 +22,7 @@ export default function CreateTask({ isOpen = true, onClose }) {
   const resetForm = () => {
     setTitle('');
     setDescription('');
-    setPriority('Medium');
+    setPriority('medium');
     setDueDate('');
     setError('');
     setIsDatePickerOpen(false);
@@ -75,7 +75,7 @@ export default function CreateTask({ isOpen = true, onClose }) {
         createTask({
           title: title.trim(),
           description: description.trim(),
-          priority,
+          priority: priority.toLowerCase(),
           dueDate,
         })
       ).unwrap();
@@ -204,7 +204,7 @@ export default function CreateTask({ isOpen = true, onClose }) {
                     <button
                       key={p}
                       type="button"
-                      onClick={() => setPriority(p.charAt(0).toUpperCase() + p.slice(1))}
+                      onClick={() => setPriority(p)}
                       className={`flex-1 rounded-[6px] py-1.5 text-xs font-medium cursor-pointer transition-colors capitalize ${
                         isSelected
                           ? selectedStyle
