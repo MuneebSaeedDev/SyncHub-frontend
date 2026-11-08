@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { getTasksAPI, deleteTasksAPI, createTaskAPI } from './taskAPI'
+import { getTasksAPI, deleteTasksAPI, createTaskAPI, updateTaskAPI } from './taskAPI'
 
 // Fetch Tasks
 export const fetchTasks = createAsyncThunk(
@@ -31,6 +31,21 @@ export const createTask = createAsyncThunk(
     }
 )
 
+// Update Task
+export const updateTask = createAsyncThunk(
+    'tasks/updateTask',
+    async ({ id, ...taskData }, { rejectWithValue }) => {
+        try {
+            const response = await updateTaskAPI(id, taskData)
+            return response
+        } catch (error) {
+            return rejectWithValue(
+                error.response?.data?.message || 'Failed to update task'
+            )
+        }
+    }
+)
+
 // Delete Task
 export const deleteTask = createAsyncThunk(
     'tasks/deleteTask',
@@ -51,6 +66,7 @@ const initialState = {
     tasks: [],
     isLoading: false,
     isCreating: false,
+    isUpdating: false,
     isDeleting: false,
     error: null,
 }
@@ -71,7 +87,9 @@ const taskSlice = createSlice({
 
             // Fetch Tasks - Pending
             .addCase(fetchTasks.pending, (state) => {
-                state.isLoading = true
+                if (state.tasks.length === 0) {
+                    state.isLoading = true
+                }
                 state.error = null
             })
 
@@ -107,6 +125,32 @@ const taskSlice = createSlice({
             // Create Task - Rejected
             .addCase(createTask.rejected, (state, action) => {
                 state.isCreating = false
+                state.error = action.payload
+            })
+
+            // Update Task - Pending
+            .addCase(updateTask.pending, (state) => {
+                state.isUpdating = true
+                state.error = null
+            })
+
+            // Update Task - Fulfilled
+            .addCase(updateTask.fulfilled, (state, action) => {
+                state.isUpdating = false
+                const updated = action.payload?.task || action.payload
+                if (updated) {
+                    const index = state.tasks.findIndex(
+                        (t) => (t._id && t._id === updated._id) || (t.id && t.id === updated.id)
+                    )
+                    if (index !== -1) {
+                        state.tasks[index] = { ...state.tasks[index], ...updated }
+                    }
+                }
+            })
+
+            // Update Task - Rejected
+            .addCase(updateTask.rejected, (state, action) => {
+                state.isUpdating = false
                 state.error = action.payload
             })
 

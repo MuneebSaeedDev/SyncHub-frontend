@@ -5,7 +5,7 @@ import { loginUser, clearError, } from '../../store/authSlice'
 import BrandLogo from '../../components/common/BrandLogo'
 import FormField from '../../components/common/FormField'
 import Button from '../../components/common/Button'
-import GoogleSignInButton from '../../components/GoogleSignInButton'
+import GoogleSignInButton from '../../components/common/GoogleSignInButton'
 
 export default function Login() {
   const dispatch = useDispatch()

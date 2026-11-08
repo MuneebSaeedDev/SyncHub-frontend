@@ -7,5 +7,3 @@ export const getUserInitials = (name = '') => {
         .map((word) => word[0].toUpperCase())
         .join('')
 }
-
-console.log("getUserInitials: ", getUserInitials)

@@ -7,6 +7,7 @@ import { ListTodo, Clock, MoreHorizontal, Plus, Loader2, Trash2 } from 'lucide-r
 import DatePicker from '../../components/taskComponents/DatePicker.jsx'
 import TaskDropdown from '../../components/taskComponents/TaskDropdown.jsx'
 import CreateTask from '../../pages/task/CreateTask.jsx'
+import EditTask from '../../pages/task/EditTask.jsx'
 import { fetchFriends, deleteFriend } from '../../store/friendSlice.js'
 
 import {
@@ -22,6 +23,7 @@ export default function DashboardPage() {
     const [openDatePickerId, setOpenDatePickerId] = useState(null)
     const [openDropdownId, setOpenDropdownId] = useState(null)
     const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false)
+    const [taskToEdit, setTaskToEdit] = useState(null)
 
     // Redux state
     const { user } = useSelector((state) => state.auth)
@@ -47,15 +49,9 @@ export default function DashboardPage() {
         dispatch(deleteFriend(id))
     }
 
-    // Fetch tasks on mount and refresh every 5 seconds
+    // Fetch tasks on mount
     useEffect(() => {
         dispatch(fetchTasks())
-
-        const intervalId = setInterval(() => {
-            dispatch(fetchTasks())
-        }, 5000)
-
-        return () => clearInterval(intervalId)
     }, [dispatch])
 
     // User information
@@ -107,13 +103,16 @@ export default function DashboardPage() {
     }
 
     const handleEditTask = (task) => {
-        console.log('Edit task:', task)
         setOpenDropdownId(null)
+        setTaskToEdit(task)
     }
 
     const handleViewTask = (task) => {
-        console.log('View task:', task)
         setOpenDropdownId(null)
+        const taskId = task._id || task.id
+        if (taskId) {
+            navigate(`/tasks/${taskId}`, { state: { from: '/dashboard' } })
+        }
     }
 
     // Delete task using Redux
@@ -415,7 +414,7 @@ export default function DashboardPage() {
                         {/* Error state handle karne ke liye */}
                         {status === 'failed' && (
                             <p className="mb-4 text-[11px] text-red-500">
-                                Failed to load friends: {friendError}
+                                Failed to load friends: {typeof friendError === 'string' ? friendError : friendError?.message || 'Something went wrong'}
                             </p>
                         )}
 
@@ -511,6 +510,17 @@ export default function DashboardPage() {
                 isOpen={isCreateTaskOpen}
                 onClose={() => setIsCreateTaskOpen(false)}
                 onSubmit={handleCreateTaskSubmit}
+            />
+
+            {/* Edit Task Modal */}
+            <EditTask
+                isOpen={Boolean(taskToEdit)}
+                task={taskToEdit}
+                onClose={() => setTaskToEdit(null)}
+                onDelete={(task) => {
+                    setTaskToEdit(null)
+                    handleDeleteTask(task._id || task.id)
+                }}
             />
 
         </div>

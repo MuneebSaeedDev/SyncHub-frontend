@@ -1,69 +1,16 @@
-// import { useState } from 'react'
-// import { useSelector } from 'react-redux'
-// import { Outlet } from 'react-router-dom'
-
-// import Sidebar from '../../components/layout/Sidebar.jsx'
-// import Header from '../../components/layout/Header.jsx'
-// import Logout from '../../features/auth/logout.jsx'
-// import { getUserInitials } from '../../utils/userUtils'
-
-// export default function DashboardLayout() {
-//     const [showLogout, setShowLogout] = useState(false)
-//     const [activeItem, setActiveItem] = useState('Overview')
-//     const [searchQuery, setSearchQuery] = useState('')
-
-//     // Redux state for user info
-//     const { user } = useSelector((state) => state.auth)
-//     const userName = user?.name || 'User'
-//     const userInitials = getUserInitials(userName) || 'U'
-
-//     return (
-//         <div className="flex min-h-screen bg-slate-50/40 text-slate-800">
-//             {/* Sidebar */}
-//             <Sidebar
-//                 activeItem={activeItem}
-//                 onNavigate={setActiveItem}
-//                 onLogout={() => setShowLogout(true)}
-//                 user={user}
-//             />
-
-//             <main className="flex min-w-0 flex-1 flex-col bg-red">
-//                 {/* Header */}
-//                 <Header
-//                     title={activeItem}
-//                     searchValue={searchQuery}
-//                     onSearch={setSearchQuery}
-//                     onNotifications={() => console.log('Notifications')}
-//                     onProfileClick={() => console.log('Profile')}
-//                     userInitial={userInitials}
-//                 />
-
-//                 {/* Outlet renders DashboardPage or TaskPage dynamically */}
-//                 <div className="flex-1 p-5">
-//                     <Outlet />
-//                 </div>
-//             </main>
-
-//             {/* Logout Modal */}
-//             <Logout
-//                 open={showLogout}
-//                 onClose={() => setShowLogout(false)}
-//             />
-//         </div>
-//     )
-// }
-
-
-import { useState } from 'react'
-import { useSelector } from 'react-redux'
+import { useState, useEffect } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 import { useNavigate, useLocation, Outlet } from 'react-router-dom'
 
 import Sidebar from './Sidebar.jsx'
 import Header from './Header.jsx'
 import Logout from '../../features/auth/logout.jsx'
 import { getUserInitials } from '../../utils/userUtils'
+import { fetchTasks } from '../../store/taskSlice.js'
+import { fetchFriends, fetchFriendRequests } from '../../store/friendSlice.js'
 
 export default function DashboardLayout() {
+    const dispatch = useDispatch()
     const [showLogout, setShowLogout] = useState(false)
     const [searchQuery, setSearchQuery] = useState('')
 
@@ -75,16 +22,24 @@ export default function DashboardLayout() {
     const userName = user?.name || 'User'
     const userInitials = getUserInitials(userName) || 'U'
 
+    // Fetch tasks, friends, and friend requests globally for real-time sidebar badges
+    useEffect(() => {
+        dispatch(fetchTasks())
+        dispatch(fetchFriends())
+        dispatch(fetchFriendRequests())
+    }, [dispatch])
+
     // Current URL determines the active sidebar item
-    const routeItems = {
-        '/dashboard': 'Overview',
-        '/tasks': 'My Tasks',
-        '/friends': 'Friends',
-        '/friend-requests': 'Friend Requests',
-        '/settings': 'Settings',
+    const getActiveItem = (pathname) => {
+        if (pathname === '/dashboard') return 'Overview'
+        if (pathname.startsWith('/tasks')) return 'My Tasks'
+        if (pathname.startsWith('/friends')) return 'Friends'
+        if (pathname.startsWith('/friend-requests')) return 'Friend Requests'
+        if (pathname.startsWith('/settings')) return 'Settings'
+        return 'Overview'
     }
 
-    const activeItem = routeItems[location.pathname] || 'Overview'
+    const activeItem = getActiveItem(location.pathname)
 
     // Sidebar navigation
     const handleNavigate = (name) => {
@@ -97,7 +52,6 @@ export default function DashboardLayout() {
         }
 
         const path = routes[name]
-        console.log("path: ", path)
 
         if (path) {
             navigate(path)
@@ -131,7 +85,7 @@ export default function DashboardLayout() {
                 </div>
 
             </main>
-            
+
             <Logout
                 open={showLogout}
                 onClose={() => setShowLogout(false)}

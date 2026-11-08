@@ -5,7 +5,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { signupUser, clearError } from '../../store/authSlice'
 import BrandLogo from '../../components/common/BrandLogo'
 import FormField from '../../components/common/FormField'
-import GoogleSignInButton from '../../components/GoogleSignInButton'
+import GoogleSignInButton from '../../components/common/GoogleSignInButton'
 import Button from '../../components/common/Button'
 
 export default function Signup() {

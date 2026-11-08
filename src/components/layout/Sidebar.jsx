@@ -1,4 +1,5 @@
 import { useState } from 'react'
+import { useSelector } from 'react-redux'
 import {
     LayoutDashboard,
     CheckSquare,
@@ -28,11 +29,20 @@ export default function Sidebar({
         .join('')
     const [mobileOpen, setMobileOpen] = useState(false)
 
+    // Real-time counts from Redux store
+    const tasks = useSelector((state) => state.tasks?.tasks) || []
+    const friends = useSelector((state) => state.friends?.list) || []
+    const friendRequests = useSelector((state) => state.friends?.requests) || []
+
+    const tasksCount = Array.isArray(tasks) ? tasks.length : 0
+    const friendsCount = Array.isArray(friends) ? friends.length : 0
+    const requestsCount = Array.isArray(friendRequests) ? friendRequests.length : 0
+
     const menuItems = [
         { name: 'Overview', icon: LayoutDashboard },
-        { name: 'My Tasks', icon: CheckSquare, count: 0 },
-        { name: 'Friends', icon: Users, count: 0 },
-        { name: 'Friend Requests', icon: UserRoundPlus, count: 0 },
+        { name: 'My Tasks', icon: CheckSquare, count: tasksCount },
+        { name: 'Friends', icon: Users, count: friendsCount },
+        { name: 'Friend Requests', icon: UserRoundPlus, count: requestsCount },
         { name: 'Settings', icon: Settings },
     ]
 
@@ -127,7 +137,7 @@ export default function Sidebar({
                                     <span
                                         className={`
                                             text-xs font-medium tabular-nums
-                                            ${item.name === 'Friend Requests'
+                                            ${item.name === 'Friend Requests' && item.count > 0
                                                 ? 'text-rose-500'
                                                 : active
                                                     ? 'text-indigo-600'

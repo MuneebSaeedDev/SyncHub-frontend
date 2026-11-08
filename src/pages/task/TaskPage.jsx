@@ -1,260 +1,452 @@
-import { useState, useRef, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { X, UserPlus, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
-import DatePicker from '../../components/taskComponents/DatePicker.jsx';
-import { createTask, fetchTasks } from '../../store/taskSlice.js';
+import { useState, useEffect, useRef, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { useNavigate } from 'react-router-dom';
+import { fetchTasks, deleteTask } from '../../store/taskSlice';
+import DatePicker from '../../components/taskComponents/DatePicker';
+import DeleteTaskModal from '../../components/taskComponents/DeleteTaskModal';
+import TaskDropdown from '../../components/taskComponents/TaskDropdown';
+import CreateTask from './CreateTask';
+import EditTask from './EditTask';
+import {
+    Search,
+    SlidersHorizontal,
+    Plus,
+    MoreHorizontal,
+    Loader2,
+    Calendar as CalendarIcon
+} from 'lucide-react';
 
-export default function CreateTask({ isOpen = true, onClose }) {
-  const dispatch = useDispatch();
+export default function TaskPage() {
+    const dispatch = useDispatch();
+    const { tasks, isLoading, isDeleting, error } = useSelector((state) => state.tasks);
 
-  const [title, setTitle] = useState('');
-  const [description, setDescription] = useState('');
-  const [priority, setPriority] = useState('Medium');
-  const [dueDate, setDueDate] = useState('');
-  
-  const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [error, setError] = useState('');
-  
-  const datePickerRef = useRef(null);
+    const [activeTab, setActiveTab] = useState('All Tasks');
+    const [searchQuery, setSearchQuery] = useState('');
+    const [currentPage, setCurrentPage] = useState(1);
+    const tasksPerPage = 6;
 
-  // Close datepicker when clicking outside
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
-        setIsDatePickerOpen(false);
-      }
+    // Filter states
+    const [selectedDateFilter, setSelectedDateFilter] = useState(null);
+    const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
+
+    // Inline Task Row Date Picker state
+    const [activeDateTaskId, setActiveDateTaskId] = useState(null);
+
+    // Modal & Dropdown states
+    const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
+    const [taskToEdit, setTaskToEdit] = useState(null);
+    const [taskToDelete, setTaskToDelete] = useState(null);
+    const [activeDropdownId, setActiveDropdownId] = useState(null);
+
+    const navigate = useNavigate();
+    const dropdownRef = useRef(null);
+    const datePickerRef = useRef(null);
+    const inlineDatePickerRef = useRef(null);
+
+    useEffect(() => {
+        dispatch(fetchTasks());
+    }, [dispatch]);
+
+    // Close popups on outside click
+    useEffect(() => {
+        const handleClickOutside = (event) => {
+            if (dropdownRef.current && !dropdownRef.current.contains(event.target)) {
+                setActiveDropdownId(null);
+            }
+            if (datePickerRef.current && !datePickerRef.current.contains(event.target)) {
+                setIsDatePickerOpen(false);
+            }
+            if (inlineDatePickerRef.current && !inlineDatePickerRef.current.contains(event.target)) {
+                setActiveDateTaskId(null);
+            }
+        };
+        document.addEventListener('mousedown', handleClickOutside);
+        return () => document.removeEventListener('mousedown', handleClickOutside);
+    }, []);
+
+    const tabs = ['All Tasks', 'High Priority', 'Medium Priority', 'Low Priority'];
+
+    // Date formatting helper
+    const formatDate = (date) => {
+        if (!date) return 'No date';
+        const parsedDate = new Date(date);
+        if (isNaN(parsedDate.getTime())) return date;
+        return parsedDate.toLocaleDateString('en-US', {
+            month: 'short',
+            day: '2-digit',
+            year: 'numeric',
+        });
     };
-    if (isDatePickerOpen) {
-      document.addEventListener('mousedown', handleClickOutside);
-    }
-    return () => {
-      document.removeEventListener('mousedown', handleClickOutside);
+
+    const getPriorityBadge = (priority) => {
+        switch (priority?.toLowerCase()) {
+            case 'high':
+                return 'bg-red-50 text-red-700 border border-red-200/60';
+            case 'medium':
+                return 'bg-amber-50 text-amber-700 border border-amber-200/60';
+            case 'low':
+                return 'bg-slate-100 text-slate-700 border border-slate-200/60';
+            default:
+                return 'bg-slate-100 text-slate-700';
+        }
     };
-  }, [isDatePickerOpen]);
 
-  if (!isOpen) return null;
+    const getPriorityDot = (priority) => {
+        switch (priority?.toLowerCase()) {
+            case 'high':
+                return 'bg-red-500';
+            case 'medium':
+                return 'bg-amber-500';
+            case 'low':
+                return 'bg-slate-400';
+            default:
+                return 'bg-slate-400';
+        }
+    };
 
-  const handleSubmit = async (e) => {
-    e.preventDefault();
-    setError('');
+    // Filter tasks based on tabs, search, and date picker
+    const filteredTasks = useMemo(() => {
+        return tasks.filter((task) => {
+            const matchesSearch = task.title?.toLowerCase().includes(searchQuery.toLowerCase());
 
-    if (title.trim().length < 8) {
-      setError('Task Title must be at least 8 characters long.');
-      return;
-    }
-    if (description.trim().length < 16) {
-      setError('Description must be at least 16 characters long.');
-      return;
-    }
-    if (!dueDate) {
-      setError('Due Date is required.');
-      return;
-    }
+            let matchesTab = true;
+            if (activeTab === 'High Priority') matchesTab = task.priority?.toLowerCase() === 'high';
+            if (activeTab === 'Medium Priority') matchesTab = task.priority?.toLowerCase() === 'medium';
+            if (activeTab === 'Low Priority') matchesTab = task.priority?.toLowerCase() === 'low';
 
-    try {
-      setIsSubmitting(true);
-      await dispatch(
-        createTask({
-          title: title.trim(),
-          description: description.trim(),
-          priority,
-          dueDate,
-        })
-      ).unwrap();
+            let matchesDate = true;
+            if (selectedDateFilter && task.dueDate) {
+                const taskDate = new Date(task.dueDate);
+                matchesDate =
+                    taskDate.getFullYear() === selectedDateFilter.getFullYear() &&
+                    taskDate.getMonth() === selectedDateFilter.getMonth() &&
+                    taskDate.getDate() === selectedDateFilter.getDate();
+            }
 
-      dispatch(fetchTasks());
-      onClose();
-    } catch (err) {
-      setError(typeof err === 'string' ? err : err?.message || 'Failed to create task. Please try again.');
-    } finally {
-      setIsSubmitting(false);
-    }
-  };
+            return matchesSearch && matchesTab && matchesDate;
+        });
+    }, [tasks, searchQuery, activeTab, selectedDateFilter]);
 
-  const formatDisplayDate = (dateVal) => {
-    if (!dateVal) return '';
-    const date = new Date(dateVal);
-    if (isNaN(date.getTime())) return dateVal;
-    return date.toLocaleDateString('en-US', {
-      month: 'short',
-      day: '2-digit',
-      year: 'numeric',
-    });
-  };
+    const indexOfLastTask = currentPage * tasksPerPage;
+    const indexOfFirstTask = indexOfLastTask - tasksPerPage;
+    const currentTasks = filteredTasks.slice(indexOfFirstTask, indexOfLastTask);
+    const totalPages = Math.ceil(filteredTasks.length / tasksPerPage) || 1;
 
-  const handleDateSelect = (date) => {
-    if (date) {
-      const year = date.getFullYear();
-      const month = String(date.getMonth() + 1).padStart(2, '0');
-      const day = String(date.getDate()).padStart(2, '0');
-      setDueDate(`${year}-${month}-${day}`);
-    } else {
-      setDueDate('');
-    }
-    setIsDatePickerOpen(false);
-  };
+    const handleConfirmDelete = () => {
+        if (!taskToDelete) return;
+        dispatch(deleteTask(taskToDelete._id)).then(() => {
+            setTaskToDelete(null);
+        });
+    };
 
-  return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 transition-opacity animate-fadeIn">
-      {/* Yahan overflow-hidden ki jagah overflow-visible kiya hai taake calendar cut na ho */}
-      <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-gray-100 overflow-visible flex flex-col transform transition-all relative">
-        
-        {/* Header */}
-        <div className="flex items-start justify-between px-6 pt-6 pb-2">
-          <div>
-            <h2 className="text-xl font-bold text-gray-900">Create New Task</h2>
-            <p className="text-sm text-gray-500 mt-0.5">Add a personal task to your workspace.</p>
-          </div>
-          <button 
-            type="button"
-            onClick={onClose}
-            className="cursor-pointer rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
-          >
-            <X className="w-5 h-5" />
-          </button>
-        </div>
+    return (
+        <div className="min-h-screen bg-[#F8FAFC] text-slate-900 font-sans relative">
+            <div className="max-w-7xl mx-auto space-y-6">
 
-        {/* Form Body */}
-        <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4 flex-1 overflow-visible">
-          
-          {/* Error Banner */}
-          {error && (
-            <div className="rounded-xl bg-red-50 p-3 text-xs text-red-600 border border-red-100">
-              {error}
-            </div>
-          )}
-
-          {/* Task Title */}
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <label className="block text-xs font-semibold text-gray-900">
-                Task Title <span className="text-red-500">*</span>
-              </label>
-              <span className="text-[11px] text-gray-400">{title.length}/100</span>
-            </div>
-            <input
-              type="text"
-              value={title}
-              onChange={(e) => setTitle(e.target.value)}
-              maxLength={100}
-              placeholder="Enter task title..."
-              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 transition-colors"
-            />
-            <p className="text-[11px] text-gray-500 mt-1">Minimum 8 characters required by schema.</p>
-          </div>
-
-          {/* Description */}
-          <div>
-            <div className="flex justify-between items-center mb-1">
-              <label className="block text-xs font-semibold text-gray-900">
-                Description <span className="text-red-500">*</span>
-              </label>
-              <span className="text-[11px] text-gray-400">{description.length}/1000</span>
-            </div>
-            <textarea
-              rows={3}
-              value={description}
-              onChange={(e) => setDescription(e.target.value)}
-              maxLength={1000}
-              placeholder="Provide context, acceptance criteria, or key steps (min 16 chars)..."
-              className="w-full rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 focus:border-indigo-600 focus:outline-none focus:ring-1 focus:ring-indigo-600 resize-none transition-colors"
-            />
-            <p className="text-[11px] text-gray-500 mt-1">Detailed description required by backend controller.</p>
-          </div>
-
-          {/* Priority and Due Date Row */}
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 overflow-visible">
-            
-            {/* Priority */}
-            <div>
-              <label className="block text-xs font-semibold text-gray-900 mb-1">
-                Priority <span className="text-red-500">*</span>
-              </label>
-              <div className="flex rounded-xl border border-gray-300 p-0.5 bg-white">
-                {['Low', 'Medium', 'High'].map((p) => {
-                  const isSelected = priority === p;
-                  let textColor = 'text-gray-600';
-                  if (isSelected) {
-                    if (p === 'Low') textColor = 'text-gray-900';
-                    if (p === 'Medium') textColor = 'text-amber-700';
-                    if (p === 'High') textColor = 'text-red-600';
-                  }
-
-                  return (
+                {/* Header Section */}
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div>
+                        <h1 className="text-2xl font-bold tracking-tight text-slate-900">My Tasks</h1>
+                        <p className="text-sm text-slate-500 mt-0.5">{tasks.length} active personal tasks recorded</p>
+                    </div>
                     <button
-                      key={p}
-                      type="button"
-                      onClick={() => setPriority(p)}
-                      className={`flex-1 rounded-lg py-1.5 text-xs font-semibold cursor-pointer transition-all ${
-                        isSelected
-                          ? `bg-amber-50/60 border border-amber-300/60 shadow-xs ${textColor}`
-                          : `text-gray-500 hover:text-gray-900 hover:bg-gray-50`
-                      }`}
+                        type="button"
+                        onClick={() => setIsCreateTaskOpen(true)}
+                        className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-lg bg-indigo-600 px-3.5 py-2 text-xs font-semibold text-white shadow-xs transition-all hover:bg-indigo-500"
                     >
-                      {p}
+                        <Plus size={16} />
+                        Create Task
                     </button>
-                  );
-                })}
-              </div>
-            </div>
-
-            {/* Due Date with Custom DatePicker Dropdown Trigger */}
-            <div className="relative overflow-visible" ref={datePickerRef}>
-              <label className="block text-xs font-semibold text-gray-900 mb-1">
-                Due Date <span className="text-red-500">*</span>
-              </label>
-              
-              <div
-                onClick={() => setIsDatePickerOpen((prev) => !prev)}
-                className="w-full flex items-center justify-between rounded-xl border border-gray-300 px-3 py-2 text-sm text-gray-900 bg-white cursor-pointer hover:border-indigo-600 transition-colors select-none"
-              >
-                <span className={dueDate ? 'text-gray-900' : 'text-gray-400'}>
-                  {dueDate ? formatDisplayDate(dueDate) : 'YYYY-MM-DD'}
-                </span>
-                <CalendarIcon size={16} className="text-gray-400" />
-              </div>
-
-              {/* Absolute positioning upar ki taraf ya neat drop-down ke liye */}
-              {isDatePickerOpen && (
-                <div className="absolute right-0 bottom-full mb-2 z-[9999] shadow-2xl bg-white rounded-xl border border-slate-200">
-                  <DatePicker
-                    value={dueDate}
-                    onChange={handleDateSelect}
-                  />
                 </div>
-              )}
+
+                {/* Tabs Navigation */}
+                <div className="border-b border-slate-200">
+                    <nav className="flex space-x-8" aria-label="Tabs">
+                        {tabs.map((tab) => {
+                            const isActive = activeTab === tab;
+                            return (
+                                <button
+                                    key={tab}
+                                    onClick={() => {
+                                        setActiveTab(tab);
+                                        setCurrentPage(1);
+                                    }}
+                                    className={`py-3 px-1 !text-sm font-medium border-b-2 transition-colors relative cursor-pointer ${isActive
+                                            ? 'border-[#6366F1] text-[#6366F1]'
+                                            : 'border-transparent text-slate-500 hover:text-slate-700 hover:border-slate-300'
+                                        }`}
+                                >
+                                    {tab}
+                                </button>
+                            );
+                        })}
+                    </nav>
+                </div>
+
+                {/* Controls Bar */}
+                <div className="flex flex-col sm:flex-row items-center gap-3">
+                    <div className="relative flex-1 w-full">
+                        <Search className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400" />
+                        <input
+                            type="text"
+                            value={searchQuery}
+                            onChange={(e) => {
+                                setSearchQuery(e.target.value);
+                                setCurrentPage(1);
+                            }}
+                            placeholder="Filter by title..."
+                            className="w-full pl-10 pr-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm text-slate-900 placeholder:text-slate-400 focus:outline-none focus:ring-2 focus:ring-[#6366F1]/20 focus:border-[#6366F1] transition-all shadow-xs"
+                        />
+                    </div>
+                    <div className="flex items-center gap-2.5 w-full sm:w-auto relative">
+                        <button className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border border-slate-200 rounded-lg text-sm font-medium text-slate-700 hover:bg-slate-50 transition-colors shadow-xs cursor-pointer">
+                            <SlidersHorizontal className="w-4 h-4 text-slate-500" />
+                            Filters
+                        </button>
+
+                        {/* Top DatePicker Filter Trigger */}
+                        <div className="relative" ref={datePickerRef}>
+                            <button
+                                onClick={() => setIsDatePickerOpen((prev) => !prev)}
+                                className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-4 py-2.5 bg-white border rounded-lg text-sm font-medium transition-colors shadow-xs cursor-pointer ${selectedDateFilter
+                                        ? 'border-indigo-600 text-indigo-600 bg-indigo-50/30'
+                                        : 'border-slate-200 text-slate-700 hover:bg-slate-50'
+                                    }`}
+                            >
+                                <CalendarIcon className="w-4 h-4 text-slate-500" />
+                                {selectedDateFilter ? formatDate(selectedDateFilter) : 'Due date'}
+                            </button>
+
+                            {isDatePickerOpen && (
+                                <div className="absolute right-0 mt-2 z-50 shadow-2xl">
+                                    <DatePicker
+                                        value={selectedDateFilter}
+                                        onChange={(date) => {
+                                            setSelectedDateFilter(date);
+                                            setIsDatePickerOpen(false);
+                                            setCurrentPage(1);
+                                        }}
+                                    />
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+
+                {/* Error State */}
+                {error && (
+                    <div className="p-4 bg-red-50 border border-red-200 rounded-lg text-sm text-red-600">
+                        {error}
+                    </div>
+                )}
+
+                {/* Task Table Container */}
+                <div className="bg-white border border-slate-200 rounded-xl shadow-xs overflow-visible">
+                    <div className="overflow-x-auto">
+                        <table className="w-full text-left border-collapse">
+                            <thead>
+                                <tr className="border-b border-slate-200 bg-slate-50/50 text-[11px] font-semibold tracking-wider text-slate-400 uppercase">
+                                    <th className="py-3 px-6 w-32">State</th>
+                                    <th className="py-3 px-2">Task Title & Description</th>
+                                    <th className="py-3 px-6 w-32">Priority</th>
+                                    <th className="py-3 px-6 w-36">Due Date</th>
+                                    <th className="py-3 px-6 w-24 text-right">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody className="divide-y divide-slate-100 text-sm">
+                                {isLoading ? (
+                                    <tr>
+                                        <td colSpan="5" className="py-12 text-center text-slate-500">
+                                            <div className="flex justify-center items-center gap-2">
+                                                <Loader2 className="w-5 h-5 animate-spin text-[#6366F1]" />
+                                                Loading tasks...
+                                            </div>
+                                        </td>
+                                    </tr>
+                                ) : currentTasks.length === 0 ? (
+                                    <tr>
+                                        <td colSpan="5" className="py-12 text-center text-slate-500">
+                                            No tasks found.
+                                        </td>
+                                    </tr>
+                                ) : (
+                                    currentTasks.map((task) => {
+                                        const taskId = task._id;
+                                        const isMenuOpen = activeDropdownId === taskId;
+                                        const isInlineDateOpen = activeDateTaskId === taskId;
+                                        const formattedDueDate = formatDate(task.dueDate);
+
+                                        return (
+                                            <tr key={taskId} className="hover:bg-slate-50/60 transition-colors group cursor-pointer">
+                                                {/* Status Column */}
+                                                <td className="py-4 px-6 align-middle">
+                                                    <span className={`text-xs font-medium ${task.status === 'Overdue' ? 'text-rose-600 font-semibold' : 'text-slate-500'}`}>
+                                                        {task.status || 'Default'}
+                                                    </span>
+                                                </td>
+
+                                                {/* Title & Description Column */}
+                                                <td className="py-4 px-2 align-middle">
+                                                    <div className="space-y-0.5">
+                                                        <p className="font-semibold text-slate-900">{task.title}</p>
+                                                        <p className="text-xs text-slate-500">{task.description}</p>
+                                                    </div>
+                                                </td>
+
+                                                {/* Priority Column */}
+                                                <td className="py-4 px-6 align-middle">
+                                                    <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-md text-xs font-medium ${getPriorityBadge(task.priority)}`}>
+                                                        <span className={`w-1.5 h-1.5 rounded-full ${getPriorityDot(task.priority)}`}></span>
+                                                        {task.priority}
+                                                    </span>
+                                                </td>
+
+                                                {/* Due Date Column with Toggleable DatePicker */}
+                                                <td className="py-4 px-6 align-middle text-xs relative">
+                                                    <div
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveDateTaskId(isInlineDateOpen ? null : taskId);
+                                                        }}
+                                                        className="cursor-pointer inline-block hover:text-indigo-600 transition-colors"
+                                                    >
+                                                        {task.isOverdue ? (
+                                                            <span className="text-rose-600 font-medium leading-tight block">
+                                                                {formattedDueDate} <span className="block text-[11px]">· Overdue</span>
+                                                            </span>
+                                                        ) : (
+                                                            <span className="text-slate-600">{formattedDueDate}</span>
+                                                        )}
+                                                    </div>
+
+                                                    {/* DatePicker renders right on click, overriding/overlapping container bounds */}
+                                                    {isInlineDateOpen && (
+                                                        <div
+                                                            ref={inlineDatePickerRef}
+                                                            className="absolute left-0 top-14 z-50 shadow-2xl"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            <DatePicker
+                                                                value={task.dueDate}
+                                                                onChange={(newDate) => {
+                                                                    console.log("Selected new date for task:", taskId, newDate);
+                                                                    setActiveDateTaskId(null);
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </td>
+
+                                                {/* Actions Column with Dropdown */}
+                                                <td className="py-4 px-6 align-middle text-right relative">
+                                                    <button
+                                                        onClick={(e) => {
+                                                            e.stopPropagation();
+                                                            setActiveDropdownId(isMenuOpen ? null : taskId);
+                                                        }}
+                                                        className="p-1.5 text-slate-400 hover:text-slate-600 hover:bg-slate-100 rounded-md transition-colors cursor-pointer"
+                                                        title="Actions"
+                                                    >
+                                                        <MoreHorizontal className="w-4 h-4" />
+                                                    </button>
+
+                                                    {isMenuOpen && (
+                                                        <div
+                                                            ref={dropdownRef}
+                                                            className="absolute right-12 top-2 z-50 text-left shadow-2xl"
+                                                            onClick={(e) => e.stopPropagation()}
+                                                        >
+                                                            <TaskDropdown
+                                                                onEdit={() => {
+                                                                    setActiveDropdownId(null);
+                                                                    setTaskToEdit(task);
+                                                                }}
+                                                                onView={() => {
+                                                                    setActiveDropdownId(null);
+                                                                    const taskId = task._id || task.id;
+                                                                    if (taskId) {
+                                                                        navigate(`/tasks/${taskId}`, { state: { from: '/tasks' } });
+                                                                    }
+                                                                }}
+                                                                onDelete={() => {
+                                                                    setActiveDropdownId(null);
+                                                                    setTaskToDelete(task);
+                                                                }}
+                                                            />
+                                                        </div>
+                                                    )}
+                                                </td>
+                                            </tr>
+                                        );
+                                    })
+                                )}
+                            </tbody>
+                        </table>
+                    </div>
+
+                    {/* Pagination Footer */}
+                    <div className="flex flex-col sm:flex-row items-center justify-between px-6 py-3.5 border-t border-slate-200 bg-white gap-3">
+                        <p className="text-xs text-slate-500">
+                            Showing <span className="font-medium text-slate-700">{filteredTasks.length > 0 ? indexOfFirstTask + 1 : 0}–{Math.min(indexOfLastTask, filteredTasks.length)}</span> of <span className="font-medium text-slate-700">{filteredTasks.length}</span> tasks
+                        </p>
+                        <div className="flex items-center gap-1.5">
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
+                                disabled={currentPage === 1}
+                                className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            >
+                                Previous
+                            </button>
+                            {Array.from({ length: totalPages }, (_, i) => i + 1).map((page) => (
+                                <button
+                                    key={page}
+                                    onClick={() => setCurrentPage(page)}
+                                    className={`w-8 h-8 text-xs font-medium rounded-lg transition-colors cursor-pointer ${currentPage === page
+                                            ? 'bg-[#6366F1] text-white shadow-xs'
+                                            : 'text-slate-700 hover:bg-slate-100'
+                                        }`}
+                                >
+                                    {page}
+                                </button>
+                            ))}
+                            <button
+                                onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
+                                disabled={currentPage === totalPages || totalPages === 0}
+                                className="px-3 py-1.5 text-xs font-medium text-slate-700 bg-white border border-slate-200 rounded-lg hover:bg-slate-50 disabled:opacity-40 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                            >
+                                Next
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
             </div>
 
-          </div>
-        </form>
+            {/* Create Task Modal */}
+            <CreateTask
+                isOpen={isCreateTaskOpen}
+                onClose={() => setIsCreateTaskOpen(false)}
+            />
 
-        {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-3 bg-gray-50/50 border-t border-gray-100 rounded-b-2xl">
-          <button
-            type="button"
-            onClick={onClose}
-            disabled={isSubmitting}
-            className="cursor-pointer rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
-          >
-            Cancel
-          </button>
-          <button
-            type="button"
-            onClick={handleSubmit}
-            disabled={isSubmitting}
-            className="inline-flex items-center gap-2 rounded-xl bg-indigo-600 px-4 py-2 text-sm font-medium text-white hover:bg-indigo-700 active:scale-[0.98] shadow-sm cursor-pointer transition-all disabled:opacity-50"
-          >
-            {isSubmitting ? (
-              <Loader2 className="w-4 h-4 animate-spin" />
-            ) : (
-              <UserPlus className="w-4 h-4" />
-            )}
-            {isSubmitting ? 'Creating...' : 'Create Task'}
-          </button>
+            {/* Edit Task Modal */}
+            <EditTask
+                isOpen={Boolean(taskToEdit)}
+                task={taskToEdit}
+                onClose={() => setTaskToEdit(null)}
+                onDelete={(task) => {
+                    setTaskToEdit(null);
+                    setTaskToDelete(task);
+                }}
+            />
+
+            {/* Integrated Delete Confirmation Modal */}
+            <DeleteTaskModal
+                isOpen={Boolean(taskToDelete)}
+                task={taskToDelete}
+                onClose={() => setTaskToDelete(null)}
+                onConfirm={handleConfirmDelete}
+                isDeleting={isDeleting}
+            />
         </div>
-
-      </div>
-    </div>
-  );
+    );
 }

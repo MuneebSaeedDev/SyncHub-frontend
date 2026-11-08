@@ -8,6 +8,9 @@ import PublicRoute from './PublicRoute'
 import DashboardLayout from '../components/layout/DashboardLayout' // Import layout
 import DashboardPage from '../pages/dashboard/DashboardPage'
 import TaskPage from '../pages/task/TaskPage'
+import ViewTask from '../pages/task/ViewTask'
+import FriendsPage from '../pages/friends/friendsPage'
+import FriendRequestsPage from '../pages/friends/FriendRequestsPage'
 
 export default function AppRoutes() {
     return (
@@ -23,6 +26,9 @@ export default function AppRoutes() {
                 <Route element={<DashboardLayout />}>
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/tasks" element={<TaskPage />} />
+                    <Route path="/tasks/:id" element={<ViewTask />} />
+                    <Route path="/friends" element={<FriendsPage />} />
+                    <Route path="/friend-requests" element={<FriendRequestsPage />} />
                 </Route>
             </Route>
 

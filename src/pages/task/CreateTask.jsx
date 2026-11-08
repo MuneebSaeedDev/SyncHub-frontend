@@ -2,7 +2,7 @@ import { useState, useRef, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { X, UserPlus, Calendar as CalendarIcon, Loader2 } from 'lucide-react';
 import DatePicker from '../../components/taskComponents/DatePicker.jsx';
-import { createTask, fetchTasks } from '../../store/taskSlice.js';
+import { createTask } from '../../store/taskSlice.js';
 
 export default function CreateTask({ isOpen = true, onClose }) {
   const dispatch = useDispatch();
@@ -11,12 +11,28 @@ export default function CreateTask({ isOpen = true, onClose }) {
   const [description, setDescription] = useState('');
   const [priority, setPriority] = useState('Medium');
   const [dueDate, setDueDate] = useState('');
-  
+
   const [isDatePickerOpen, setIsDatePickerOpen] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState('');
-  
+
   const datePickerRef = useRef(null);
+
+  // Reset form fields
+  const resetForm = () => {
+    setTitle('');
+    setDescription('');
+    setPriority('Medium');
+    setDueDate('');
+    setError('');
+    setIsDatePickerOpen(false);
+  };
+
+  // Reset when dialog closes or unmounts
+  const handleClose = () => {
+    resetForm();
+    onClose?.();
+  };
 
   // Close datepicker when clicking outside
   useEffect(() => {
@@ -37,6 +53,7 @@ export default function CreateTask({ isOpen = true, onClose }) {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    if (isSubmitting) return;
     setError('');
 
     if (title.trim().length < 8) {
@@ -63,8 +80,10 @@ export default function CreateTask({ isOpen = true, onClose }) {
         })
       ).unwrap();
 
-      dispatch(fetchTasks());
-      onClose();
+      // Reset form values upon successful creation
+      resetForm();
+
+      onClose?.();
     } catch (err) {
       setError(typeof err === 'string' ? err : err?.message || 'Failed to create task. Please try again.');
     } finally {
@@ -97,17 +116,18 @@ export default function CreateTask({ isOpen = true, onClose }) {
 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center bg-black/50 backdrop-blur-xs p-4 transition-opacity animate-fadeIn">
-      <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-gray-100 overflow-hidden flex flex-col transform transition-all">
-        
+      <div className="w-full max-w-xl rounded-2xl bg-white shadow-2xl border border-gray-100 flex flex-col transform transition-all overflow-visible relative">
+
         {/* Header */}
-        <div className="flex items-start justify-between px-6 pt-6 pb-2">
+        <div className="flex items-start justify-between px-6 pt-6 pb-2 rounded-t-2xl">
           <div>
             <h2 className="text-xl font-bold text-gray-900">Create New Task</h2>
             <p className="text-sm text-gray-500 mt-0.5">Add a personal task to your workspace.</p>
           </div>
-          <button 
+          <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
+            disabled={isSubmitting}
             className="cursor-pointer rounded-lg p-1.5 text-gray-400 hover:bg-gray-100 hover:text-gray-700 transition-colors"
           >
             <X className="w-5 h-5" />
@@ -116,7 +136,7 @@ export default function CreateTask({ isOpen = true, onClose }) {
 
         {/* Form Body */}
         <form onSubmit={handleSubmit} className="px-6 py-4 space-y-4 flex-1">
-          
+
           {/* Error Banner */}
           {error && (
             <div className="rounded-xl bg-red-50 p-3 text-xs text-red-600 border border-red-100">
@@ -164,7 +184,7 @@ export default function CreateTask({ isOpen = true, onClose }) {
 
           {/* Priority and Due Date Row */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-            
+
             {/* Priority */}
             <div>
               <label className="block text-xs font-semibold text-gray-900 mb-1">
@@ -229,10 +249,10 @@ export default function CreateTask({ isOpen = true, onClose }) {
         </form>
 
         {/* Footer */}
-        <div className="flex items-center justify-end gap-3 px-6 py-3 bg-gray-50/50 border-t border-gray-100">
+        <div className="flex items-center justify-end gap-3 px-6 py-3 bg-gray-50/50 border-t border-gray-100 rounded-b-2xl">
           <button
             type="button"
-            onClick={onClose}
+            onClick={handleClose}
             disabled={isSubmitting}
             className="cursor-pointer rounded-xl border border-gray-300 px-4 py-2 text-sm font-medium text-gray-700 hover:bg-gray-100 hover:text-gray-900 transition-colors"
           >

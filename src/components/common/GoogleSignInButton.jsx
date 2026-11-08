@@ -1,7 +1,7 @@
 import { GoogleLogin } from '@react-oauth/google'
 import { useDispatch } from 'react-redux'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { googleLoginUser } from '../store/authSlice'
+import { googleLoginUser } from '../../store/authSlice'
 
 export default function GoogleSignInButton() {
     const dispatch = useDispatch()
