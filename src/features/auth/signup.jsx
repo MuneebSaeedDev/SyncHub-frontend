@@ -81,25 +81,25 @@ export default function Signup() {
 
                 {/* Heading */}
                 <div className="mb-6 text-center">
-                    <h1 className="text-xl font-semibold tracking-tight text-[#181d26]">
+                    <h1 className="!text-xl font-semibold tracking-tight text-[#181d26]">
                         Create your account
                     </h1>
 
-                    <p className="mt-1 text-xs text-[#41454d]">
+                    <p className="mt-1 !text-xs text-[#41454d]">
                         Start organizing your tasks with minimal friction
                     </p>
                 </div>
 
                 {/* General Form Error */}
                 {errors.form && (
-                    <div className="mb-4 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 text-xs text-[#aa2d00]">
+                    <div className="mb-4 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 !text-xs text-[#aa2d00]">
                         {errors.form}
                     </div>
                 )}
 
                 {/* Backend Error */}
                 {authError && (
-                    <div className="mb-4 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 text-xs text-[#aa2d00]">
+                    <div className="mb-4 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 !text-xs text-[#aa2d00]">
                         {authError}
                     </div>
                 )}
@@ -187,7 +187,7 @@ export default function Signup() {
                     <div className="flex w-full items-center gap-3 py-2">
                         <span className="h-px flex-1 bg-[#dddddd]" />
 
-                        <span className="whitespace-nowrap text-xs text-[#41454d]">
+                        <span className="whitespace-nowrap !text-xs text-[#41454d]">
                             or continue with
                         </span>
 
@@ -201,7 +201,7 @@ export default function Signup() {
                 </form>
 
                 {/* Login Link */}
-                <p className="mt-5 text-center text-xs text-[#41454d]">
+                <p className="mt-5 text-center !text-xs text-[#41454d]">
                     Already have an account?{' '}
                     <Link
                         to="/login"

@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate, useLocation } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
-import { ArrowLeft, Calendar, AlertCircle, Edit, Trash2, Home, ChevronRight, Loader2 } from 'lucide-react'
+import { ArrowLeft, Calendar, AlertCircle, Edit, Trash2, Home, ChevronRight, Loader2, Share2 } from 'lucide-react'
 import { getTaskByIdAPI } from '../../store/taskAPI'
 import { deleteTask } from '../../store/taskSlice'
 import { getUserInitials } from '../../utils/userUtils'
 import EditTask from './EditTask'
 import DeleteTaskModal from '../../components/taskComponents/DeleteTaskModal'
+import ShareTaskModal from '../../components/sharedTaskComponents/ShareTaskModal'
 
 export default function ViewTask({
     task: taskProp,
@@ -29,6 +30,7 @@ export default function ViewTask({
     // Edit and Delete Modal States
     const [isEditOpen, setIsEditOpen] = useState(false)
     const [isDeleteOpen, setIsDeleteOpen] = useState(false)
+    const [isShareOpen, setIsShareOpen] = useState(false)
 
     // Check where the user came from (default to /tasks)
     const previousPath = location.state?.from || '/tasks'
@@ -188,7 +190,7 @@ export default function ViewTask({
         return (
             <div className="flex h-96 items-center justify-center gap-2 text-[#41454d]">
                 <Loader2 className="h-5 w-5 animate-spin text-[#181d26]" />
-                <span className="text-xs font-medium">Loading task details...</span>
+                <span className="!text-xs font-medium">Loading task details...</span>
             </div>
         )
     }
@@ -199,7 +201,7 @@ export default function ViewTask({
                 <button
                     type="button"
                     onClick={handleBack}
-                    className="flex items-center gap-1.5 text-xs font-medium text-[#1b61c9] hover:text-[#1a3866] transition-colors cursor-pointer mb-6"
+                    className="flex items-center gap-1.5 !text-xs font-medium text-[#1b61c9] hover:text-[#1a3866] transition-colors cursor-pointer mb-6"
                 >
                     <ArrowLeft size={14} />
                     Back to {fromLabel}
@@ -249,7 +251,7 @@ export default function ViewTask({
     return (
         <div className="mx-auto max-w-5xl space-y-6 pb-12 text-[#181d26]">
             {/* Breadcrumbs Row */}
-            <nav className="flex items-center gap-2 text-xs font-normal text-[#41454d]" aria-label="Breadcrumb">
+            <nav className="flex items-center gap-2 !text-xs font-normal text-[#41454d]" aria-label="Breadcrumb">
                 <button
                     type="button"
                     onClick={() => navigate('/dashboard')}
@@ -274,7 +276,7 @@ export default function ViewTask({
                 <button
                     type="button"
                     onClick={handleBack}
-                    className="flex items-center gap-1.5 text-xs font-medium text-[#1b61c9] hover:text-[#1a3866] transition-colors cursor-pointer"
+                    className="flex items-center gap-1.5 !text-xs font-medium text-[#1b61c9] hover:text-[#1a3866] transition-colors cursor-pointer"
                 >
                     <ArrowLeft size={14} />
                     Back to {fromLabel}
@@ -283,8 +285,16 @@ export default function ViewTask({
                 <div className="flex items-center gap-2.5">
                     <button
                         type="button"
+                        onClick={() => setIsShareOpen(true)}
+                        className="flex items-center gap-1.5 rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 !text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] hover:border-[#9297a0] transition-colors cursor-pointer shadow-xs"
+                    >
+                        <Share2 size={13} />
+                        Share
+                    </button>
+                    <button
+                        type="button"
                         onClick={handleEdit}
-                        className="flex items-center gap-1.5 rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] hover:border-[#9297a0] transition-colors cursor-pointer shadow-xs"
+                        className="flex items-center gap-1.5 rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 !text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] hover:border-[#9297a0] transition-colors cursor-pointer shadow-xs"
                     >
                         <Edit size={13} />
                         Edit Task
@@ -292,7 +302,7 @@ export default function ViewTask({
                     <button
                         type="button"
                         onClick={handleDeleteClick}
-                        className="flex items-center gap-1.5 rounded-[8px] bg-[#aa2d00] px-3.5 py-2 text-xs font-medium text-white hover:bg-[#8f2500] transition-colors cursor-pointer shadow-xs"
+                        className="flex items-center gap-1.5 rounded-[8px] bg-[#aa2d00] px-3.5 py-2 !text-xs font-medium text-white hover:bg-[#8f2500] transition-colors cursor-pointer shadow-xs"
                     >
                         <Trash2 size={13} />
                         Delete
@@ -304,13 +314,13 @@ export default function ViewTask({
             <div className="rounded-[12px] border border-[#dddddd] bg-white p-6 sm:p-8 shadow-xs">
                 {/* Header Metadata: Priority Badge & Due Info */}
                 <div className="flex flex-wrap items-center justify-between gap-3 mb-5">
-                    <span className={`inline-flex items-center gap-1.5 rounded-[4px] px-2.5 py-1 text-xs font-medium border ${priorityStyle.bg} ${priorityStyle.text} ${priorityStyle.border}`}>
+                    <span className={`inline-flex items-center gap-1.5 rounded-[4px] px-2.5 py-1 !text-xs font-medium border ${priorityStyle.bg} ${priorityStyle.text} ${priorityStyle.border}`}>
                         <span className={`h-1.5 w-1.5 rounded-full ${priorityStyle.dot}`}></span>
                         {priority.charAt(0).toUpperCase() + priority.slice(1)} Priority
                     </span>
 
                     {dueBadgeText && (
-                        <div className="flex items-center gap-1.5 rounded-[6px] bg-[#f8fafc] px-2.5 py-1 text-xs font-medium text-[#41454d] border border-[#dddddd]">
+                        <div className="flex items-center gap-1.5 rounded-[6px] bg-[#f8fafc] px-2.5 py-1 !text-xs font-medium text-[#41454d] border border-[#dddddd]">
                             <Calendar size={13} className="text-[#41454d]" />
                             <span>{dueBadgeText}</span>
                         </div>
@@ -318,12 +328,12 @@ export default function ViewTask({
                 </div>
 
                 {/* Task Title */}
-                <h1 className="text-xl sm:text-2xl font-semibold text-[#181d26] tracking-tight leading-snug">
+                <h1 className="!text-xl sm:!text-2xl font-semibold text-[#181d26] tracking-tight leading-snug">
                     {currentTask.title}
                 </h1>
 
                 {/* Task ID */}
-                <p className="mt-1.5 text-xs font-mono text-[#41454d]">
+                <p className="mt-1.5 !text-xs font-mono text-[#41454d]">
                     Task ID: {taskId}
                 </p>
 
@@ -332,10 +342,10 @@ export default function ViewTask({
 
                 {/* Description Section */}
                 <div>
-                    <h2 className="text-xs font-medium text-[#181d26] mb-2">
+                    <h2 className="!text-xs font-medium text-[#181d26] mb-2">
                         Description
                     </h2>
-                    <p className="text-xs text-[#333840] leading-relaxed whitespace-pre-wrap">
+                    <p className="!text-xs text-[#333840] leading-relaxed whitespace-pre-wrap">
                         {currentTask.description || 'No description provided for this task.'}
                     </p>
                 </div>
@@ -348,7 +358,7 @@ export default function ViewTask({
                             <span className="text-[11px] font-normal text-[#41454d] block mb-1">
                                 Due date
                             </span>
-                            <div className="flex items-center gap-2 text-xs font-medium text-[#181d26]">
+                            <div className="flex items-center gap-2 !text-xs font-medium text-[#181d26]">
                                 <Calendar size={14} className="text-[#41454d] shrink-0" />
                                 <span>{formatFullDateTime(currentTask.dueDate, true)}</span>
                             </div>
@@ -359,7 +369,7 @@ export default function ViewTask({
                             <span className="text-[11px] font-normal text-[#41454d] block mb-1">
                                 Priority level
                             </span>
-                            <div className={`flex items-center gap-1.5 text-xs font-medium ${priorityStyle.text}`}>
+                            <div className={`flex items-center gap-1.5 !text-xs font-medium ${priorityStyle.text}`}>
                                 <AlertCircle size={14} className="shrink-0" />
                                 <span>
                                     {priority.charAt(0).toUpperCase() + priority.slice(1)}{' '}
@@ -375,7 +385,7 @@ export default function ViewTask({
                             <span className="text-[11px] font-normal text-[#41454d] block mb-1">
                                 Created
                             </span>
-                            <div className="flex items-center gap-2 text-xs font-normal text-[#333840]">
+                            <div className="flex items-center gap-2 !text-xs font-normal text-[#333840]">
                                 <span>{formatFullDateTime(currentTask.createdAt)}</span>
                             </div>
                         </div>
@@ -385,7 +395,7 @@ export default function ViewTask({
                             <span className="text-[11px] font-normal text-[#41454d] block mb-1">
                                 Last updated
                             </span>
-                            <div className="flex items-center gap-2 text-xs font-normal text-[#333840]">
+                            <div className="flex items-center gap-2 !text-xs font-normal text-[#333840]">
                                 <span>{formatFullDateTime(currentTask.updatedAt)}</span>
                             </div>
                         </div>
@@ -400,7 +410,7 @@ export default function ViewTask({
                             <div className="flex h-7 w-7 items-center justify-center rounded-[6px] bg-white border border-[#dddddd] text-[#181d26] text-xs font-medium">
                                 {userInitials}
                             </div>
-                            <span className="text-xs font-normal text-[#333840]">
+                            <span className="!text-xs font-normal text-[#333840]">
                                 Personal Task (Private to {userName})
                             </span>
                         </div>
@@ -426,6 +436,13 @@ export default function ViewTask({
                 onClose={() => setIsDeleteOpen(false)}
                 onConfirm={handleConfirmDelete}
                 isDeleting={isDeleting}
+            />
+
+            {/* Share Task Modal */}
+            <ShareTaskModal
+                isOpen={isShareOpen}
+                preselectedTask={currentTask}
+                onClose={() => setIsShareOpen(false)}
             />
         </div>
     )

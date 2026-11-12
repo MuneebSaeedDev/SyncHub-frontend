@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useSelector, useDispatch } from "react-redux";
 import {
   Loader2,
@@ -107,7 +107,7 @@ export default function FriendRequestsPage() {
         <h1 className="text-xl font-semibold tracking-tight text-[#181d26]">
           Friend Requests
         </h1>
-        <p className="mt-1 text-xs text-[#41454d]">
+        <p className="mt-1 !text-xs text-[#41454d]">
           {activeTab === "received"
             ? pendingCount === 0
               ? "You have no pending invitations."
@@ -128,7 +128,8 @@ export default function FriendRequestsPage() {
         <button
           type="button"
           onClick={() => setActiveTab("received")}
-          className={`cursor-pointer inline-flex items-center gap-2 rounded-[6px] px-3 py-1.5 text-xs font-medium transition-colors ${
+          className={`cursor-pointer inline-flex items-center gap-2 rounded-[6px] px-3 py-1.5
+            !text-xs font-medium transition-colors ${
             activeTab === "received"
               ? "bg-[#181d26] text-white shadow-xs"
               : "text-[#41454d] hover:text-[#181d26] hover:bg-[#e0e2e6]/60 border border-transparent"
@@ -151,7 +152,7 @@ export default function FriendRequestsPage() {
         <button
           type="button"
           onClick={() => setActiveTab("sent")}
-          className={`cursor-pointer inline-flex items-center gap-2 rounded-[6px] px-3 py-1.5 text-xs font-medium transition-colors ${
+          className={`cursor-pointer inline-flex items-center gap-2 rounded-[6px] px-3 py-1.5 !text-xs font-medium transition-colors ${
             activeTab === "sent"
               ? "bg-[#181d26] text-white shadow-xs"
               : "text-[#41454d] hover:text-[#181d26] hover:bg-[#e0e2e6]/60 border border-transparent"
@@ -174,7 +175,7 @@ export default function FriendRequestsPage() {
       {/* Notification / Feedback Banner */}
       {actionFeedback && (
         <div
-          className={`flex items-center justify-between rounded-[8px] border p-3 text-xs font-normal transition-all ${
+          className={`flex items-center justify-between rounded-[8px] border p-3 !text-xs font-normal transition-all ${
             actionFeedback.type === "success"
               ? "border-[#39bf45]/30 bg-[#006400]/10 text-[#006400]"
               : actionFeedback.type === "error"
@@ -196,7 +197,7 @@ export default function FriendRequestsPage() {
           <button
             type="button"
             onClick={() => setActionFeedback(null)}
-            className="text-xs text-[#41454d] hover:text-[#181d26] cursor-pointer"
+            className="!text-xs text-[#41454d] hover:text-[#181d26] cursor-pointer"
           >
             Dismiss
           </button>
@@ -220,14 +221,14 @@ export default function FriendRequestsPage() {
           {requestStatus === "loading" && requests.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-[#41454d]">
               <Loader2 size={22} className="animate-spin text-[#181d26]" />
-              <p className="mt-2 text-xs">Loading requests...</p>
+              <p className="mt-2 !text-xs">Loading requests...</p>
             </div>
           ) : requests.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center text-[#41454d]">
               <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-[#f8fafc] border border-[#dddddd] text-[#9297a0]">
                 <Inbox size={20} />
               </div>
-              <h3 className="mt-3 text-xs font-medium text-[#181d26]">
+              <h3 className="mt-3 !text-xs font-medium text-[#181d26]">
                 No pending requests
               </h3>
               <p className="mt-1 text-[11px] text-[#41454d] max-w-sm">
@@ -274,14 +275,14 @@ export default function FriendRequestsPage() {
           {sentStatus === "loading" && sentRequests.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-[#41454d]">
               <Loader2 size={22} className="animate-spin text-[#181d26]" />
-              <p className="mt-2 text-xs">Loading sent invitations...</p>
+              <p className="mt-2 !text-xs">Loading sent invitations...</p>
             </div>
           ) : sentRequests.length === 0 ? (
             <div className="flex flex-col items-center justify-center py-16 text-center text-[#41454d]">
               <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-[#f8fafc] border border-[#dddddd] text-[#9297a0]">
                 <Send size={18} />
               </div>
-              <h3 className="mt-3 text-xs font-medium text-[#181d26]">
+              <h3 className="mt-3 !text-xs font-medium text-[#181d26]">
                 No sent invitations
               </h3>
               <p className="mt-1 text-[11px] text-[#41454d] max-w-sm">

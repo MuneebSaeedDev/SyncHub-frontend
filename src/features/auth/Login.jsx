@@ -78,26 +78,26 @@ export default function Login() {
         </div>
 
         {/* Heading */}
-        <header className="mb-6 mt-6 text-center">
-          <h1 className="text-xl font-semibold tracking-tight text-[#181d26]">
+        <header className="mb-6 mt-6 !text-center">
+          <h1 className="!text-xl !font-semibold !tracking-tight !text-[#181d26]">
             Welcome back
           </h1>
 
-          <p className="mt-1 text-xs text-[#41454d]">
+          <p className="mt-1 !text-xs !text-[#41454d]">
             Enter your credentials to access your account
           </p>
         </header>
 
         {/* Signup success message */}
         {location.state?.message && (
-          <div className="mb-4 rounded-[6px] border border-[#39bf45]/40 bg-[#006400]/5 p-3 text-xs text-[#006400]">
+          <div className="mb-4 rounded-[6px] border border-[#39bf45]/40 bg-[#006400]/5 p-3 !text-xs !text-[#006400]">
             {location.state.message}
           </div>
         )}
 
         {/* Backend error */}
         {authError && (
-          <div className="mb-4 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 text-xs text-[#aa2d00]">
+          <div className="mb-4 rounded-[6px] border border-[#aa2d00]/30 bg-[#aa2d00]/10 p-3 !text-xs !text-[#aa2d00]">
             {authError}
           </div>
         )}
@@ -173,7 +173,7 @@ export default function Login() {
           <div className="flex items-center gap-3 pt-3 pb-1">
             <div className="h-px flex-1 bg-[#dddddd]" />
 
-            <span className="shrink-0 text-xs text-[#41454d]">
+            <span className="shrink-0 !text-xs !text-[#41454d]">
               or continue with
             </span>
 
@@ -185,11 +185,11 @@ export default function Login() {
         </form>
 
         {/* Signup Link */}
-        <p className="mt-6 text-center text-xs text-[#41454d]">
+        <p className="mt-6 !text-center !text-xs !text-[#41454d]">
           Don&apos;t have an account?{' '}
           <Link
             to="/signup"
-            className="font-medium text-[#1b61c9] transition hover:text-[#1a3866]"
+            className="!font-medium !text-[#1b61c9] transition hover:!text-[#1a3866]"
           >
             Sign up
           </Link>

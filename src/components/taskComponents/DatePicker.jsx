@@ -54,7 +54,7 @@ export default function DatePicker({ value, onChange }) {
     }
 
     return (
-        <div className="w-[280px] rounded-[12px] border border-[#dddddd] bg-white p-3 shadow-xl text-[#181d26]">
+        <div className="w-[280px] rounded-[12px] border border-[#dddddd] bg-white p-3 shadow-xl !text-[#181d26]">
 
             <div className="mb-2.5 flex items-center justify-between px-1">
 
@@ -63,12 +63,12 @@ export default function DatePicker({ value, onChange }) {
                     onClick={() =>
                         setCurrentMonth(new Date(year, month - 1, 1))
                     }
-                    className="cursor-pointer flex h-7 w-7 items-center justify-center rounded-[6px] border border-[#dddddd] bg-white text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26] transition-colors"
+                    className="cursor-pointer flex h-7 w-7 items-center justify-center rounded-[6px] border border-[#dddddd] bg-white !text-[#41454d] hover:bg-[#f8fafc] hover:!text-[#181d26] transition-colors"
                 >
                     <ChevronLeft size={14} />
                 </button>
 
-                <span className="text-xs font-medium text-[#181d26]">
+                <span className="!text-xs !font-medium !text-[#181d26]">
                     {currentMonth.toLocaleDateString('en-US', {
                         month: 'short',
                         year: 'numeric',
@@ -80,7 +80,7 @@ export default function DatePicker({ value, onChange }) {
                     onClick={() =>
                         setCurrentMonth(new Date(year, month + 1, 1))
                     }
-                    className="cursor-pointer flex h-7 w-7 items-center justify-center rounded-[6px] border border-[#dddddd] bg-white text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26] transition-colors"
+                    className="cursor-pointer flex h-7 w-7 items-center justify-center rounded-[6px] border border-[#dddddd] bg-white !text-[#41454d] hover:bg-[#f8fafc] hover:!text-[#181d26] transition-colors"
                 >
                     <ChevronRight size={14} />
                 </button>
@@ -93,7 +93,7 @@ export default function DatePicker({ value, onChange }) {
                     (day, i) => (
                         <div
                             key={i}
-                            className="py-1 text-center text-[10px] font-medium text-[#9297a0]"
+                            className="py-1 !text-center !text-[10px] !font-medium !text-[#9297a0]"
                         >
                             {day}
                         </div>
@@ -115,14 +115,14 @@ export default function DatePicker({ value, onChange }) {
                             type="button"
                             key={index}
                             onClick={() => selectDate(date)}
-                            className={`cursor-pointer flex aspect-square items-center justify-center rounded-[4px] text-[11px] tabular-nums transition-colors
+                            className={`cursor-pointer flex aspect-square items-center justify-center rounded-[4px] !text-[11px] !tabular-nums transition-colors
                                 ${isSelected
-                                    ? 'bg-[#181d26] font-medium text-white shadow-xs'
+                                    ? 'bg-[#181d26] !font-medium !text-white shadow-xs'
                                     : isToday
-                                        ? 'border border-[#181d26] text-[#181d26] bg-[#f8fafc]'
+                                        ? 'border border-[#181d26] !text-[#181d26] bg-[#f8fafc]'
                                         : isCurrentMonth
-                                            ? 'text-[#181d26] hover:bg-[#f8fafc]'
-                                            : 'text-[#9297a0] hover:bg-[#f8fafc]/50'
+                                            ? '!text-[#181d26] hover:bg-[#f8fafc]'
+                                            : '!text-[#9297a0] hover:bg-[#f8fafc]/50'
                                 }
                             `}
                         >
@@ -138,7 +138,7 @@ export default function DatePicker({ value, onChange }) {
                 <button
                     type="button"
                     onClick={clearDate}
-                    className="cursor-pointer rounded-[6px] bg-[#f8fafc] border border-[#dddddd] px-2.5 py-1 text-[11px] font-normal text-[#41454d] transition-colors hover:bg-white hover:text-[#181d26]"
+                    className="cursor-pointer rounded-[6px] bg-[#f8fafc] border border-[#dddddd] px-2.5 py-1 !text-[11px] !font-normal !text-[#41454d] transition-colors hover:bg-white hover:!text-[#181d26]"
                 >
                     Clear
                 </button>
@@ -146,7 +146,7 @@ export default function DatePicker({ value, onChange }) {
                 <button
                     type="button"
                     onClick={goToday}
-                    className="cursor-pointer rounded-[6px] bg-white border border-[#dddddd] px-2.5 py-1 text-[11px] font-normal text-[#1b61c9] transition-colors hover:text-[#1a3866] hover:bg-[#f8fafc]"
+                    className="cursor-pointer rounded-[6px] bg-white border border-[#dddddd] px-2.5 py-1 !text-[11px] !font-normal !text-[#1b61c9] transition-colors hover:!text-[#1a3866] hover:bg-[#f8fafc]"
                 >
                     Today
                 </button>

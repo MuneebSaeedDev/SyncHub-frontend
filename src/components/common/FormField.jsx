@@ -51,10 +51,10 @@ export default function FormField({
   const renderIcon = () => {
     if (icon) return icon
     if (type === 'email') {
-      return <Mail size={16} className="shrink-0 text-[#9297a0]" />
+      return <Mail size={16} className="shrink-0 !text-[#9297a0]" />
     }
     if (isPasswordField) {
-      return <Lock size={16} className="shrink-0 text-[#9297a0]" />
+      return <Lock size={16} className="shrink-0 !text-[#9297a0]" />
     }
     return null
   }
@@ -62,16 +62,16 @@ export default function FormField({
   const fieldIcon = renderIcon()
 
   return (
-    <div className={`space-y-1.5 text-left ${className}`}>
+    <div className={`space-y-1.5 !text-left ${className}`}>
       {(label || labelAction) && (
-        <div className="flex items-center justify-between text-xs">
+        <div className="flex items-center justify-between !text-xs">
           {label && (
             <label
               htmlFor={inputId}
-              className="font-medium text-[#181d26] select-none"
+              className="!font-medium !text-[#181d26] select-none"
             >
               {label}
-              {required && <span className="ml-0.5 text-[#aa2d00]">*</span>}
+              {required && <span className="ml-0.5 !text-[#aa2d00]">*</span>}
             </label>
           )}
           {labelAction}
@@ -98,7 +98,7 @@ export default function FormField({
           disabled={disabled}
           autoComplete={autoComplete}
           aria-invalid={Boolean(error)}
-          className={`h-full min-w-0 flex-1 bg-transparent text-sm text-[#181d26] outline-none placeholder:text-[#9297a0] disabled:cursor-not-allowed ${inputClassName}`}
+          className={`h-full min-w-0 flex-1 bg-transparent !text-sm !text-[#181d26] outline-none placeholder:!text-[#9297a0] disabled:cursor-not-allowed ${inputClassName}`}
           {...restProps}
         />
 
@@ -108,7 +108,7 @@ export default function FormField({
             onClick={handleTogglePassword}
             tabIndex={-1}
             aria-label={isPasswordVisible ? 'Hide password' : 'Show password'}
-            className="cursor-pointer ml-2 grid size-7 place-items-center rounded-[4px] text-[#9297a0] transition hover:bg-[#f8fafc] hover:text-[#181d26] focus:outline-none"
+            className="cursor-pointer ml-2 grid size-7 place-items-center rounded-[4px] !text-[#9297a0] transition hover:bg-[#f8fafc] hover:!text-[#181d26] focus:outline-none"
           >
             {isPasswordVisible ? <EyeOff size={16} /> : <Eye size={16} />}
           </button>
@@ -116,11 +116,11 @@ export default function FormField({
       </div>
 
       {error ? (
-        <p className="text-xs font-normal text-[#aa2d00]">
+        <p className="!text-xs !font-normal !text-[#aa2d00]">
           {error}
         </p>
       ) : hint ? (
-        <p className="text-xs text-[#41454d]">{hint}</p>
+        <p className="!text-xs !text-[#41454d]">{hint}</p>
       ) : null}
     </div>
   )

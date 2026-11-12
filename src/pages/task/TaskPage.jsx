@@ -7,6 +7,7 @@ import DeleteTaskModal from '../../components/taskComponents/DeleteTaskModal';
 import TaskDropdown from '../../components/taskComponents/TaskDropdown';
 import CreateTask from './CreateTask';
 import EditTask from './EditTask';
+import ShareTaskModal from '../../components/sharedTaskComponents/ShareTaskModal';
 import {
     Search,
     SlidersHorizontal,
@@ -36,6 +37,7 @@ export default function TaskPage() {
     const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
     const [taskToEdit, setTaskToEdit] = useState(null);
     const [taskToDelete, setTaskToDelete] = useState(null);
+    const [taskToShare, setTaskToShare] = useState(null);
     const [activeDropdownId, setActiveDropdownId] = useState(null);
 
     const navigate = useNavigate();
@@ -146,13 +148,13 @@ export default function TaskPage() {
                 {/* Header Section */}
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-4">
                     <div>
-                        <h1 className="text-xl font-semibold tracking-tight text-[#181d26]">My Tasks</h1>
-                        <p className="text-xs text-[#41454d] mt-1">{tasks.length} active personal tasks recorded</p>
+                        <h1 className="!text-xl font-semibold tracking-tight text-[#181d26]">My Tasks</h1>
+                        <p className="!text-xs text-[#41454d] mt-1">{tasks.length} active personal tasks recorded</p>
                     </div>
                     <button
                         type="button"
                         onClick={() => setIsCreateTaskOpen(true)}
-                        className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] bg-[#181d26] px-4 py-2 text-xs font-medium text-white transition hover:bg-[#0d1218] active:bg-[#0d1218] shadow-xs"
+                        className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] bg-[#181d26] px-4 py-2 !text-xs font-medium text-white transition hover:bg-[#0d1218] active:bg-[#0d1218] shadow-xs"
                     >
                         <Plus size={15} />
                         Create Task
@@ -171,7 +173,7 @@ export default function TaskPage() {
                                         setActiveTab(tab);
                                         setCurrentPage(1);
                                     }}
-                                    className={`py-2.5 px-0.5 text-xs font-medium border-b-2 transition-colors relative cursor-pointer ${isActive
+                                    className={`py-2.5 px-0.5 !text-xs font-medium border-b-2 transition-colors relative cursor-pointer ${isActive
                                             ? 'border-[#181d26] text-[#181d26]'
                                             : 'border-transparent text-[#41454d] hover:text-[#181d26]'
                                         }`}
@@ -195,11 +197,11 @@ export default function TaskPage() {
                                 setCurrentPage(1);
                             }}
                             placeholder="Filter by title..."
-                            className="w-full pl-9 pr-3.5 py-2 bg-white border border-[#dddddd] rounded-[8px] text-xs text-[#181d26] placeholder:text-[#9297a0] focus:outline-none focus:border-[#458fff] transition-colors"
+                            className="w-full pl-9 pr-3.5 py-2 bg-white border border-[#dddddd] rounded-[8px] !text-xs text-[#181d26] placeholder:text-[#9297a0] focus:outline-none focus:border-[#458fff] transition-colors"
                         />
                     </div>
                     <div className="flex items-center gap-2.5 w-full sm:w-auto relative">
-                        <button className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 bg-white border border-[#dddddd] rounded-[8px] text-xs font-medium text-[#41454d] hover:text-[#181d26] hover:bg-[#f8fafc] transition-colors cursor-pointer">
+                        <button className="flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 bg-white border border-[#dddddd] rounded-[8px] !text-xs font-medium text-[#41454d] hover:text-[#181d26] hover:bg-[#f8fafc] transition-colors cursor-pointer">
                             <SlidersHorizontal className="w-3.5 h-3.5 text-[#41454d]" />
                             Filters
                         </button>
@@ -208,7 +210,7 @@ export default function TaskPage() {
                         <div className="relative" ref={datePickerRef}>
                             <button
                                 onClick={() => setIsDatePickerOpen((prev) => !prev)}
-                                className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-[8px] text-xs font-medium transition-colors cursor-pointer ${selectedDateFilter
+                                className={`flex-1 sm:flex-none inline-flex items-center justify-center gap-2 px-3.5 py-2 rounded-[8px] !text-xs font-medium transition-colors cursor-pointer ${selectedDateFilter
                                         ? 'border border-[#181d26] text-[#181d26] bg-[#f8fafc]'
                                         : 'border border-[#dddddd] bg-white text-[#41454d] hover:text-[#181d26] hover:bg-[#f8fafc]'
                                     }`}
@@ -235,7 +237,7 @@ export default function TaskPage() {
 
                 {/* Error State */}
                 {error && (
-                    <div className="p-3 bg-[#aa2d00]/10 border border-[#aa2d00]/30 rounded-[8px] text-xs text-[#aa2d00]">
+                    <div className="p-3 bg-[#aa2d00]/10 border border-[#aa2d00]/30 rounded-[8px] !text-xs text-[#aa2d00]">
                         {error}
                     </div>
                 )}
@@ -253,7 +255,7 @@ export default function TaskPage() {
                                     <th className="py-2.5 px-5 w-20 text-right">Actions</th>
                                 </tr>
                             </thead>
-                            <tbody className="divide-y divide-[#dddddd] text-xs">
+                            <tbody className="divide-y divide-[#dddddd] !text-xs">
                                 {isLoading ? (
                                     <tr>
                                         <td colSpan="5" className="py-12 text-center text-[#41454d]">
@@ -328,7 +330,7 @@ export default function TaskPage() {
                                                         >
                                                             <DatePicker
                                                                 value={task.dueDate}
-                                                                onChange={(newDate) => {
+                                                                onChange={() => {
                                                                     setActiveDateTaskId(null);
                                                                 }}
                                                             />
@@ -356,6 +358,10 @@ export default function TaskPage() {
                                                             onClick={(e) => e.stopPropagation()}
                                                         >
                                                             <TaskDropdown
+                                                                onShare={() => {
+                                                                    setActiveDropdownId(null);
+                                                                    setTaskToShare(task);
+                                                                }}
                                                                 onEdit={() => {
                                                                     setActiveDropdownId(null);
                                                                     setTaskToEdit(task);
@@ -385,14 +391,14 @@ export default function TaskPage() {
 
                     {/* Pagination Footer */}
                     <div className="flex flex-col sm:flex-row items-center justify-between px-5 py-3 border-t border-[#dddddd] bg-white gap-3">
-                        <p className="text-xs text-[#41454d]">
+                        <p className="!text-xs text-[#41454d]">
                             Showing <span className="font-medium text-[#181d26]">{filteredTasks.length > 0 ? indexOfFirstTask + 1 : 0}&ndash;{Math.min(indexOfLastTask, filteredTasks.length)}</span> of <span className="font-medium text-[#181d26]">{filteredTasks.length}</span> tasks
                         </p>
                         <div className="flex items-center gap-1.5">
                             <button
                                 onClick={() => setCurrentPage(prev => Math.max(prev - 1, 1))}
                                 disabled={currentPage === 1}
-                                className="px-3 py-1.5 text-xs font-normal text-[#41454d] bg-white border border-[#dddddd] rounded-[6px] hover:text-[#181d26] hover:bg-[#f8fafc] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                                className="px-3 py-1.5 !text-xs font-normal text-[#41454d] bg-white border border-[#dddddd] rounded-[6px] hover:text-[#181d26] hover:bg-[#f8fafc] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                             >
                                 Previous
                             </button>
@@ -400,7 +406,7 @@ export default function TaskPage() {
                                 <button
                                     key={page}
                                     onClick={() => setCurrentPage(page)}
-                                    className={`w-7 h-7 text-xs font-medium rounded-[6px] transition-colors cursor-pointer ${currentPage === page
+                                    className={`w-7 h-7 !text-xs font-medium rounded-[6px] transition-colors cursor-pointer ${currentPage === page
                                             ? 'bg-[#181d26] text-white shadow-xs'
                                             : 'text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26]'
                                         }`}
@@ -411,7 +417,7 @@ export default function TaskPage() {
                             <button
                                 onClick={() => setCurrentPage(prev => Math.min(prev + 1, totalPages))}
                                 disabled={currentPage === totalPages || totalPages === 0}
-                                className="px-3 py-1.5 text-xs font-normal text-[#41454d] bg-white border border-[#dddddd] rounded-[6px] hover:text-[#181d26] hover:bg-[#f8fafc] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
+                                className="px-3 py-1.5 !text-xs font-normal text-[#41454d] bg-white border border-[#dddddd] rounded-[6px] hover:text-[#181d26] hover:bg-[#f8fafc] disabled:opacity-30 disabled:cursor-not-allowed transition-colors cursor-pointer"
                             >
                                 Next
                             </button>
@@ -445,6 +451,13 @@ export default function TaskPage() {
                 onClose={() => setTaskToDelete(null)}
                 onConfirm={handleConfirmDelete}
                 isDeleting={isDeleting}
+            />
+
+            {/* Share Task Modal */}
+            <ShareTaskModal
+                isOpen={Boolean(taskToShare)}
+                preselectedTask={taskToShare}
+                onClose={() => setTaskToShare(null)}
             />
         </div>
     );

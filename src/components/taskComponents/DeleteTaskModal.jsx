@@ -30,20 +30,20 @@ export default function DeleteTaskModal({
             onClick={handleClose}
         >
             <div
-                className="w-full max-w-[460px] rounded-[12px] border border-[#dddddd] bg-white p-6 shadow-xl transition-all text-[#181d26]"
+                className="w-full max-w-[460px] rounded-[12px] border border-[#dddddd] bg-white p-6 shadow-xl transition-all !text-[#181d26]"
                 onClick={(e) => e.stopPropagation()}
             >
                 {/* Header: Trash Icon + Title/Subtitle + Close Button */}
                 <div className="flex items-start justify-between">
                     <div className="flex items-center gap-3">
-                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] bg-[#aa2d00]/10 text-[#aa2d00] border border-[#aa2d00]/25">
+                        <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-[8px] bg-[#aa2d00]/10 !text-[#aa2d00] border border-[#aa2d00]/25">
                             <Trash2 size={16} strokeWidth={1.8} />
                         </div>
                         <div>
-                            <h3 className="text-sm font-semibold text-[#181d26]">
+                            <h3 className="!text-sm !font-semibold !text-[#181d26]">
                                 Delete Task
                             </h3>
-                            <p className="text-xs text-[#aa2d00]">
+                            <p className="!text-xs !text-[#aa2d00]">
                                 This action cannot be undone.
                             </p>
                         </div>
@@ -53,14 +53,14 @@ export default function DeleteTaskModal({
                         type="button"
                         onClick={handleClose}
                         disabled={isDeleting}
-                        className="flex h-7 w-7 items-center justify-center rounded-[6px] border border-[#dddddd] text-[#41454d] hover:bg-[#f8fafc] hover:text-[#181d26] transition-colors cursor-pointer disabled:opacity-50"
+                        className="flex h-7 w-7 items-center justify-center rounded-[6px] border border-[#dddddd] !text-[#41454d] hover:bg-[#f8fafc] hover:!text-[#181d26] transition-colors cursor-pointer disabled:opacity-50"
                     >
                         <X size={14} />
                     </button>
                 </div>
 
                 {/* Main Descriptive Question */}
-                <p className="mt-4 text-xs text-[#41454d] leading-relaxed">
+                <p className="mt-4 !text-xs !text-[#41454d] !leading-relaxed">
                     Are you sure you want to permanently delete this task from your workspace?
                 </p>
 
@@ -73,7 +73,7 @@ export default function DeleteTaskModal({
                         <div
                             className={`flex h-4 w-4 shrink-0 items-center justify-center rounded-[4px] border transition-colors ${
                                 isChecked
-                                    ? 'bg-[#aa2d00] border-[#aa2d00] text-white'
+                                    ? 'bg-[#aa2d00] border-[#aa2d00] !text-white'
                                     : 'border-[#dddddd] bg-white hover:border-[#9297a0]'
                             }`}
                         >
@@ -83,12 +83,12 @@ export default function DeleteTaskModal({
                                 </svg>
                             )}
                         </div>
-                        <span className="text-xs font-medium text-[#181d26] truncate">
+                        <span className="!text-xs !font-medium !text-[#181d26] !truncate">
                             {task.title}
                         </span>
                     </div>
                     {task.priority && (
-                        <span className="shrink-0 rounded-[4px] bg-[#aa2d00]/10 border border-[#aa2d00]/25 px-1.5 py-0.5 text-[10px] font-medium text-[#aa2d00] capitalize">
+                        <span className="shrink-0 rounded-[4px] bg-[#aa2d00]/10 border border-[#aa2d00]/25 px-1.5 py-0.5 !text-[10px] !font-medium !text-[#aa2d00] !capitalize">
                             {task.priority}
                         </span>
                     )}
@@ -100,7 +100,7 @@ export default function DeleteTaskModal({
                         type="button"
                         onClick={handleClose}
                         disabled={isDeleting}
-                        className="rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
+                        className="rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 !text-xs !font-medium !text-[#181d26] hover:bg-[#f8fafc] transition-colors cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                         Cancel
                     </button>
@@ -109,7 +109,7 @@ export default function DeleteTaskModal({
                         type="button"
                         onClick={handleConfirm}
                         disabled={isDeleting || !isChecked}
-                        className="flex items-center gap-1.5 rounded-[8px] bg-[#aa2d00] px-3.5 py-2 text-xs font-medium text-white hover:bg-[#8f2500] transition-colors shadow-xs cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
+                        className="flex items-center gap-1.5 rounded-[8px] bg-[#aa2d00] px-3.5 py-2 !text-xs !font-medium !text-white hover:bg-[#8f2500] transition-colors shadow-xs cursor-pointer disabled:opacity-40 disabled:cursor-not-allowed"
                     >
                         {isDeleting && (
                             <Loader2 size={13} className="animate-spin" />

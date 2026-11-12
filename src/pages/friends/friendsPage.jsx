@@ -72,10 +72,10 @@ export default function FriendsPage() {
             <div>
                 <div className="mt-2 flex flex-col justify-between gap-4 sm:flex-row sm:items-center">
                     <div>
-                        <h1 className="text-xl font-semibold tracking-tight text-[#181d26]">
+                        <h1 className="!text-xl font-semibold tracking-tight text-[#181d26]">
                             Friends
                         </h1>
-                        <p className="mt-0.5 text-xs text-[#41454d]">
+                        <p className="mt-0.5 !text-xs text-[#41454d]">
                             {friends.length} connected {friends.length === 1 ? 'friend' : 'friends'} in your network
                         </p>
                     </div>
@@ -84,7 +84,7 @@ export default function FriendsPage() {
                     <button
                         type="button"
                         onClick={() => setIsConnectModalOpen(true)}
-                        className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] bg-[#181d26] px-4 py-2 text-xs font-medium text-white shadow-xs transition-colors hover:bg-[#0d1218] active:bg-[#0d1218]"
+                        className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] bg-[#181d26] px-4 py-2 !text-xs font-medium text-white shadow-xs transition-colors hover:bg-[#0d1218] active:bg-[#0d1218]"
                     >
                         <UserPlus size={14} />
                         Connect Friend
@@ -104,7 +104,7 @@ export default function FriendsPage() {
                         value={searchQuery}
                         onChange={(e) => setSearchQuery(e.target.value)}
                         placeholder="Search friends by name or email..."
-                        className="h-9 w-full rounded-[8px] border border-[#dddddd] bg-white pl-9 pr-3.5 text-xs text-[#181d26] placeholder:text-[#9297a0] outline-none transition-colors hover:border-[#9297a0] focus:border-[#458fff]"
+                        className="h-9 w-full rounded-[8px] border border-[#dddddd] bg-white pl-9 pr-3.5 !text-xs text-[#181d26] placeholder:text-[#9297a0] outline-none transition-colors hover:border-[#9297a0] focus:border-[#458fff]"
                     />
                 </div>
 
@@ -112,7 +112,7 @@ export default function FriendsPage() {
                 <button
                     type="button"
                     onClick={() => navigate('/friend-requests')}
-                    className="inline-flex cursor-pointer items-center gap-1.5 text-xs font-medium text-[#1b61c9] transition-colors hover:text-[#1a3866] self-start sm:self-auto"
+                    className="inline-flex cursor-pointer items-center gap-1.5 !text-xs font-medium text-[#1b61c9] transition-colors hover:text-[#1a3866] self-start sm:self-auto"
                 >
                     <span>View Pending Requests ({pendingRequestsCount})</span>
                     <ArrowRight size={13} />
@@ -131,7 +131,7 @@ export default function FriendsPage() {
             {status === 'loading' && friends.length === 0 ? (
                 <div className="flex flex-col items-center justify-center py-20 text-[#41454d]">
                     <Loader2 size={24} className="animate-spin text-[#181d26]" />
-                    <p className="mt-2 text-xs font-normal">Loading your network...</p>
+                    <p className="mt-2 !text-xs font-normal">Loading your network...</p>
                 </div>
             ) : (
                 /* Friends Grid */
@@ -149,7 +149,7 @@ export default function FriendsPage() {
                             >
                                 {/* Top: Avatar + Status Pill */}
                                 <div className="flex items-start justify-between">
-                                    <div className="flex h-10 w-10 items-center justify-center rounded-[8px] border border-[#dddddd] bg-[#f8fafc] text-xs font-medium text-[#181d26]">
+                                    <div className="flex h-10 w-10 items-center justify-center rounded-[8px] border border-[#dddddd] bg-[#f8fafc] !text-xs font-medium text-[#181d26]">
                                         {initials}
                                     </div>
 
@@ -161,7 +161,7 @@ export default function FriendsPage() {
 
                                 {/* Friend Name & Email */}
                                 <div className="mt-4">
-                                    <h3 className="truncate text-xs font-medium text-[#181d26]">
+                                    <h3 className="truncate !text-xs font-medium text-[#181d26]">
                                         {friend.name || 'Anonymous User'}
                                     </h3>
                                     <p className="truncate text-[11px] text-[#41454d] mt-0.5">
@@ -204,7 +204,7 @@ export default function FriendsPage() {
                         <div className="flex h-10 w-10 items-center justify-center rounded-[8px] bg-white border border-[#dddddd] text-[#41454d] group-hover:text-[#181d26] transition-colors">
                             <UserPlus size={18} />
                         </div>
-                        <h4 className="mt-3 text-xs font-medium text-[#181d26]">
+                        <h4 className="mt-3 !text-xs font-medium text-[#181d26]">
                             Connect another friend
                         </h4>
                         <p className="mt-0.5 text-[11px] text-[#41454d]">
@@ -216,7 +216,7 @@ export default function FriendsPage() {
 
             {/* Empty state when searching and no results */}
             {status !== 'loading' && friends.length > 0 && filteredFriends.length === 0 && (
-                <div className="py-12 text-center text-xs text-[#41454d]">
+                <div className="py-12 text-center !text-xs text-[#41454d]">
                     No friends found matching "{searchQuery}".
                 </div>
             )}
@@ -241,10 +241,10 @@ export default function FriendsPage() {
                             <UserCheck size={16} />
                         </div>
 
-                        <h3 className="mt-3.5 text-sm font-semibold text-[#181d26]">
+                        <h3 className="mt-3.5 !text-sm font-semibold text-[#181d26]">
                             Remove Friend?
                         </h3>
-                        <p className="mt-1 text-xs text-[#41454d] leading-relaxed">
+                        <p className="mt-1 !text-xs text-[#41454d] leading-relaxed">
                             Are you sure you want to remove <span className="font-medium text-[#181d26]">{friendToRemove.name}</span> from your friends list? You won't be able to assign tasks together until you reconnect.
                         </p>
 
@@ -252,14 +252,14 @@ export default function FriendsPage() {
                             <button
                                 type="button"
                                 onClick={() => setFriendToRemove(null)}
-                                className="cursor-pointer rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] transition-colors"
+                                className="cursor-pointer rounded-[8px] border border-[#dddddd] bg-white px-3.5 py-2 !text-xs font-medium text-[#181d26] hover:bg-[#f8fafc] transition-colors"
                             >
                                 Cancel
                             </button>
                             <button
                                 type="button"
                                 onClick={handleConfirmRemove}
-                                className="cursor-pointer rounded-[8px] bg-[#aa2d00] px-3.5 py-2 text-xs font-medium text-white hover:bg-[#8f2500] transition-colors shadow-xs"
+                                className="cursor-pointer rounded-[8px] bg-[#aa2d00] px-3.5 py-2 !text-xs font-medium text-white hover:bg-[#8f2500] transition-colors shadow-xs"
                             >
                                 Remove Friend
                             </button>

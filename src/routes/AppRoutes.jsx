@@ -9,6 +9,7 @@ import DashboardLayout from '../components/layout/DashboardLayout' // Import lay
 import DashboardPage from '../pages/dashboard/DashboardPage'
 import TaskPage from '../pages/task/TaskPage'
 import ViewTask from '../pages/task/ViewTask'
+import SharedTasksPage from '../pages/sharedTask/SharedTasksPage'
 import FriendsPage from '../pages/friends/friendsPage'
 import FriendRequestsPage from '../pages/friends/FriendRequestsPage'
 
@@ -27,6 +28,7 @@ export default function AppRoutes() {
                     <Route path="/dashboard" element={<DashboardPage />} />
                     <Route path="/tasks" element={<TaskPage />} />
                     <Route path="/tasks/:id" element={<ViewTask />} />
+                    <Route path="/shared-tasks" element={<SharedTasksPage />} />
                     <Route path="/friends" element={<FriendsPage />} />
                     <Route path="/friend-requests" element={<FriendRequestsPage />} />
                 </Route>
@@ -41,7 +43,7 @@ export default function AppRoutes() {
             {/* 404 */}
             <Route
                 path="*"
-                element={<h1 className="p-10 text-center">404 - Page Not Found</h1>}
+                element={<h1 className="p-10 !text-center">404 - Page Not Found</h1>}
             />
         </Routes>
     )

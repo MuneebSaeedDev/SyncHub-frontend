@@ -3,6 +3,7 @@ import { useSelector } from 'react-redux'
 import {
     LayoutDashboard,
     CheckSquare,
+    Share2,
     Users,
     UserRoundPlus,
     Settings,
@@ -33,14 +34,17 @@ export default function Sidebar({
     const tasks = useSelector((state) => state.tasks?.tasks) || []
     const friends = useSelector((state) => state.friends?.list) || []
     const friendRequests = useSelector((state) => state.friends?.requests) || []
+    const sharedReceived = useSelector((state) => state.sharedTasks?.received) || []
 
     const tasksCount = Array.isArray(tasks) ? tasks.length : 0
     const friendsCount = Array.isArray(friends) ? friends.length : 0
     const requestsCount = Array.isArray(friendRequests) ? friendRequests.length : 0
+    const sharedCount = Array.isArray(sharedReceived) ? sharedReceived.length : 0
 
     const menuItems = [
         { name: 'Overview', icon: LayoutDashboard },
         { name: 'My Tasks', icon: CheckSquare, count: tasksCount },
+        { name: 'Shared Tasks', icon: Share2, count: sharedCount },
         { name: 'Friends', icon: Users, count: friendsCount },
         { name: 'Friend Requests', icon: UserRoundPlus, count: requestsCount },
         { name: 'Settings', icon: Settings },
@@ -59,7 +63,7 @@ export default function Sidebar({
                 onClick={() => setMobileOpen((prev) => !prev)}
                 aria-label={mobileOpen ? 'Close sidebar' : 'Open sidebar'}
                 aria-expanded={mobileOpen}
-                className="cursor-pointer fixed left-3 top-3 z-[1100] flex h-8 w-8 items-center justify-center rounded-[8px] border border-[#dddddd] bg-white text-[#41454d] shadow-xs min-[701px]:hidden hover:text-[#181d26]"
+                className="cursor-pointer fixed left-3 top-3 z-[1100] flex h-8 w-8 items-center justify-center rounded-[8px] border border-[#dddddd] bg-white !text-[#41454d] shadow-xs min-[701px]:hidden hover:!text-[#181d26]"
             >
                 {mobileOpen ? <X size={16} /> : <Menu size={16} />}
             </button>
@@ -107,34 +111,34 @@ export default function Sidebar({
                                 aria-current={active ? 'page' : undefined}
                                 className={`
                                     cursor-pointer flex h-9 w-full items-center gap-2.5
-                                    rounded-[8px] px-2.5 text-left text-xs
+                                    rounded-[8px] px-2.5 !text-left !text-xs
                                     transition-colors
 
                                     ${active
-                                        ? 'bg-[#181d26] font-medium text-white shadow-xs'
-                                        : 'font-normal text-[#41454d] hover:bg-[#e0e2e6]/60 hover:text-[#181d26]'
+                                        ? 'bg-[#181d26] !font-medium !text-white shadow-xs'
+                                        : '!font-normal !text-[#41454d] hover:bg-[#e0e2e6]/60 hover:!text-[#181d26]'
                                     }
                                 `}
                             >
                                 <Icon
                                     size={16}
                                     strokeWidth={1.8}
-                                    className={`shrink-0 ${active ? 'text-white' : 'text-[#41454d]'}`}
+                                    className={`shrink-0 ${active ? '!text-white' : '!text-[#41454d]'}`}
                                 />
 
-                                <span className="flex-1 whitespace-nowrap truncate">
+                                <span className="flex-1 !whitespace-nowrap !truncate">
                                     {item.name}
                                 </span>
 
                                 {item.count !== undefined && (
                                     <span
                                         className={`
-                                            text-[11px] tabular-nums font-medium px-1.5 py-0.5 rounded-[4px]
+                                            !text-[11px] !tabular-nums !font-medium px-1.5 py-0.5 rounded-[4px]
                                             ${active
-                                                ? 'bg-white/20 text-white'
+                                                ? 'bg-white/20 !text-white'
                                                 : item.name === 'Friend Requests' && item.count > 0
-                                                    ? 'bg-[#aa2d00]/10 text-[#aa2d00]'
-                                                    : 'bg-[#e0e2e6] text-[#41454d]'
+                                                    ? 'bg-[#aa2d00]/10 !text-[#aa2d00]'
+                                                    : 'bg-[#e0e2e6] !text-[#41454d]'
                                             }
                                         `}
                                     >
@@ -149,16 +153,16 @@ export default function Sidebar({
                 {/* User Profile */}
                 <div className="mt-auto shrink-0 border-t border-[#dddddd] bg-white p-3">
                     <div className="flex items-center gap-2.5">
-                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[6px] bg-[#f8fafc] border border-[#dddddd] text-xs font-medium text-[#181d26]">
+                        <div className="flex h-8 w-8 shrink-0 items-center justify-center rounded-[6px] bg-[#f8fafc] border border-[#dddddd] !text-xs !font-medium !text-[#181d26]">
                             {initials}
                         </div>
 
                         <div className="min-w-0 flex-1">
-                            <h3 className="truncate text-xs font-medium text-[#181d26]">
+                            <h3 className="!truncate !text-xs !font-medium !text-[#181d26]">
                                 {userName}
                             </h3>
 
-                            <p className="truncate text-[11px] text-[#41454d]">
+                            <p className="!truncate !text-[11px] !text-[#41454d]">
                                 {userEmail}
                             </p>
                         </div>
@@ -168,7 +172,7 @@ export default function Sidebar({
                             onClick={onLogout}
                             title="Logout"
                             aria-label="Logout"
-                            className="cursor-pointer flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] text-[#41454d] transition hover:bg-[#f8fafc] hover:text-[#aa2d00]"
+                            className="cursor-pointer flex h-7 w-7 shrink-0 items-center justify-center rounded-[6px] !text-[#41454d] transition hover:bg-[#f8fafc] hover:!text-[#aa2d00]"
                         >
                             <LogOut size={16} />
                         </button>

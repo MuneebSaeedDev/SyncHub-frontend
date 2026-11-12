@@ -5,9 +5,11 @@ import { useNavigate, useLocation, Outlet } from 'react-router-dom'
 import Sidebar from './Sidebar.jsx'
 import Header from './Header.jsx'
 import Logout from '../../features/auth/logout.jsx'
+import Toast from '../common/Toast.jsx'
 import { getUserInitials } from '../../utils/userUtils'
 import { fetchTasks } from '../../store/taskSlice.js'
 import { fetchFriends, fetchFriendRequests } from '../../store/friendSlice.js'
+import { fetchReceivedSharedTasks, fetchSentSharedTasks } from '../../store/sharedTaskSlice.js'
 
 export default function DashboardLayout() {
     const dispatch = useDispatch()
@@ -22,17 +24,20 @@ export default function DashboardLayout() {
     const userName = user?.name || 'User'
     const userInitials = getUserInitials(userName) || 'U'
 
-    // Fetch tasks, friends, and friend requests globally for real-time sidebar badges
+    // Fetch tasks, friends, friend requests, and shared tasks globally for real-time sidebar badges
     useEffect(() => {
         dispatch(fetchTasks())
         dispatch(fetchFriends())
         dispatch(fetchFriendRequests())
+        dispatch(fetchReceivedSharedTasks())
+        dispatch(fetchSentSharedTasks())
     }, [dispatch])
 
     // Current URL determines the active sidebar item
     const getActiveItem = (pathname) => {
         if (pathname === '/dashboard') return 'Overview'
         if (pathname.startsWith('/tasks')) return 'My Tasks'
+        if (pathname.startsWith('/shared-tasks')) return 'Shared Tasks'
         if (pathname.startsWith('/friends')) return 'Friends'
         if (pathname.startsWith('/friend-requests')) return 'Friend Requests'
         if (pathname.startsWith('/settings')) return 'Settings'
@@ -46,6 +51,7 @@ export default function DashboardLayout() {
         const routes = {
             'Overview': '/dashboard',
             'My Tasks': '/tasks',
+            'Shared Tasks': '/shared-tasks',
             'Friends': '/friends',
             'Friend Requests': '/friend-requests',
             'Settings': '/settings',
@@ -90,6 +96,8 @@ export default function DashboardLayout() {
                 open={showLogout}
                 onClose={() => setShowLogout(false)}
             />
+
+            <Toast />
 
         </div>
     )

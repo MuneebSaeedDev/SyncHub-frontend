@@ -17,6 +17,7 @@ import TaskDropdown from "../../components/taskComponents/TaskDropdown.jsx";
 import CreateTask from "../../pages/task/CreateTask.jsx";
 import EditTask from "../../pages/task/EditTask.jsx";
 import ConnectFriendModal from "../../components/friendComponents/ConnectFriendModal.jsx";
+import ShareTaskModal from "../../components/sharedTaskComponents/ShareTaskModal.jsx";
 import { fetchFriends, deleteFriend } from "../../store/friendSlice.js";
 
 import { fetchTasks, deleteTask } from "../../store/taskSlice.js";
@@ -31,6 +32,7 @@ export default function DashboardPage() {
   const [isCreateTaskOpen, setIsCreateTaskOpen] = useState(false);
   const [isConnectFriendOpen, setIsConnectFriendOpen] = useState(false);
   const [taskToEdit, setTaskToEdit] = useState(null);
+  const [taskToShare, setTaskToShare] = useState(null);
 
   // Redux state
   const { user } = useSelector((state) => state.auth);
@@ -96,7 +98,7 @@ export default function DashboardPage() {
     setOpenDropdownId(null);
   };
 
-  const handleDateChange = (taskId, selectedDate) => {
+  const handleDateChange = () => {
     setOpenDatePickerId(null);
   };
 
@@ -130,7 +132,7 @@ export default function DashboardPage() {
     }
   };
 
-  const handleCreateTaskSubmit = (taskData) => {
+  const handleCreateTaskSubmit = () => {
     setIsCreateTaskOpen(false);
   };
 
@@ -153,7 +155,7 @@ export default function DashboardPage() {
             Overview
           </h1>
 
-          <p className="mt-1 text-xs text-[#41454d]">
+          <p className="mt-1 !text-xs text-[#41454d]">
             Workspace briefing for {firstName} &middot; {tasks.length} active
             tasks recorded
           </p>
@@ -162,7 +164,7 @@ export default function DashboardPage() {
         <button
           type="button"
           onClick={() => setIsCreateTaskOpen(true)}
-          className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] bg-[#181d26] px-4 py-2 text-xs font-medium text-white transition hover:bg-[#0d1218] active:bg-[#0d1218] shadow-xs"
+          className="inline-flex shrink-0 cursor-pointer items-center justify-center gap-1.5 rounded-[10px] bg-[#181d26] px-4 py-2 !text-xs font-medium text-white transition hover:bg-[#0d1218] active:bg-[#0d1218] shadow-xs"
         >
           <Plus size={15} />
           Create Task
@@ -219,7 +221,7 @@ export default function DashboardPage() {
           {/* Header */}
           <div className="flex items-center justify-between px-5 py-3.5 border-b border-[#dddddd]">
             <div>
-              <h2 className="text-xs font-medium text-[#181d26]">
+              <h2 className="!text-xs font-medium text-[#181d26]">
                 Upcoming Tasks
               </h2>
 
@@ -251,20 +253,20 @@ export default function DashboardPage() {
             {isLoading && tasks.length === 0 && (
               <div className="flex items-center justify-center gap-2 py-10 text-[#41454d]">
                 <Loader2 size={16} className="animate-spin text-[#181d26]" />
-                <span className="text-xs">Loading tasks...</span>
+                <span className="!text-xs">Loading tasks...</span>
               </div>
             )}
 
             {/* Error */}
             {taskError && (
-              <div className="py-8 text-center text-xs text-[#aa2d00]">
+              <div className="py-8 text-center !text-xs text-[#aa2d00]">
                 {taskError}
               </div>
             )}
 
             {/* Empty State */}
             {!isLoading && !taskError && displayedTasks.length === 0 && (
-              <div className="py-8 text-center text-xs text-[#41454d]">
+              <div className="py-8 text-center !text-xs text-[#41454d]">
                 No tasks recorded yet.
               </div>
             )}
@@ -333,7 +335,7 @@ export default function DashboardPage() {
 
                     {/* Title + Description */}
                     <div className="min-w-0 pr-4">
-                      <p className="text-xs font-medium text-[#181d26] truncate">
+                      <p className="!text-xs font-medium text-[#181d26] truncate">
                         {task.title}
                       </p>
 
@@ -392,6 +394,10 @@ export default function DashboardPage() {
                       {openDropdownId === taskId && (
                         <div className="absolute right-0 top-8 z-50">
                           <TaskDropdown
+                            onShare={() => {
+                              setOpenDropdownId(null);
+                              setTaskToShare(task);
+                            }}
                             onEdit={() => handleEditTask(task)}
                             onView={() => handleViewTask(task)}
                             onDelete={() => handleDeleteTask(taskId)}
@@ -409,11 +415,11 @@ export default function DashboardPage() {
         <div className="space-y-4">
           <section className="rounded-[12px] border border-[#dddddd] bg-white p-5 shadow-xs">
             <div className="mb-3 flex items-center justify-between">
-              <h2 className="text-xs font-medium text-[#181d26]">Friends</h2>
+              <h2 className="!text-xs font-medium text-[#181d26]">Friends</h2>
 
               <button
                 onClick={() => navigate("/friends")}
-                className="text-xs font-medium text-[#1b61c9] hover:text-[#1a3866] cursor-pointer transition-colors"
+                className="!text-xs font-medium text-[#1b61c9] hover:text-[#1a3866] cursor-pointer transition-colors"
               >
                 Manage ({friends.length})
               </button>
@@ -463,7 +469,7 @@ export default function DashboardPage() {
 
                 <div className="mb-4 divide-y divide-[#dddddd] max-h-56 overflow-y-auto">
                   {friends.length === 0 ? (
-                    <p className="text-xs text-[#41454d] py-2">
+                    <p className="!text-xs text-[#41454d] py-2">
                       No friends connected yet.
                     </p>
                   ) : (
@@ -478,11 +484,11 @@ export default function DashboardPage() {
                           </div>
 
                           <div className="min-w-0 flex-1">
-                            <p className="truncate text-xs font-medium text-[#181d26]">
+                            <p className="truncate !text-xs font-medium text-[#181d26]">
                               {friend.name}
                             </p>
 
-                            <p className="truncate text-[10px] text-[#41454d]">
+                            <p className="truncate !text-[10px] text-[#41454d]">
                               {friend.email}
                             </p>
                           </div>
@@ -516,11 +522,11 @@ export default function DashboardPage() {
           {/* Friend Requests Notification Card */}
           <section className="rounded-[12px] border border-[#dddddd] bg-[#f8fafc] p-4 shadow-xs">
             <div className="flex items-center justify-between gap-2">
-              <p className="text-xs text-[#41454d]">
+              <p className="!text-xs text-[#41454d]">
                 {requests.length > 0 ? (
                   <>
                     You have{" "}
-                    <span className="text-sm font-medium text-[#181d26]">
+                    <span className="!text-sm font-medium text-[#181d26]">
                       {requests.length} pending requests
                     </span>
                   </>
@@ -562,6 +568,13 @@ export default function DashboardPage() {
       <ConnectFriendModal
         isOpen={isConnectFriendOpen}
         onClose={() => setIsConnectFriendOpen(false)}
+      />
+
+      {/* Share Task Modal */}
+      <ShareTaskModal
+        isOpen={Boolean(taskToShare)}
+        preselectedTask={taskToShare}
+        onClose={() => setTaskToShare(null)}
       />
     </div>
   );
